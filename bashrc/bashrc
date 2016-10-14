@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+if [ -e ~/.bash_alias.d ]; then
+	source ~/.bash_alias.d/*
+fi
