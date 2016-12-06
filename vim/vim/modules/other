@@ -1,0 +1,20 @@
+" Lean & mean status/tabline for vim
+Plugin 'bling/vim-airline'
+
+" Themes for airline
+Plugin 'vim-airline/vim-airline-themes'
+
+" Powerline fonts plugin
+Plugin 'Lokaltog/powerline'
+
+" Pending tasks list
+Plugin 'fisadev/FixedTaskList.vim'
+
+" Consoles as buffers
+Plugin 'rosenfeld/conque-term'
+
+" Parentheses, brackets, quotes, XML tags, and more
+Plugin 'tpope/vim-surround'
+
+" Colorschemes
+Plugin 'flazz/vim-colorschemes'

@@ -1,0 +1,6 @@
+" Flake8 plugin for Vim
+Plugin 'nvie/vim-flake8'
+
+" Syntax checking hacks for vim
+Plugin 'scrooloose/syntastic.git'
+

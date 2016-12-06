@@ -22,15 +22,21 @@ call vundle#begin('$HOME/.vim/plugins')
 "" let Vundle manage Vundle (required)
 Plugin 'VundleVim/Vundle.vim'
 
-runtime ruby
-"runtime languages
-"runtime ansible
-"runtime git
-"runtime appearance
-"runtime textobjects
-"runtime search
-"runtime project
-"runtime vim-improvements
+""runtime ruby
+runtime ansible
+runtime appearance
+runtime languages
+runtime python
+runtime snipperts
+runtime static_syntax
+runtime git
+runtime other
+runtime appearance
+runtime textobjects
+runtime search
+runtime project
+runtime vim-improvements
+runtime themes
 
 " The plugins listed in ~/.vim/.vundles.local will be added here to
 " allow the user to add vim plugins to yadr without the need for a fork.

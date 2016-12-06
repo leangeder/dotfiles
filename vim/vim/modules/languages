@@ -1,8 +1,45 @@
-Plugin 'sheerun/vim-polyglot'
 " Plugin 'garbas/vim-snipmate.git'
 " Plugin 'honza/vim-snippets'
-Plugin 'jtratner/vim-flavored-markdown.git'
-Plugin 'scrooloose/syntastic.git'
-Plugin 'nelstrom/vim-markdown-preview'
-Plugin 'skwp/vim-html-escape'
-Plugin 'mxw/vim-jsx'
+" Plugin 'jtratner/vim-flavored-markdown.git'
+" Plugin 'nelstrom/vim-markdown-preview'
+" Plugin 'skwp/vim-html-escape'
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fork of the python.vim by Dmitry Vasiliev and Neil Schemenauer for 2.x and 3.x. 
+
+" Up-to-date PHP syntax file (5.3–5.6 support)
+Plugin 'StanAngeloff/php.vim'
+
+" It's a clone of the vim directory in the offical nginx repository.
+Plugin 'othree/nginx-contrib-vim'
+
+" HTML5 omnicomplete and syntax http://www.vim.org/scripts/script.php?script_id=3236
+Plugin 'othree/html5.vim'
+
+" Markdown Vim Mode http://plasticboy.com/markdown-vim-mode/
+Plugin 'plasticboy/vim-markdown'
+
+"  Lightweight Toolbox for LaTeX - New Official repository http://www.vim.org/scripts/script.php?script_id=3109
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+
+" Vastly improved Javascript indentation and syntax support in Vim. http://www.vim.org/scripts/script.php?script_id=4452
+Plugin 'pangloss/vim-javascript'
+
+" Syntax highlighting for Dockerfiles
+Plugin 'honza/dockerfile.vim'
+
+" Cutting-edge vim css syntax file http://www.vim.org
+Plugin 'JulesWang/css.vim'
+
+" .tmux.conf syntax highlighting
+Plugin 'keith/tmux.vim'
+
+" Override vim syntax for yaml files
+Plugin 'stephpy/vim-yaml'
+
+" A solid language pack for Vim.
+Plugin 'sheerun/vim-polyglot'
+
+" A vim plugin for syntax highlihting Ansible's common filetypes
+Plugin 'pearofducks/ansible-vim'

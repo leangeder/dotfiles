@@ -1,0 +1,3 @@
+Plugin 'klen/python-mode'                   " Python mode (docs, refactor, lints...)
+Plugin 'davidhalter/jedi-vim'               " Jedi-vim autocomplete plugin
+Plugin 'scrooloose/syntastic'               " Syntax checking plugin for Vim

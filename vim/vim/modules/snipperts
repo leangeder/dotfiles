@@ -1,0 +1,11 @@
+" Snippets manager
+Plugin 'garbas/vim-snipmate'
+
+" dependencies #1
+Plugin 'MarcWeber/vim-addon-mw-utils'
+
+" dependencies #2
+Plugin 'tomtom/tlib_vim'
+
+" snippets repo
+Plugin 'honza/vim-snippets'

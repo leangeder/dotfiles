@@ -3,3 +3,6 @@ Plugin 'scrooloose/nerdtree.git'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
+
+" Class/module browser
+Plugin 'majutsushi/tagbar'

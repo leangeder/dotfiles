@@ -1,10 +1,20 @@
+" Colorizer : highlight color codes and names 
+" color hex codes and color names
 Plugin 'chrisbra/color_highlight.git'
-Plugin 'skwp/vim-colors-solarized'
-Plugin 'itchyny/lightline.vim'
-Plugin 'jby/tmux.vim.git'
-Plugin 'morhetz/gruvbox'
-Plugin 'xsunsmile/showmarks.git'
-Plugin 'chriskempson/base16-vim'
 
-" Required for Gblame in terminal vim
-Plugin 'godlygeek/csapprox.git'
+"" Solarized : Beautiful dual light/dark, selective contrast, GUI/256/16 colorscheme 
+"Plugin 'skwp/vim-colors-solarized'
+
+" A light and configurable statusline/tabline for Vim
+Plugin 'itchyny/lightline.vim'
+
+"Plugin 'jby/tmux.vim.git'
+"Plugin 'morhetz/gruvbox'
+"Plugin 'xsunsmile/showmarks.git'
+"Plugin 'chriskempson/base16-vim'
+"
+"" Required for Gblame in terminal vim
+"Plugin 'godlygeek/csapprox.git'
+"
+"" test
+"Plugin 'mhinz/vim-tmuxify'
