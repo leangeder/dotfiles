@@ -1,0 +1,25 @@
+# vim: syntax=sh
+#function music() {
+#	MUSIC_SERVER="node2.leangeder.eu"
+#	TMUX_NAME="Music"
+#	tmux has-session -t ${TMUX_NAME}
+#	if [ $? != 0 ]	; then
+#		tmux new-window -s '${TMUX_NAME}' -n '${TMUX_NAME}' -d
+#		tmux send-keys '[ ! -s ~/.config/mpd/pid ] && mpd' C-m
+#		tmux send-keys 'mpc clear -q && mpc -h ${MUSIC_SERVER} play && mpc load stream' C-m
+#		tmux send-keys 'ncmpcpp -S visualizer' C-m
+#	fi
+#	tmux attach -t '${TMUX_NAME}'
+#}
+#
+#
+#
+#
+#
+#
+##function music() {
+##	tmux new-window -n 'Music'
+##	tmux select-window -t Music
+##	tmux send-keys '[ ! -s ~/.config/mpd/pid ] && mpd; mpc -h ~/.config/mpd/socket clear -q; mpc -h ~/.config/mpd/socket load stream; mpc -h ~/.config/mpd/socket play; ncmpcpp -c ~/.ncmpcpp/config -S visualizer'
+##	tmux -2 attach-session -t "Music"
+##}

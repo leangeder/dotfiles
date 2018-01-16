@@ -1,27 +1,28 @@
-#########################################
-# Black       0;30     Dark Gray     1;30
-# Red         0;31     Light Red     1;31
-# Green       0;32     Light Green   1;32
-# Brown       0;33     Yellow        1;33
-# Blue        0;34     Light Blue    1;34
-# Purple      0;35     Light Purple  1;35
-# Cyan        0;36     Light Cyan    1;36
-# Light Gray  0;37     White         1;37
-#########################################
-
-alias color_black = $(print "%" "0;30")
-alias color_red = $(print "%" "0;31")
-alias color_green = $(print "%" "0;32")
-alias color_brown = $(print "%" "0;33")
-alias color_blue = $(print "%" "0;34")
-alias color_purple = $(print "%" "0;35")
-alias color_cyan = $(print "%" "0;36")
-alias color_light_gray = $(print "%" "0;37")
-alias color_dark_gray = $(print "%" "1;30")
-alias color_light_red = $(print "%" "1;31")
-alias color_light_green = $(print "%" "1;32")
-alias color_yellow = $(print "%" "1;33")
-alias color_light_blue = $(print "%" "1;34")
-alias color_light_purple = $(print "%" "1;35")
-alias color_light_cyan = $(print "%" "1;36")
-alias color_white = $(print "%" "1;37")
+# vim: syntax=sh
+##########################################
+## Black       0;30     Dark Gray     1;30
+## Red         0;31     Light Red     1;31
+## Green       0;32     Light Green   1;32
+## Brown       0;33     Yellow        1;33
+## Blue        0;34     Light Blue    1;34
+## Purple      0;35     Light Purple  1;35
+## Cyan        0;36     Light Cyan    1;36
+## Light Gray  0;37     White         1;37
+##########################################
+#
+#alias color_black = $(print "%" "0;30")
+#alias color_red = $(print "%" "0;31")
+#alias color_green = $(print "%" "0;32")
+#alias color_brown = $(print "%" "0;33")
+#alias color_blue = $(print "%" "0;34")
+#alias color_purple = $(print "%" "0;35")
+#alias color_cyan = $(print "%" "0;36")
+#alias color_light_gray = $(print "%" "0;37")
+#alias color_dark_gray = $(print "%" "1;30")
+#alias color_light_red = $(print "%" "1;31")
+#alias color_light_green = $(print "%" "1;32")
+#alias color_yellow = $(print "%" "1;33")
+#alias color_light_blue = $(print "%" "1;34")
+#alias color_light_purple = $(print "%" "1;35")
+#alias color_light_cyan = $(print "%" "1;36")
+#alias color_white = $(print "%" "1;37")

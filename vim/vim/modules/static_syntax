@@ -2,5 +2,5 @@
 Plugin 'nvie/vim-flake8'
 
 " Syntax checking hacks for vim
-Plugin 'scrooloose/syntastic.git'
+"Plugin 'scrooloose/syntastic.git'
 

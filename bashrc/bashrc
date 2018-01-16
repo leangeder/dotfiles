@@ -2,6 +2,59 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+##
+## setup ssh-agent
+##
+#
+#SSH_ENV="$HOME/.ssh/environment"
+#
+function start_agent {
+     echo "Initialising new SSH agent..."
+#     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+	  eval $(ssh-agent)
+     echo succeeded
+#     chmod 600 "${SSH_ENV}"
+#     . "${SSH_ENV}" > /dev/null
+     /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+     . "${SSH_ENV}" > /dev/null
+     #ps ${SSH_AGENT_PID} doesn't work under cywgin
+     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+         start_agent;
+     }
+else
+     start_agent;
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+export TOKEN="3a6abb3618e574f46096d16192149e6ca3ca0cb8"
+export GITHUB_TOKEN="3a6abb3618e574f46096d16192149e6ca3ca0cb8"
+export SONAR_URL="https://tywin.s8platform.co.uk"
+export SONAR_TOKEN="65dca2562bbf6491ef94ea99619d57305488373c"
+export DRONE_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXh0IjoibGVhbmdlZGVyIiwidHlwZSI6InVzZXIifQ.JuFUxjpLKpUApFvWkrK6yWgVziz_X99yuahtaC6Bi-M"
+export DRONE_SERVER="https://tyrion.s8platform.co.uk"
+export EDITOR=vim
+# export TERM=xterm-256color
+export LANG=fr_FR.UTF-8
+#export LC_ALL=fr_FR.UTF-8
+#export REMOTE_MPD_HOST=node2.leangeder.eu
+export REMOTE_MPD_HOST=6bbf993279@node2.leangeder.eu
+export PATH=$PATH:~/bin/
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -50,6 +103,13 @@ case "$TERM" in
         else
             export TERM=xterm
         fi
+
+        # Management or the tmux launch
+        # {
+        [[ $- != *i* ]] && return
+        [[ -z "$TMUX" ]] && exec tmux
+        # }
+
         ;;
     linux)
         [ -n "$FBTERM" ] && export TERM=fbterm
@@ -141,9 +201,12 @@ alias vim='vim -o'
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
+if [ -d ~/.bash_alias.d ]; then
+   for f in ~/.bash_alias.d/*; do source $f; done
+fi
 
-if [ -f ~/.bash_alias.d ]; then
-    . ~/.bash_alias.d/*
+if [ -d ~/.bash.d ]; then
+   for f in ~/.bash.d/*; do source $f; done
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -161,33 +224,51 @@ git_branch_parser() {
    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
-export PULSE_SERVER=$(docker inspect pulseaudio | grep -i \"ipaddress\" | cut -d":" -f 2 | tail -n 1 | sed "s/\"//g" | sed "s/,//g" | sed "s/\ //g")
 
 
 
-#
-# setup ssh-agent
-#
 
-SSH_ENV="$HOME/.ssh/environment"
+# # Auto Manage Dual Monitor
+# # {
+# SCREEN_ONE="eDP-1"
+# DEFAULT_BRIGHTNESS="0.7"
+# xrandr --auto
+# if [ "X$(xrandr --listmonitors | grep -v Monitor | cut -d \  -f 6 | wc -l )" != "X1" ]
+# then
+# 	SCREEN_TWO=$(xrandr --listmonitors | grep -v Monitor | cut -d \  -f 6 | grep -v eDP-1)
+# 	xrandr --output ${SCREEN_ONE} --primary
+# 	# xrandr --output ${SCREEN_TWO} --left-of ${SCREEN_ONE}
+# 	xrandr --output ${SCREEN_TWO} --right-of ${SCREEN_ONE}
+# 	# xrandr --output ${SCREEN_TWO} --brightness ${DEFAULT_BRIGHTNESS}
+# fi
+# # xrandr --output ${SCREEN_ONE} --brightness ${DEFAULT_BRIGHTNESS}
+# # }
 
-function start_agent {
-     echo "Initialising new SSH agent..."
-     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-     echo succeeded
-     chmod 600 "${SSH_ENV}"
-     . "${SSH_ENV}" > /dev/null
-     /usr/bin/ssh-add;
+
+# Battery script
+# exec ~/.crontab/battery &
+
+# Manage mpd for the current user
+# {
+if [ ! -f "$HOME/.config/mpd/pid" ]
+then
+	mpd
+	mpc clear -q
+	mpc load stream
+fi
+# }
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/leangeder/Téléchargements/google-cloud-sdk/path.bash.inc' ]; then source '/home/leangeder/Téléchargements/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/leangeder/Téléchargements/google-cloud-sdk/completion.bash.inc' ]; then source '/home/leangeder/Téléchargements/google-cloud-sdk/completion.bash.inc'; fi
+
+
+function drone_build {
+  _event=$1
+  _branch=$(git rev-parse --abbrev-ref HEAD)
+  drone exec --local --build-event=${_event} --commit-sha=$(git log -1 --format="%H") --commit-branch=${_branch} --repo-name=$(basename $PWD)
 }
 
-# Source SSH settings, if applicable
-
-if [ -f "${SSH_ENV}" ]; then
-     . "${SSH_ENV}" > /dev/null
-     #ps ${SSH_AGENT_PID} doesn't work under cywgin
-     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-         start_agent;
-     }
-else
-     start_agent;
-fi
+alias kps='kubectl --kubeconfig=/home/leangeder/data/dotfile/kube.conf'

@@ -1,0 +1,21 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug eth0
+iface eth0 inet dhcp
+
+allow-hotplug wlan0 
+iface wlan0 inet dhcp
+	wpa-ssid TALKTALKD142C7
+	wpa-psk 364a1009e6afc7c654c0302addedbedc44ba8c756d2183fbe475c153d81f8f05
+
+#iface wlan0 inet dhcp
+#	wpa-ssid QinecWiFi
+#	wpa-psk 91671e9749022438e54f1e41ce340a8d987db9894ac475fab76c7d3805d2fd4c

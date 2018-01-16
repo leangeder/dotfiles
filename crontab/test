@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import commands
+# import pynotify
+import notify2
+from threading import Timer
+
+
+def battery_check():
+
+	rem = float(commands.getoutput("grep \"^POWER_SUPPLY_CHARGE_NOW=\" /sys/class/power_supply/BAT0/uevent"))
+	full = float(commands.getoutput("grep \"^POWER_SUPPLY_CHARGE_FULL=\" /sys/class/power_supply/BAT0/uevent"))
+	state = commands.getoutput("grep \"^charging state\" /proc/acpi/battery/BAT0/state | awk '{ print $3 }'")
+
+	percentage = int((rem/full) * 100)
+
+	if state == "discharging":
+		notify2.init("Battery Alert!")
+		notification = notify2.Notification("Battery "+state,str(percentage)+"%","/usr/share/icons/gnome/32x32/status/battery-low.png")
+		notification.show()
+
+	timer = Timer(300.0,battery_check)
+	timer.start()
+
+if __name__ == "__main__": battery_check()

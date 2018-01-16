@@ -1,0 +1,46 @@
+# vim: syntax=sh
+
+WIFI_INTERFACE="wlan0"
+# WIFI_HOT_SPOT="ClubWorkspace"
+WIFI_HOT_SPOT="Workspace"
+	
+function WWoff() {
+   sudo iw dev ${WIFI_INTERFACE} disconnect
+	sudo ip link set ${WIFI_INTERFACE} down
+   sudo ifdown eth0
+	sudo ifdown ${WIFI_INTERFACE}
+}
+	
+if [ ! -f /tmp/onwork ] 
+then
+	PATH=$PATH:~/works/_bootloader/node_modules/.bin/
+
+	function WWon() {
+		WWoff
+		sudo ip link set ${WIFI_INTERFACE} up
+	   sudo iw dev ${WIFI_INTERFACE} connect -w ${WIFI_HOT_SPOT}
+		sudo dhclient ${WIFI_INTERFACE}
+      # exec firefox &
+	}
+	
+#	function Wscreen() {
+#		SCREEN_ONE="eDP-1"
+#		DEFAULT_BRIGHTNESS="0.7"
+#		xrandr --auto
+#		if [ $(xrandr --listmonitors | tail -n 2 | cut -d \  -f 6 | wc -l ) > 1 ]
+#		then
+#			SCREEN_TWO=$(xrandr --listmonitors | tail -n 2 | cut -d \  -f 6 | grep -v eDP-1)
+#			xrandr --output  ${SCREEN_TWO} --left-of ${SCREEN_ONE}
+#			xrandr --output  ${SCREEN_TWO} --brightness ${DEFAULT_BRIGHTNESS}
+#		fi
+#		xrandr --output ${SCREEN_ONE} --brightness ${DEFAULT_BRIGHTNESS}
+#	}
+
+   function works()
+	{
+		touch /tmp/onwork
+		cd ~/works
+		Wscreen
+		WWon
+	}
+fi

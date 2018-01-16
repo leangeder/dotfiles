@@ -1,0 +1,46 @@
+# # ex: ts=4 sw=4 et filetype=sh
+# 
+# cat <<EOF > /tmp/gcloud.json
+# {
+#   "type": "service_account",
+#   "project_id": "octer-156817",
+#   "private_key_id": "2c3639cb1f8b00e9cd1398ed925ebbf5aefece10",
+#   "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmdjr6zQqawMfz\nXUeSspCW5QtL4LGqr98ZT5ihfIA8orauePrhqknaim/KHWkyYw3dCBrUB3L7cosJ\nQ/0bmbDfktcdip+UgJP6NiLYI0a5Btqe2zj98miYdh/LG7bN+O7HAsbIqFYPcdvv\n9yI+U8AGUfH4172WPSfxQboN1QM7mZex5Cy8WBzfApsZ1acgQrPhnhUAv28mtetF\nmtaZDKwCONSBLL8Adizht3+YaTQnzeYqpNvbJtgCMV6iebYBfbVf9aUJTTdZUvQQ\nCBwKa5FW6rNbu3ck3WOkp4wNfD7sy8+QhKChmIff/snuOCLDERjKuH/BjrfmaXhw\nVaXUdlT7AgMBAAECggEAClqKCMwUr+ANliudn/HyWcHz7DhhsWoQZT/udup9awgV\n3Vx4aLpErxtzbS3CIf7hcsRZYtaQLM3Vkj7dcRUj2FKHH11ePdVEUi8boLgk/Ho0\nKLOEl0SeHXZV1bZeFInT7dXuEx00grzRJY5VRDor7fJORVOQUiMKQN1jmw7X2iH1\nvLLpkPoL3Gd+gXUfcUu40D+q7RJ9hBhbVtCxksxw5VC2QpkzqpZYcybItCwn8kCF\nChfxM1zpWgYMuwnUXTFrS8zorZmZdILh60vR38tWmkUlSSDtLzBWZS0ufSz4RM9u\nBhlo05SAo8suF3/qs1eeyxwgIwXNasrSAi7Aind85QKBgQDqtFkilsHTqTJZvqtf\nK9Ubu2CsAb37yOeWeNuABg+e8TkoXV7/8l/Bhr9TJOJtj7YGdm8RbOhoJCOAfiPC\nP5VC4C6udERVVz+8b9OqK+3xh5H5g7P20HW2cbIM9AKFN/ldAGiJC8dhYM2Taaxl\ndmXUMPCkYv0F4WKgzgxHe4QdnwKBgQC1kMK1pbimHctmayvuyYr1wfcMXerZU5PF\nwEQ/MyH/coeiVfdRM85FIL/zJA8soma1tRcrOIjpu4m/Zq0SLwI/PSZy5FlMIvmF\n51NjpL/uTKcJXyji09XTed0rTJSB+IQ4GULTqluT0Q2vzwJ8TUu0xQGTSdknxH0u\nH+5MPYzTJQKBgA3G7mCIZvJMwUbhWV/py8Wn9yHBrGxGO8nqaEAYmvwifs9uw6/U\ng2hxx3NS+/OgdvfkJdrpAK90R504SlMRtmpJjJPzATvdNkGScuNPVtVRtvDlmT/I\nttAx1ljKTgeR5JJf/sLkrRx7OTYJAvSlwY52HPoZUW7x7v8veSsNBhFTAoGBAKQk\nauKtH3GOHgRJfz4xFl93K1ES1u4CkOWGHCzGnUXC1Lv928idfS0hnmbBgrZnW1OK\nk5ePVLd5w941hOGbffyN2+Sia9hZBhv4NXsvxhQ5WAkw7lWiDP1SfpBWeyvE8EOH\nEtMogAHyTN1T2HtnpbmXIQV3DcrV6BV66IQkYNvBAoGAGo4Sgbh2BtTq6oQ1qJm6\nZf8BtgB5+AMtq3cmKO+VLOT85E+sel5ao50S2sR2CgEYETRAnuVoRQlezDDXOr8i\nKoXN9X4GCoFyFTN3sNuV6lubH2EpxHf5aSGqAmWyB629nbk8MkTFyGXDOLXpGklR\ndDWNk0pdf6jAYQ0L7crZn8c=\n-----END PRIVATE KEY-----\n",
+#   "client_email": "tyrion@octer-156817.iam.gserviceaccount.com",
+#   "client_id": "117647745576260565150",
+#   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+#   "token_uri": "https://accounts.google.com/o/oauth2/token",
+#   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+#   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tyrion%40octer-156817.iam.gserviceaccount.com"
+# }
+# EOF
+# 
+# CD_USER="tyrion@octer-156817.iam.gserviceaccount.com"
+# PROJECT_ID="s8-usa-staging"
+# 
+# if [ -e /tmp/gcloud.json ]
+# then 
+# 	# echo $CD_TOKEN > /tmp/gcloud.json
+# 
+#    docker rm -f gcloud-config 2&>1
+#    docker volume rm -f gcloud kubectl 2&>1
+# 
+#    docker volume create gcloud 2&>1
+# 
+#    docker run -ti --rm -v gcloud:/root/.config -v /tmp/gcloud.json:/tmp/gcloud.json google/cloud-sdk gcloud auth activate-service-account ${CD_USER} --key-file /tmp/gcloud.json --project ${PROJECT_ID}
+#    CLUSTERS=$(docker run --rm -ti -v gcloud:/root/.config google/cloud-sdk gcloud container clusters list --format="csv(selfLink.basename(),zone)" | sed "1d")
+#    docker volume create kubectl 2&>1
+#    for _cluster in $CLUSTERS
+#    do
+#       docker run --rm -ti -v gcloud:/root/.config -v kubectl:/root/.kube google/cloud-sdk gcloud container clusters get-credentials --zone=$(echo $_cluster | cut -d , -f 2 | tr -d '\r') $(echo $_cluster | cut -d , -f 1)
+#    done
+# fi
+# 
+# 
+# alias kubectl='docker run --rm -ti -v kubectl:/root/.kube google/cloud-sdk kubectl'
+# alias gcloud='docker run --rm -ti -v gcloud:/root/.config google/cloud-sdk gcloud'
+# 
+# kubectl completion bash | tr -d '\r' > /tmp/kubectl_completion
+# source /tmp/kubectl_completion
+# docker run --rm -ti -v gcloud:/root/.config google/cloud-sdk cat /usr/lib/google-cloud-sdk/completion.bash.inc | tr -d '\r' > /tmp/gcloud_completion
+# source /tmp/gcloud_completion

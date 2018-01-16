@@ -14,7 +14,7 @@ Plugin 'fisadev/FixedTaskList.vim'
 Plugin 'rosenfeld/conque-term'
 
 " Parentheses, brackets, quotes, XML tags, and more
-Plugin 'tpope/vim-surround'
+" Plugin 'tpope/vim-surround'
 
 " Colorschemes
 Plugin 'flazz/vim-colorschemes'

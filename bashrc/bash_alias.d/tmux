@@ -1,18 +1,19 @@
-if [[ -z "$TMUX" ]] ;then
-	WHOAMI=$(whoami)
-    if tmux has-session -t $WHOAMI 2>/dev/null; then
-		tmux -2 new-session
-	else
-	        tmux -2 new-session -d -s "$WHOAMI"
-		tmux new-session -t "$WHOAMI:1" -n 'Logs'
-		tmux split-window -h
-		tmux select-pane -t 1
-		tmux split-window -v
-		tmux select-pane -t 1
-		tmux send-keys "profanity -a hipchat" enter
-		tmux select-pane -t 2
-		tmux send-keys "htop" enter
-		tmux select-window -t "$WHOAMI:1"
-		tmux -2 attach-session -t "$WHOAMI"
-    fi
-fi
+## vim: syntax=sh
+#if [[ -z "$TMUX" ]] ;then
+#	WHOAMI=$(whoami)
+#	if tmux has-session -t $WHOAMI 2>/dev/null; then
+#		tmux -2 new-session
+#	else
+#		tmux -2 new-session -d -s "$WHOAMI"
+##		tmux new-session -t "$WHOAMI:1" -n 'Logs'
+##		tmux split-window -h
+##		tmux select-pane -t 1
+##		tmux split-window -v
+##♯		tmux select-pane -t 1
+##		tmux send-keys "profanity -a hipchat" enter
+##		tmux select-pane -t 2
+##		tmux send-keys "htop" enter
+##		tmux select-window -t "$WHOAMI:1"
+#		tmux -2 attach-session -t "$WHOAMI"
+#	fi
+#fi

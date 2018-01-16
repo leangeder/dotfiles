@@ -53,6 +53,30 @@ coreos:
         Where=/home/core/data
         Type=ext4
         Options=nofail,auto,noatime,relatime,data=ordered,defaults,user,rw
+    - name: home-core-data-torrent-downloads.mount
+      command: start
+      content: |
+        [Unit]
+        After=format-home-core-torrent.service
+        Requires=format-home-core-torrent.service
+        Requires=home-core-data.mount
+        [Mount]
+        What=/dev/sdc
+        Where=/home/core/data/torrent/downloads
+        Type=ext4
+        Options=nofail,auto,noatime,relatime,data=ordered,defaults,user,rw
+    - name: format-home-core-torrent.service
+      command: start
+      content: |
+        [Unit]
+        Description=Formats the ephemeral drive
+        After=dev-sdc.device
+        Requires=dev-sdc.device
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/usr/sbin/wipefs -f /dev/sdc
+        ExecStart=/usr/sbin/mkfs.ext4 -F /dev/sdc
     - name: vulcand.service
       command: start
       content: |
@@ -78,45 +102,75 @@ coreos:
         [Unit]
         Description=Seedbox
         After=docker.service
+        After=home-core-data-torrent-downloads.mount
         Requires=docker.service
         Requires=etcd.service
         Requires=vulcand.service
+        Requires=home-core-data-torrent-downloads.mount
 
         [Service]
         ExecStartPre=-/usr/bin/docker kill %p
         ExecStartPre=-/usr/bin/docker rm %p
         ExecStartPre=-/usr/bin/docker pull leangeder-docker-registry.bintray.io/torrent 
-        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/torrent/downloads:/home/torrent/downloads -v /home/core/data/torrent/watch:/home/torrent/watch -v /home/core/data/torrent/.session:/home/torrent/.session -t leangeder-docker-registry.bintray.io/torrent
-        ExecStartPost=/usr/bin/sleep 1
+        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/torrent/downloads:/home/torrent/downloads -v /home/core/data/torrent/watch:/home/torrent/watch -v /home/core/data/torrent/.session:/home/torrent/.session -v /home/core/data/torrent/rtorrent.rc:/home/torrent/.rtorrent.rc:rw -t leangeder-docker-registry.bintray.io/torrent
+        ExecStartPost=/usr/bin/sleep 10
         ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/torrent/endpoints/seedbox http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):80"
         ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/torrent.leangeder.eu/locations/home/path /.*
         ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/torrent.leangeder.eu/locations/home/upstream torrent
-        ExecStartPost=/usr/bin/docker exec %p /bin/sh -c "chown -R torrent:torrent /home/torrent; rm -rf /home/torrent/.session/rtorrent.lock && /etc/init.d/*torr* restart"
+        ExecStartPost=/usr/bin/docker exec %p /bin/sh -c "chown -R torrent:torrent /home/torrent; chmod -R a+w /home/torrent/downloads ; rm -rf /home/torrent/.session/rtorrent.lock && /etc/init.d/*torr* restart"
         ExecStop=/usr/bin/docker rm -f %p 
         ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/torrent.leangeder.eu
         ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/torrent
-    - name: torrents.service
+    - name: sickrage.service
       command: start
       content: |
         [Unit]
-        Description=Seedbox
+        Description=Sickrage
         After=docker.service
+        After=torrent.service
         Requires=docker.service
         Requires=etcd.service
         Requires=vulcand.service
+        Requires=torrent.service
 
         [Service]
         ExecStartPre=-/usr/bin/docker kill %p
         ExecStartPre=-/usr/bin/docker rm %p
-        ExecStartPre=-/usr/bin/docker pull sickrage/sickrage 
-        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/torrents/config:/config -v /home/core/data/torrents/downloads:/downloads -v /home/core/data/torrents/tv:/tv -v /etc/localtime:/etc/localtime:ro -p 8081 sickrage/sickrage 
+        ExecStartPre=-/usr/bin/docker pull linuxserver/sickrage
+        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/config/sickrage:/config -v /home/core/data/torrent/downloads/tmp:/downloads -v /home/core/data/torrent/downloads/Serie:/tv -e TZ=Europe/Paris -e PGID=500 -e PUID=500 --link torrent:torrent -p 8081 linuxserver/sickrage
         ExecStartPost=/usr/bin/sleep 1
-        ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/torrents/endpoints/seedbox http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8081"
-        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/torrents.leangeder.eu/locations/home/path /.*
-        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/torrents.leangeder.eu/locations/home/upstream torrents
+        ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/sickrage/endpoints/sickrage http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8081"
+        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/serie.manage.leangeder.eu/locations/home/path /.*
+        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/serie.manage.leangeder.eu/locations/home/upstream sickrage
+        ExecStartPost=/usr/bin/docker exec %p /bin/sh -c "chown -R abc:abc /downloads /tv; chmod -R a+w /downloads /tv"
         ExecStop=/usr/bin/docker rm -f %p 
-        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/torrents.leangeder.eu
-        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/torrents
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/serie.manage.leangeder.eu
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/sickrage
+    - name: couchpotato.service
+      command: start
+      content: |
+        [Unit]
+        Description=Couchpotato
+        After=docker.service
+        After=torrent.service
+        Requires=docker.service
+        Requires=etcd.service
+        Requires=vulcand.service
+        Requires=torrent.service
+
+        [Service]
+        ExecStartPre=-/usr/bin/docker kill %p
+        ExecStartPre=-/usr/bin/docker rm %p
+        ExecStartPre=-/usr/bin/docker pull linuxserver/couchpotato
+        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/config/couchpotato/config:/config -v /home/core/data/config/couchpotato/custom:/custom -v /home/core/data/torrent/downloads/tmp:/downloads -v /home/core/data/torrent/downloads/Movie:/movies -e TZ=Europe/Paris -e PGID=500 -e PUID=500 --link torrent:torrent -p 5050 linuxserver/couchpotato
+        ExecStartPost=/usr/bin/sleep 20
+        ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/couchpotato/endpoints/couchpotato http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):5050"
+        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/movie.manage.leangeder.eu/locations/home/path /.*
+        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/movie.manage.leangeder.eu/locations/home/upstream couchpotato
+        ExecStartPost=/usr/bin/docker exec %p /bin/sh -c "cp -r /custom/* /app/couchpotato/couchpotato/core/helpers/.;chown -R abc:abc /config /app/couchpotato/couchpotato/core/helpers/"
+        ExecStop=/usr/bin/docker rm -f %p 
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/movie.manage.leangeder.eu
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/couchpotato
     - name: mongo.service
       command: start
       content: |
@@ -170,14 +224,37 @@ coreos:
        ExecStartPre=-/usr/bin/docker kill %p
        ExecStartPre=-/usr/bin/docker rm %p
        ExecStartPre=-/usr/bin/docker pull regueiro/calibre-server
-       ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/downloads:/add -v /home/core/data/Library:/opt/calibre/server -p 8080 regueiro/calibre-server
+       ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/torrent/downloads/tmp:/add -v /home/core/data/torrent/downloads/Ebooks:/opt/calibre/server -p 8080 regueiro/calibre-server
        ExecStartPost=/usr/bin/sleep 1
-       ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/books/endpoints/books http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8080"
-       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/books.leangeder.eu/locations/home/path /.*
-       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/books.leangeder.eu/locations/home/upstream books
+       ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/book/endpoints/book http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8080"
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/book.leangeder.eu/locations/home/path /.*
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/book.leangeder.eu/locations/home/upstream book
        ExecStop=/usr/bin/docker rm -f %p
-       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/books.leangeder.eu
-       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/books
+       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/book.leangeder.eu
+       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/book
+    - name: mylar.service
+      command: start
+      content: |
+       [Unit]
+       Description=Mylar
+       After=docker.service
+       Requires=docker.service
+       Requires=etcd.service
+       Requires=vulcand.service
+       Requires=torrent.service
+
+       [Service]
+       ExecStartPre=-/usr/bin/docker kill %p
+       ExecStartPre=-/usr/bin/docker rm %p
+       ExecStartPre=-/usr/bin/docker pull linuxserver/mylar
+       ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/config/mylar:/config --link torrent:torrent -v /home/core/data/torrent/downloads/tmp:/downloads -v /home/core/data/torrent/downloads/Ebooks/Comics:/comics -e PGID=500 -e PUID=500 -e TZ=Europe/Paris -p 8090 linuxserver/mylar
+       ExecStartPost=/usr/bin/sleep 1
+       ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/mylar/endpoints/mylar http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8090"
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/book.manage.leangeder.eu/locations/home/path /.*
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/book.manage.leangeder.eu/locations/home/upstream mylar
+       ExecStop=/usr/bin/docker rm -f %p
+       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/book.manage.leangeder.eu
+       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/mylar
     - name: webmail.service
       command: start
       content: |
@@ -217,29 +294,132 @@ coreos:
        ExecStartPre=-/usr/bin/docker kill %p
        ExecStartPre=-/usr/bin/docker rm %p
        ExecStartPre=-/usr/bin/docker pull mariadb
-       ExecStart=/usr/bin/docker run --rm --name %p --env MYSQL_ROOT_PASSWORD="$(cat /home/core/data/mysql_root_pwd)" --env MYSQL_USER=sonerezh --env MYSQL_PASSWORD="$(/home/core/data/mysql_sonerezh_pwd)" --env MYSQL_DATABASE=sonerezh -v /home/core/data/mysql:/var/lib/mysql mariadb
+       ExecStart=/usr/bin/docker run --rm --name %p --env MYSQL_ROOT_PASSWORD="$(cat /home/core/data/mysql_root_pwd)" --env MYSQL_USER=sonerezh --env MYSQL_PASSWORD="$(cat /home/core/data/mysql_sonerezh_pwd)" --env MYSQL_DATABASE=sonerezh -v /home/core/data/mysql:/var/lib/mysql mariadb
        ExecStartPost=/usr/bin/sleep 1
        ExecStop=/usr/bin/docker rm -f %p
     - name: sonerezh.service
       command: start
       content: |
         [Unit]
-        Description=Music
+        Description=sonerezh
         After=docker.service
         Requires=docker.service
         Requires=etcd.service
         Requires=vulcand.service
         Requires=mariadb.service
+        Requires=torrent.service
 
         [Service]
         ExecStartPre=-/usr/bin/docker kill %p
         ExecStartPre=-/usr/bin/docker rm %p
-        ExecStartPre=-/usr/bin/docker pull sonerezh/sonerezh
-        ExecStart=/usr/bin/docker run --rm --name %p --link mariadb:sonerezh-db -v /home/core/data/music/library:/music -v /home/core/data/music/thumbnails:/thumbnails --env SONEREZH_DB_ENV_MYSQL_PASSWORD="$(cat /home/core/data/mysql_sonerezh_pwd)" --env SONEREZH_DB_PORT_3306_TCP_ADDR="sonerezh-db" --env SONEREZH_DB_ENV_MYSQL_DATABASE="sonerezh" --env SONEREZH_DB_ENV_MYSQL_USER="sonerezh" -p 80 sonerezh/sonerezh
+        ExecStartPre=-/usr/bin/docker pull sonerezh/sonerezh:latest
+        ExecStart=/usr/bin/docker run --rm --name %p --link mariadb:sonerezh-db -v /home/core/data/torrent/downloads/Music/library:/music -v /home/core/data/torrent/downloads/Music/thumbnails:/thumbnails -e SONEREZH_DB_ENV_MYSQL_PASSWORD="$(cat /home/core/data/mysql_sonerezh_pwd)" -e SONEREZH_DB_PORT_3306_TCP_ADDR="sonerezh-db" -e SONEREZH_DB_ENV_MYSQL_DATABASE="sonerezh" -e SONEREZH_DB_ENV_MYSQL_USER="sonerezh" -p 80 sonerezh/sonerezh:latest
         ExecStartPost=/usr/bin/sleep 1
         ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/music/endpoints/music http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):80"
         ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/music.leangeder.eu/locations/home/path /.*
         ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/music.leangeder.eu/locations/home/upstream music
-        ExecStop=/usr/bin/docker rm -f %p 
+        ExecStop=/usr/bin/docker rm -f %p
         ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/music.leangeder.eu
         ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/music
+    - name: headphone.service
+      command: start
+      content: |
+        [Unit]
+        Description=Headphone
+        After=docker.service
+        Requires=docker.service
+        Requires=etcd.service
+        Requires=vulcand.service
+        Requires=torrent.service
+
+        [Service]
+        ExecStartPre=-/usr/bin/docker kill %p
+        ExecStartPre=-/usr/bin/docker rm %p
+        ExecStartPre=-/usr/bin/docker pull 
+        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/torrent/downloads/tmp:/downloads --link torrent:torrent -v /home/core/data/config/headphone:/config -v /home/core/data/torrent/downloads/Music/library:/music -e PGID=500 -e PUID=500 -e TZ=Europe/Paris -p 8181 linuxserver/headphones
+        ExecStartPost=/usr/bin/sleep 1
+        ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/headphone/endpoints/headphone http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8181"
+        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/music.manage.leangeder.eu/locations/home/path /.*
+        ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/music.manage.leangeder.eu/locations/home/upstream headphone
+        ExecStop=/usr/bin/docker rm -f %p 
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/music.manage.leangeder.eu
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/upstreams/headphone
+    - name: tvheadend-data.service
+      command: start
+      content: |
+        [Unit]
+        Description=TV-data
+        After=docker.service
+        Requires=docker.service
+        Requires=etcd.service
+        Requires=vulcand.service
+
+        [Service]
+        ExecStartPre=-/usr/bin/docker kill %p
+        ExecStartPre=-/usr/bin/docker rm %p
+        ExecStartPre=-/usr/bin/docker pull hobbsau/tvheadend
+        ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/config/tvheadend:/config -v /home/core/data/tvheadend/recordings:/recordings hobbsau/tvheadend
+    - name: tvheadend.service
+      command: start
+      content: |
+        [Unit]
+        Description=TV
+        After=docker.service
+        Requires=docker.service
+        Requires=etcd.service
+        Requires=vulcand.service
+        Requires=tvheadend-data.service
+
+        [Service]
+        ExecStartPre=-/usr/bin/docker kill %p
+        ExecStartPre=-/usr/bin/docker rm %p
+        ExecStartPre=-/usr/bin/docker pull hobbsau/tvheadend
+        #ExecStart=/usr/bin/docker run --rm --name %p --volumes-from tvheadend-data hobbsau/tvheadend
+        #ExecStart=/usr/bin/docker run -d --restart --net="host" -v /data/tvheadend/tv_grab_kazer:/usr/bin/tv_grab_kazer --name %p --volumes-from tvheadend-data hobbsau/tvheadend
+        ExecStart=/usr/bin/docker run --rm --name %p --volumes-from tvheadend-data --net=host -e PUID=500 -e PGID=500 linuxserver/tvheadend
+        ExecStartPost=/usr/bin/sleep 1
+        ExecStop=/usr/bin/docker rm -f %p 
+        ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/tv.leangeder.eu
+    - name: nzb.service
+      command: start
+      content: |
+       [Unit]
+       Description=Nzb
+       After=docker.service
+       Requires=docker.service
+       Requires=etcd.service
+       Requires=vulcand.service
+       Requires=torrent.service
+
+       [Service]
+       ExecStartPre=-/usr/bin/docker kill %p
+       ExecStartPre=-/usr/bin/docker rm %p
+       ExecStartPre=-/usr/bin/docker pull linuxserver/sabnzbd
+       ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/config/sabnzbd:/config -v /home/core/data/torrent/downloads/tmp:/downloads -e PGID=500 -e PUID=500 -e TZ=Europe/Paris -p 8080 linuxserver/sabnzbd
+       ExecStartPost=/usr/bin/sleep 1
+       ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/nzb/endpoints/nzb http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8080"
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/nzb.leangeder.eu/locations/home/path /.*
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/nzb.leangeder.eu/locations/home/upstream nzb
+       ExecStop=/usr/bin/docker rm -f %p
+       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/nzb.leangeder.eu
+    - name: seafile.service
+      command: start
+      content: |
+       [Unit]
+       Description=Seafile
+       After=docker.service
+       Requires=docker.service
+       Requires=etcd.service
+       Requires=vulcand.service
+
+       [Service]
+       ExecStartPre=-/usr/bin/docker kill %p
+       ExecStartPre=-/usr/bin/docker rm %p
+       ExecStartPre=-/usr/bin/docker pull jenserat/seafile
+       ExecStart=/usr/bin/docker run --rm --name %p -v /home/core/data/torrent/downloads:/opt/seafile -p 10001 -p 12001 -p 8000 -p 8080 -p 8082 -e autostart=true jenserat/seafile
+       ExecStartPost=/usr/bin/sleep 1
+       ExecStartPost=/bin/sh -c "/usr/bin/etcdctl set /vulcand/upstreams/seafile/endpoints/seafile http://$(docker inspect --format='{{(index .NetworkSettings.IPAddress)}}' %p):8080"
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/seafile.leangeder.eu/locations/home/path /.*
+       ExecStartPost=/usr/bin/etcdctl set /vulcand/hosts/seafile.leangeder.eu/locations/home/upstream seafile
+       ExecStop=/usr/bin/docker rm -f %p
+       ExecStopPost=/usr/bin/etcdctl rm --recursive --dir /vulcand/hosts/seafile.leangeder.eu

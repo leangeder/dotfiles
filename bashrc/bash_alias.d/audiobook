@@ -1,0 +1,23 @@
+audiobook() {
+  BOOK=$1
+  # ACTIVE_BYTES=$2
+  ACTIVE_BYTES=3a99d005
+  TMP_BOOK="/tmp/audiobook_$(basename ${BOOK})"
+  ffmpeg -i $BOOK 2> ${TMP_BOOK}
+
+  old_IFS=$IFS
+  IFS=$'\n'
+
+  for line in $(cat ${TMP_BOOK} | grep -i Chapter\ #)
+  do
+     tmp_chapter=$(echo $line | cut -d\  -f 6 | cut -d\: -f 2)
+     start=$(echo $line | cut -d\  -f 8 | cut -d, -f1)
+     end=$(echo $line | cut -d\  -f 10)
+    # #  ffmpeg -vsync 2 -i "${BOOK}" -ss "${start}" -to "${end}" -vn -ar 44100 -ac 2 -ab 128 -f mp3 "${chapter}.mp3" </dev/null
+    #  ffmpeg -y -activation_bytes ${ACTIVE_BYTES} -vsync 2 -i "${BOOK}" -ss "${start}" -to "${end}" -vn -ar 44100 -ac 2 -ab 128 -f mp3 "Chapter_${chapter}.mp3" </dev/null
+     ffmpeg -y -activation_bytes ${ACTIVE_BYTES} -vsync 2 -i "${BOOK}" -ss "${start}" -to "${end}" -vn -c:a libvorbis -b:a 64k Chapter_$(seq -f "%02g" ${tmp_chapter} ${tmp_chapter}).ogg </dev/null
+  done
+  IFS=$old_IFS
+
+  rm ${TMP_BOOK}
+}

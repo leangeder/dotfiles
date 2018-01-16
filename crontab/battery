@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+# -*- coding: utf-8 -*-
+
+# Dependecy: notify2
+
+import notify2
+import subprocess
+import pid
+from threading import Timer
+# from pid.decorator import pidfile
+
+def battery_check():
+    file_capacity = "/sys/class/power_supply/BAT0/capacity"
+    file_status = "/sys/class/power_supply/BAT0/status"
+
+    capacity = int(subprocess.check_output(["cat", file_capacity]))
+    status = subprocess.check_output(["cat", file_status])
+    print(status)
+
+    if "Discharging" in status and capacity >= 74 and capacity <= 100:
+        show_notification(str(capacity),"low")
+    elif "Discharging" in status and capacity <= 10:
+        show_notification(str(capacity), "critical")
+
+    time = Timer(10.0,battery_check)
+    time.start()
+
+def show_notification(bat, level):
+    notify2.init('bat_check')
+    note = notify2.Notification("Battery " + str(bat) + "%", "Charge your battery", "/usr/share/icons/gnome/32x32/status/battery-low.png")
+    if level == "critical":
+        note.set_urgency(notify2.URGENCY_CRITICAL)
+    else:
+        note.set_urgency(notify2.URGENCY_CRITICAL)
+    note.set_category('device')
+    note.set_timeout(5000)
+    note.show()
+
+# @pidfile()
+def main():
+#    try:
+        _pidfile = pid.PidFile(pidname="battery",piddir="/tmp/battery_check/",enforce_dotpid_postfix=False)
+        with _pidfile.create():
+            battery_check()
+    # finally:
+    #     pidfile.close()
+
+if __name__ == "__main__":
+    main()
