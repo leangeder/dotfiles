@@ -1,0 +1,6 @@
+export EDITOR=vim
+export TERM=xterm-256color
+
+export PATH=$PATH:$HOME/bin
+
+export MPD_HOST="music.leangeder.eu"

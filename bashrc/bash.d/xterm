@@ -1,0 +1,29 @@
+# vim: syntax=sh
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+
+case "$TERM" in
+    xterm*)
+        if [ -e /usr/share/terminfo/x/xterm-256color ]; then
+            export TERM=xterm-256color
+        elif [ -e /usr/share/terminfo/x/xterm-color ]; then
+            export TERM=xterm-color;
+        else
+            export TERM=xterm
+        fi
+
+        # Management or the tmux launch
+        # {
+        [[ $- != *i* ]] && return
+        [[ -z "$TMUX" ]] && exec tmux
+        # }
+
+        ;;
+    linux)
+        [ -n "$FBTERM" ] && export TERM=fbterm
+        ;;
+esac

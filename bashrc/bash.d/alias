@@ -1,0 +1,30 @@
+# vim: syntax=sh
+alias mpd="mpd ${HOME}/.config/mpd/mpd.conf"
+
+function music {
+  SESSION=Music
+
+  tmux -2 new-session -d -s $SESSION 'ncmpcpp -s help'	
+  tmux -2 split-window -d -t $SESSION:0 -p 40 'ncmpcpp -s playlist'
+  tmux -2 split-window -d -t $SESSION:0 -p 50 'ncmpcpp -s visualizer'
+
+  for i in "\\"; do
+    tmux -2 send-keys -t $SESSION:0.1 "$i"
+    tmux -2 send-keys -t $SESSION:0.2 "$i"
+  done
+
+  for i in "C-l" "BSpace" "BSpace" "60" "Enter" "7" "Left"; do
+    tmux -2 send-keys -t $SESSION:0.0 "$i"
+  done
+
+  sleep 1
+
+  for i in "C-l" "BSpace" "BSpace" "60" "Enter" "4" "Left"; do
+    tmux -2 send-keys -t $SESSION:0.2 "$i"
+  done
+
+  sleep 1
+
+  tmux -2 set -t $SESSION -g status off
+  tmux -2 attach-session -t $SESSION:0.2
+}
