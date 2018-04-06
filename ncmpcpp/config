@@ -12,7 +12,7 @@
 ## file which defines that while launching ncmpcpp.
 ##
 #
-ncmpcpp_directory = ~/.ncmpcpp
+ncmpcpp_directory = ~/.config/ncmpcpp
 #
 ##
 ## Directory for storing downloaded lyrics. It
@@ -24,9 +24,10 @@ lyrics_directory = ~/.lyrics
 #
 ##### connection settings #####
 #
-mpd_host = 6bbf993279@node2.leangeder.eu
-#mpd_host = ~/.config/mpd/socket
-#mpd_host = 127.0.0.1
+# mpd_host = 6bbf993279@node2.leangeder.eu
+# mpd_host = ~/.config/mpd/socket
+# mpd_host = 127.0.0.1
+mpd_host = music.leangeder.eu
 #
 mpd_port = 6600
 #
@@ -34,7 +35,8 @@ mpd_port = 6600
 #
 ## Needed for tag editor and file operations to work.
 ##
-mpd_music_dir = /srv/files/leangeder/files/Music/library/
+# mpd_music_dir = /srv/files/leangeder/files/Music/library/
+mpd_music_dir = ~/Music
 #mpd_music_dir = http://node2.leangeder.eu/owncloud/remote.php/webdav/Music/library/
 #
 mpd_crossfade_time = 5
@@ -47,15 +49,16 @@ mpd_crossfade_time = 5
 ## or 44100:16:2 for stereo visualization. Example
 ## configuration (it has to be put into mpd.conf):
 ##
-# audio_output {
-#        type            "fifo"
-#        name            "mpd_fifo"
-#        path            "~/.config/mpd/fifo"
-#        format          "44100:16:1"
-# }
+audio_output {
+       type            "fifo"
+       name            "mpd_fifo"
+#       path            "~/.config/mpd/fifo"
+       path            "/tmp/mpd.fifo"
+       format          "44100:16:2"
+}
 ##
 #
-# visualizer_fifo_path = /tmp/mpd_fifo
+visualizer_fifo_path = /tmp/mpd.fifo
 #
 ##
 ## Note: Below parameter is needed for ncmpcpp
@@ -97,7 +100,8 @@ visualizer_sync_interval = 30
 ##
 visualizer_type = spectrum
 
-visualizer_look = "●▮"
+# visualizer_look = "●▮"
+visualizer_look = "▪▪"
 
 visualizer_color = cyan, green, yellow, magenta, red
 #
@@ -288,7 +292,7 @@ song_columns_list_format = (20)[]{a} (6f)[green]{NE} (50)[white]{t|f:Title} (20)
 ## Attention: It doesn't support song format anymore.
 ## Use `ncmpcpp --now-playing SONG_FORMAT` instead.
 ##
-#execute_on_song_change = ""
+execute_on_song_change = "killall mpv && mpv --really-quiet http://music.leangeder.eu &"
 #
 playlist_show_remaining_time = no
 #
@@ -386,7 +390,7 @@ follow_now_playing_lyrics = yes
 #
 #generate_win32_compatible_filenames = yes
 #
-allow_for_physical_item_deletion = no
+allow_for_physical_item_deletion = yes
 #
 ##
 ## Note: If you set this variable, ncmpcpp will try to
@@ -396,13 +400,13 @@ allow_for_physical_item_deletion = no
 ##
 ## Note: Language has to be expressed as an ISO 639 alpha-2 code.
 ##
-#lastfm_preferred_language = en
+lastfm_preferred_language = fr
 #
 ## Available values: add_remove, always_add.
 ##
 #space_add_mode = always_add
 #
-#show_hidden_files_in_local_browser = no
+show_hidden_files_in_local_browser = yes
 #
 ##
 ## How shall screen switcher work?
@@ -455,7 +459,7 @@ ignore_leading_the = yes
 #
 #block_search_constraints_change_if_items_found = yes
 #
-#mouse_support = yes
+mouse_support = no
 #
 #mouse_list_scroll_whole_page = yes
 #
@@ -467,7 +471,7 @@ ignore_leading_the = yes
 #
 #media_library_sort_by_mtime = no
 #
-#enable_window_title = yes
+enable_window_title = yes
 #
 ##
 ## Note: You can choose default search mode for search
