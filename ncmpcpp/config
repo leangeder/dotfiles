@@ -292,7 +292,7 @@ song_columns_list_format = (20)[]{a} (6f)[green]{NE} (50)[white]{t|f:Title} (20)
 ## Attention: It doesn't support song format anymore.
 ## Use `ncmpcpp --now-playing SONG_FORMAT` instead.
 ##
-execute_on_song_change = "killall mpv && mpv --really-quiet http://music.leangeder.eu &"
+execute_on_song_change = "killall mpv; mpv --really-quiet http://music.leangeder.eu &"
 #
 playlist_show_remaining_time = no
 #
