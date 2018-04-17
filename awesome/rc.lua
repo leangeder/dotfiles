@@ -20,16 +20,6 @@ local lain          = require("lain")
 --local menubar       = require("menubar")
 local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
-
--- Perso
--- load the module
-local screensaver   = require("screensaver")
--- instanciate the control
-screensaver_ctrl = screensaver({})
--- 
--- 
--- -- add the widget to your wibox
--- right_layout:add(screensaver_ctrl.widget)
 -- }}}
 
 -- {{{ Error handling
@@ -65,7 +55,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "xterm", "slack", "owncloud", "keepassxc", "redshift" })
+run_once({ "xterm", "slack", "firefox", "chromium-browser", "redshift" })
 -- }}}
 
 -- {{{ Variable definitions
@@ -74,7 +64,7 @@ local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = "xterm -bg black" or "urxvtc"
 local editor       = os.getenv("EDITOR") or "vim" or "vi"
-local gui_editor   = "gvim"
+local gui_editor   = "vim"
 local browser      = "firefox"
 
 awful.util.terminal = terminal
@@ -598,11 +588,11 @@ awful.rules.rules = {
     { rule = { class = "Nightly" },
       properties = { screen = 1, tag = screen[1].tags[2] } },
     { rule = { class = "Chromium" },
-      properties = { screen = 1, tag = screen[1].tags[2] } },
+      properties = { screen = 2, tag = screen[2].tags[2] } },
 
     -- Set Slack to always map on the three tag on screen 1/2.
     { rule = { class = "Slack" },
-      properties = { screen = 1, tag = screen[1].tags[3] } },
+      properties = { screen = 2, tag = screen[2].tags[1] } },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
