@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/home/leangeder/data/dotfile/vim/vim/settings'
-let g:netrw_dirhist_2='/home/leangeder/data/dotfile/vim/vim'
-let g:netrw_dirhist_3='/home/leangeder/data/dotfile/vim/vim/plugins'
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/leangeder/data/projet'
+let g:netrw_dirhist_2='/home/leangeder/data/projet/beamery/devops-kubernetes-vault/templates'
+let g:netrw_dirhist_3='/home/leangeder/data/devbox/gitlab-runner'
+let g:netrw_dirhist_4='/home/leangeder/data/devbox/ingress'
+let g:netrw_dirhist_5='/home/leangeder/data/projet/golang/website'

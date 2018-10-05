@@ -1,17 +1,5 @@
-" # vi:ft=vim
-
 " Go Lang Bundle
-" Plugin 'fatih/vim-go', {'do': ':GoInstallBinaries'}
-Plugin 'fatih/vim-go', {'do': ':GoUpdateBinaries'}
-
-" Real-time completion
-" Plugin 'Shougo/neocomplete.vim'
-
-" Snippets
-" Plugin 'Shougo/neocomplete.vim'
-
-
-
+Plugin 'fatih/vim-go', {'do': ':GoInstallBinaries'}
 
 " " Use goimport for formatting
 " let g:go_fmt_command = "goimports"

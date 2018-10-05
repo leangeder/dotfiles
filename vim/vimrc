@@ -1,3 +1,5 @@
+" # vi:ft=vim
+
 " Plugins
 " {
     let vundle_exists=expand('~/.vim/plugins/download/Vundle.vim')

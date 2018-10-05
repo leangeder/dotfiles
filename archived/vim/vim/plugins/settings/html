@@ -1,5 +1,3 @@
-# vi:ft=vim
-
 " HTML Bundle
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'gorodinskiy/vim-coloresque'
