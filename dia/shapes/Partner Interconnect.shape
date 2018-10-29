@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Networking - Partner Interconnect</name>
+  <icon>Partner Interconnect.png</icon>
+  <connections>
+    <point x="3.05" y="2.25001"/>
+    <point x="3.2" y="2.25001"/>
+    <point x="3.35" y="2.25001"/>
+    <point x="3.35" y="3.2"/>
+    <point x="3.35" y="4.15"/>
+    <point x="3.2" y="4.15"/>
+    <point x="3.05" y="4.15"/>
+    <point x="3.05" y="3.2"/>
+    <point x="3.2" y="3.2"/>
+    <point x="1.35" y="3.05"/>
+    <point x="1.6" y="3.05"/>
+    <point x="1.85" y="3.05"/>
+    <point x="1.85" y="3.2"/>
+    <point x="1.85" y="3.35"/>
+    <point x="1.6" y="3.35"/>
+    <point x="1.35" y="3.35"/>
+    <point x="1.35" y="3.2"/>
+    <point x="1.6" y="3.2"/>
+    <point x="1.81303" y="2.61303"/>
+    <point x="2.25" y="2.6"/>
+    <point x="2.68697" y="2.61303"/>
+    <point x="2.7" y="3.2"/>
+    <point x="2.68697" y="3.78697"/>
+    <point x="2.25" y="3.8"/>
+    <point x="1.81303" y="3.78697"/>
+    <point x="1.80001" y="3.2"/>
+    <point x="2.25" y="3.2"/>
+    <point x="4.55" y="3.05"/>
+    <point x="4.8" y="3.05"/>
+    <point x="5.05" y="3.05"/>
+    <point x="5.05" y="3.2"/>
+    <point x="5.05" y="3.35"/>
+    <point x="4.8" y="3.35"/>
+    <point x="4.55" y="3.35"/>
+    <point x="4.55" y="3.2"/>
+    <point x="4.8" y="3.2"/>
+    <point x="3.71303" y="2.61303"/>
+    <point x="4.15" y="2.6"/>
+    <point x="4.58697" y="2.61303"/>
+    <point x="4.59999" y="3.2"/>
+    <point x="4.58697" y="3.78697"/>
+    <point x="4.15" y="3.8"/>
+    <point x="3.71303" y="3.78697"/>
+    <point x="3.7" y="3.2"/>
+    <point x="4.15" y="3.2"/>
+  </connections>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:path style="fill: #4285f4; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.32369 2.906 C 5.88528,2.14364 5.44688,1.38127 5.00847,0.61891 C 4.90783,0.440411 4.72017,0.328576 4.51528,0.325 C 3.63847,0.325 2.76166,0.325 1.88484,0.325 C 1.67995,0.328463 1.49223,0.440268 1.3916,0.618785 C 0.953188,1.37962 0.514782,2.14046 0.076375,2.9013 C -0.0254107,3.07831 -0.0254545,3.29608 0.07626,3.47313 C 0.514673,4.23897 0.953087,5.00482 1.3915,5.77067 C 1.49111,5.95162 1.67828,6.06711 1.88469,6.075 C 2.7615,6.075 3.6383,6.075 4.51511,6.075 C 4.72141,6.06788 4.90878,5.9528 5.00841,5.772 C 5.4468,5.00959 5.88518,4.24718 6.32357,3.48477 C 6.42544,3.3053 6.42549,3.0855 6.32369,2.906 C 6.32369,2.906 6.32369,2.906 6.32369,2.906z"/>
+    <svg:path style="fill: #000000; fill-opacity: 0.07; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 5.0084 5.77197 C 5.37141,5.14067 5.7344,4.50936 6.09741,3.87805 C 5.45971,3.24035 4.82202,2.60266 4.18433,1.96497 C 3.52289,2.05998 2.86144,2.15499 2.2,2.25 C 2.33974,2.38974 2.47948,2.52948 2.61921,2.66921 C 2.19614,2.89614 1.77307,3.12307 1.35,3.35 C 1.66706,3.66706 1.98412,3.98412 2.30117,4.30117 C 2.27245,4.34562 2.24372,4.39006 2.215,4.4345 C 2.76183,4.98133 3.30867,5.52817 3.8555,6.075 C 4.07537,6.075 4.29524,6.075 4.51511,6.075 C 4.72142,6.06788 4.90878,5.95278 5.0084,5.77198 C 5.0084,5.77198 5.0084,5.77197 5.0084,5.77197z"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="3.05" y="2.25001" width="0.3" height="1.89999" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.35" y="3.05" width="0.5" height="0.3" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke-linejoin: round; stroke: #ffffff" x="1.80001" y="2.6" width="0.899995" height="1.19999" rx="0.044475" ry="0.044475"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="3.05" y="2.25001" width="0.3" height="1.89999" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="4.55" y="3.05" width="0.5" height="0.3" rx="0" ry="0"/>
+    <svg:path style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 2.2 4.15 C 2.2,4.23259 2.2,4.31518 2.2,4.39777 C 2.2,4.42662 2.22338,4.45 2.25223,4.45 C 2.88408,4.45 3.51592,4.45 4.14777,4.45 C 4.17662,4.45 4.20001,4.42661 4.2,4.39776 C 4.2,4.31518 4.2,4.23259 4.2,4.15 C 3.53333,4.15 2.86667,4.15 2.2,4.15z"/>
+    <svg:path style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 4.14777 1.95 C 3.51592,1.95 2.88408,1.95 2.25223,1.95 C 2.22338,1.95 2.2,1.97338 2.2,2.00223 C 2.2,2.08482 2.2,2.16741 2.2,2.25 C 2.86667,2.25 3.53333,2.25 4.2,2.25 C 4.2,2.16741 4.2,2.08482 4.2,2.00223 C 4.2,1.97338 4.17662,1.95 4.14777,1.95 C 4.14777,1.95 4.14777,1.95 4.14777,1.95z"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke-linejoin: round; stroke: #ffffff" x="3.7" y="2.6" width="0.899995" height="1.19999" rx="0.044475" ry="0.044475"/>
+  </svg:svg>
+</shape>

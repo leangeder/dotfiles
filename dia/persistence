@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dia:persistence xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
+  <dia:window role="diagram_tree">
+    <dia:attribute name="xpos">
+      <dia:int val="0"/>
+    </dia:attribute>
+    <dia:attribute name="ypos">
+      <dia:int val="20"/>
+    </dia:attribute>
+    <dia:attribute name="width">
+      <dia:int val="958"/>
+    </dia:attribute>
+    <dia:attribute name="height">
+      <dia:int val="1022"/>
+    </dia:attribute>
+    <dia:attribute name="isopen">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+  </dia:window>
+  <dia:window role="sheets_main_dialog">
+    <dia:attribute name="xpos">
+      <dia:int val="1145"/>
+    </dia:attribute>
+    <dia:attribute name="ypos">
+      <dia:int val="20"/>
+    </dia:attribute>
+    <dia:attribute name="width">
+      <dia:int val="528"/>
+    </dia:attribute>
+    <dia:attribute name="height">
+      <dia:int val="349"/>
+    </dia:attribute>
+    <dia:attribute name="isopen">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+  </dia:window>
+  <dia:window role="dia-main-window">
+    <dia:attribute name="xpos">
+      <dia:int val="0"/>
+    </dia:attribute>
+    <dia:attribute name="ypos">
+      <dia:int val="20"/>
+    </dia:attribute>
+    <dia:attribute name="width">
+      <dia:int val="958"/>
+    </dia:attribute>
+    <dia:attribute name="height">
+      <dia:int val="1022"/>
+    </dia:attribute>
+    <dia:attribute name="isopen">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:window>
+  <dia:list role="color-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##8A8A8A
+#F0F0F0
+#D8E5E5
+#000099#</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="sheets">
+    <dia:attribute name="listvalue">
+      <dia:string>#Amazon
+Google
+Network
+Civil
+Event-driven process chain
+Electric
+Automata
+AADL
+Building Site
+Renewable Energy
+Shape Design
+Database
+Graphes de flux#</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="font-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>#Linux Biolinum O#</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="recent-files">
+    <dia:attribute name="listvalue">
+      <dia:string>#/home/leangeder/work/infra.dia
+/home/leangeder/Téléchargements/aws/PNG, SVG, EPS/Networking &amp; Content Delivery/NetworkingContentDelivery_AmazonRoute53.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Compute/Container Engine.svg
+/home/leangeder/.dia/shapes/Container Engine.shape
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud Datastore.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud Datastore.png
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_storage.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_standard-machine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_shared-core-machine-G1.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_shared-core-machine-F1.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_preemptable-vm.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_high-memory-machine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_high-CPU-machine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_custom-virtual-machine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/modifiers_autoscaling.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/Container-Engine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/Compute-Engine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/Cloud-Dataproc.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/Cloud-Dataflow.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Expanded Product Card Icons/App-Engine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Open Source Icons/TensorFlow_logo.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Open Source Icons/Kubernetes_name.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Open Source Icons/Kubernetes_logo.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Open Source Icons/Istio_logo.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Open Source Icons/Forseti_logo.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Open Source Icons/Forseti_lockup.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Persistent Disk.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud Storage.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud SQL.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud Spanner.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud Memorystore.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Storage &amp; Databases/Cloud Bigtable.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Virtual Private Cloud.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Standard Network Tier.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Premium Network Tier.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Partner Interconnect.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Dedicated Interconnect.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud VPN.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud Routes.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud Router.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud Network.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud Load Balancing.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud Firewall Rules.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud External IP Addresses.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud DNS.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud CDN.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Networking/Cloud Armor.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Trace.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Stackdriver.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Monitoring.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Logging.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Error Reporting.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Debugger.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Cloud Shell.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Cloud Mobile App.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Cloud Deployment Manager.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Cloud Console.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Cloud Billing API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Management Tools/Cloud APIs.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Internet of Things/Cloud IoT Core.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Security Key Enforcement.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Key Management Service.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Identity-Aware Proxy.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Data Loss Prevention API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Cloud Security Scanner.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Cloud Security Command Center.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Cloud Resource Manager.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/Cloud IAM.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Identity &amp; Security/BeyondCorp.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Prediction API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Google Cloud Platform.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Google Cloud Platform_lockup.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Generic GCP.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Extras/Blue Hexagon.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Google Plugin for Eclipse.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Container Registry.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Container Builder.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Tools for Visual Studio.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Tools for PowerShell.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Tools for IntelliJ.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Tools for Android Studio.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Test Lab.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Source Repositories.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud SDK.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Developer Tools/Cloud Deployment Manager.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Data Transfer/Transfer Appliance.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Compute/GPU.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Compute/Container-Optimized OS.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Compute/Compute Engine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Compute/Cloud Functions.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Compute/App Engine.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Dialogflow Enterprise Edition.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Vision API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Video Intelligence API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Translation API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud TPU.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Text-to-Speech.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Speech API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Natural Language API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Machine Learning.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud Jobs API.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Cloud AutoML.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Cloud AI/Advanced Solutions Lab.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Genomics.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Data Studio.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Cloud PubSub.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Cloud Dataproc.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Cloud Dataprep.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Cloud Datalab.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Cloud Dataflow.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/Cloud Composer.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/Big Data/BigQuery.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/API Platform &amp; Ecosystems/Developer Portal.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/API Platform &amp; Ecosystems/Cloud Endpoints.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/API Platform &amp; Ecosystems/API Monetization.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/API Platform &amp; Ecosystems/Apigee Sense.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/API Platform &amp; Ecosystems/Apigee API Platform.svg
+/home/leangeder/Téléchargements/google/GCP Icons/Products &amp; Services/API Platform &amp; Ecosystems/API Analytics.svg#</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:list role="arrow-menu">
+    <dia:attribute name="listvalue">
+      <dia:string>##</dia:string>
+    </dia:attribute>
+  </dia:list>
+  <dia:integer role="undo_depth">
+    <dia:attribute name="intvalue">
+      <dia:int val="15"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="line-style">
+    <dia:attribute name="intvalue">
+      <dia:int val="0"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="new_view_width">
+    <dia:attribute name="intvalue">
+      <dia:int val="500"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="grid_major">
+    <dia:attribute name="intvalue">
+      <dia:int val="5"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="grid_vis_x">
+    <dia:attribute name="intvalue">
+      <dia:int val="1"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="grid_vis_y">
+    <dia:attribute name="intvalue">
+      <dia:int val="1"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="recent_documents_list_size">
+    <dia:attribute name="intvalue">
+      <dia:int val="5"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="export-filter">
+    <dia:attribute name="intvalue">
+      <dia:int val="6"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="new_view_height">
+    <dia:attribute name="intvalue">
+      <dia:int val="400"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:integer role="import-filter">
+    <dia:attribute name="intvalue">
+      <dia:int val="0"/>
+    </dia:attribute>
+  </dia:integer>
+  <dia:real role="new_view_zoom">
+    <dia:attribute name="realvalue">
+      <dia:real val="100"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="end-arrow-length">
+    <dia:attribute name="realvalue">
+      <dia:real val="0.5"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="dash-length">
+    <dia:attribute name="realvalue">
+      <dia:real val="1"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="grid_w">
+    <dia:attribute name="realvalue">
+      <dia:real val="1"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="grid_x">
+    <dia:attribute name="realvalue">
+      <dia:real val="1"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="grid_y">
+    <dia:attribute name="realvalue">
+      <dia:real val="1"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="linewidth">
+    <dia:attribute name="realvalue">
+      <dia:real val="0.15000000000000002"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="start-arrow-length">
+    <dia:attribute name="realvalue">
+      <dia:real val="0.5"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="start-arrow-width">
+    <dia:attribute name="realvalue">
+      <dia:real val="0.5"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:real role="end-arrow-width">
+    <dia:attribute name="realvalue">
+      <dia:real val="0.5"/>
+    </dia:attribute>
+  </dia:real>
+  <dia:boolean role="view_antialiased">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="reverse_rubberbanding_intersects">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="pagebreak_solid">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="snap_object">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="reset_tools_after_create">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="compress_save">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="use_menu_bar">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="pagebreak_visible">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="grid_snap">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="grid_visible">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="show_cx_pts">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="is_portrait">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="fixed_icon_size">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="Avertissement">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="grid_hex">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="toolbox_on_top">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="false"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:boolean role="grid_dynamic">
+    <dia:attribute name="booleanvalue">
+      <dia:boolean val="true"/>
+    </dia:attribute>
+  </dia:boolean>
+  <dia:string role="new_diagram_papertype">
+    <dia:attribute name="stringvalue">
+      <dia:string>#A4#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="favored_svg_export">
+    <dia:attribute name="stringvalue">
+      <dia:string>#any#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="end-arrow-type">
+    <dia:attribute name="stringvalue">
+      <dia:string>#None#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="favored_ps_export">
+    <dia:attribute name="stringvalue">
+      <dia:string>#any#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="last-sheet-selected">
+    <dia:attribute name="stringvalue">
+      <dia:string>#Amazon#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="start-arrow-type">
+    <dia:attribute name="stringvalue">
+      <dia:string>#Filled Concave#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="favored_png_export">
+    <dia:attribute name="stringvalue">
+      <dia:string>#any#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="favored_emf_export">
+    <dia:attribute name="stringvalue">
+      <dia:string>#any#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="fontsize_unit">
+    <dia:attribute name="stringvalue">
+      <dia:string>#Millimeter#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="length_unit">
+    <dia:attribute name="stringvalue">
+      <dia:string>#Centimeter#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:string role="favored_wmf_export">
+    <dia:attribute name="stringvalue">
+      <dia:string>#any#</dia:string>
+    </dia:attribute>
+  </dia:string>
+  <dia:color role="pagebreak_colour">
+    <dia:attribute name="colorvalue">
+      <dia:color val="#000099ff"/>
+    </dia:attribute>
+  </dia:color>
+  <dia:color role="grid_colour">
+    <dia:attribute name="colorvalue">
+      <dia:color val="#d8e5e5ff"/>
+    </dia:attribute>
+  </dia:color>
+  <dia:color role="fg_color">
+    <dia:attribute name="colorvalue">
+      <dia:color val="#000000ff"/>
+    </dia:attribute>
+  </dia:color>
+  <dia:color role="new_diagram_bgcolour">
+    <dia:attribute name="colorvalue">
+      <dia:color val="#ffffffff"/>
+    </dia:attribute>
+  </dia:color>
+  <dia:color role="bg_color">
+    <dia:attribute name="colorvalue">
+      <dia:color val="#ffffffff"/>
+    </dia:attribute>
+  </dia:color>
+</dia:persistence>

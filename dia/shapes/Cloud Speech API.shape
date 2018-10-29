@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Cloud AI - Cloud Speech API</name>
+  <icon>Cloud Speech API.png</icon>
+  <connections>
+    <point x="1.7" y="2.4"/>
+    <point x="1.9" y="2.4"/>
+    <point x="2.1" y="2.4"/>
+    <point x="2.1" y="3.2"/>
+    <point x="2.1" y="4"/>
+    <point x="1.9" y="4"/>
+    <point x="1.7" y="4"/>
+    <point x="1.7" y="3.2"/>
+    <point x="1.9" y="3.2"/>
+    <point x="4.3" y="2.4"/>
+    <point x="4.5" y="2.4"/>
+    <point x="4.7" y="2.4"/>
+    <point x="4.7" y="3.2"/>
+    <point x="4.7" y="4"/>
+    <point x="4.5" y="4"/>
+    <point x="4.3" y="4"/>
+    <point x="4.3" y="3.2"/>
+    <point x="4.5" y="3.2"/>
+    <point x="3" y="2.05"/>
+    <point x="3.2" y="2.05"/>
+    <point x="3.4" y="2.05"/>
+    <point x="3.4" y="3.2"/>
+    <point x="3.4" y="4.35"/>
+    <point x="3.2" y="4.35"/>
+    <point x="3" y="4.35"/>
+    <point x="3" y="3.2"/>
+    <point x="3.2" y="3.2"/>
+    <point x="2.35" y="2.6"/>
+    <point x="2.55" y="2.6"/>
+    <point x="2.75" y="2.6"/>
+    <point x="2.75" y="3.2"/>
+    <point x="2.75" y="3.8"/>
+    <point x="2.55" y="3.8"/>
+    <point x="2.35" y="3.8"/>
+    <point x="2.35" y="3.2"/>
+    <point x="2.55" y="3.2"/>
+    <point x="3.65" y="2.8"/>
+    <point x="3.85" y="2.8"/>
+    <point x="4.05" y="2.8"/>
+    <point x="4.05" y="3.2"/>
+    <point x="4.05" y="3.6"/>
+    <point x="3.85" y="3.6"/>
+    <point x="3.65" y="3.6"/>
+    <point x="3.65" y="3.2"/>
+    <point x="3.85" y="3.2"/>
+  </connections>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:path style="fill: #4285f4; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.3235 2.906 C 5.88517,2.14367 5.44683,1.38133 5.0085,0.619 C 4.90788,0.44056 4.72032,0.328711 4.5155,0.325 C 3.63867,0.325 2.76183,0.325 1.885,0.325 C 1.68015,0.32861 1.49255,0.440486 1.392,0.619 C 0.9535,1.37933 0.515,2.13967 0.0765,2.9 C -0.0252672,3.07709 -0.0252672,3.29491 0.0765,3.472 C 0.514833,4.23867 0.953167,5.00533 1.3915,5.772 C 1.49102,5.95298 1.67812,6.06854 1.8845,6.0765 C 2.76133,6.0765 3.63817,6.0765 4.515,6.0765 C 4.72137,6.06942 4.90881,5.95433 5.0085,5.7735 C 5.44683,5.01117 5.88517,4.24883 6.3235,3.4865 C 6.42597,3.30657 6.42597,3.08593 6.3235,2.906 C 6.3235,2.906 6.3235,2.906 6.3235,2.906z"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 4.7 2.4 C 4.61667,2.63333 4.53333,2.86667 4.45,3.1 C 4.1,2.75 3.75,2.4 3.4,2.05 C 3.35433,2.40433 3.30867,2.75867 3.263,3.113 C 3.092,2.942 2.921,2.771 2.75,2.6 C 2.707,2.707 2.664,2.814 2.621,2.921 C 2.44733,2.74733 2.27367,2.57367 2.1,2.4 C 2.03333,2.62567 1.96667,2.85133 1.9,3.077 C 1.95567,3.31217 2.01133,3.54733 2.067,3.7825 C 1.94467,3.855 1.82233,3.9275 1.7,4 C 2.39167,4.69167 3.08333,5.38333 3.775,6.075 C 4.02167,6.075 4.26833,6.075 4.515,6.075 C 4.72137,6.06792 4.90881,5.95283 5.0085,5.772 C 5.38133,5.12367 5.75417,4.47533 6.127,3.827 C 5.65133,3.35133 5.17567,2.87567 4.7,2.4"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.7" y="2.4" width="0.4" height="1.6" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="4.3" y="2.4" width="0.4" height="1.6" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="3" y="2.05" width="0.4" height="2.3" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="2.35" y="2.6" width="0.4" height="1.2" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="3.65" y="2.8" width="0.4" height="0.8" rx="0" ry="0"/>
+  </svg:svg>
+</shape>

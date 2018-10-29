@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Management Tools - Trace</name>
+  <icon>Trace.png</icon>
+  <connections>
+    <point x="1.7" y="2.9"/>
+    <point x="3.2" y="2.9"/>
+    <point x="4.7" y="2.9"/>
+    <point x="4.7" y="3.2"/>
+    <point x="4.7" y="3.5"/>
+    <point x="3.2" y="3.5"/>
+    <point x="1.7" y="3.5"/>
+    <point x="1.7" y="3.2"/>
+    <point x="3.2" y="3.2"/>
+    <point x="2.65" y="4.1"/>
+    <point x="3.675" y="4.1"/>
+    <point x="4.7" y="4.1"/>
+    <point x="4.7" y="4.4"/>
+    <point x="4.7" y="4.7"/>
+    <point x="3.675" y="4.7"/>
+    <point x="2.65" y="4.7"/>
+    <point x="2.65" y="4.4"/>
+    <point x="3.675" y="4.4"/>
+    <point x="1.7" y="1.7"/>
+    <point x="2.175" y="1.7"/>
+    <point x="2.65" y="1.7"/>
+    <point x="2.65" y="2"/>
+    <point x="2.65" y="2.3"/>
+    <point x="2.175" y="2.3"/>
+    <point x="1.7" y="2.3"/>
+    <point x="1.7" y="2"/>
+    <point x="2.175" y="2"/>
+  </connections>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:path style="fill: #4285f4; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.3235 2.906 C 5.88517,2.14367 5.44683,1.38133 5.0085,0.619 C 4.90788,0.44056 4.72032,0.328711 4.5155,0.325 C 3.63867,0.325 2.76183,0.325 1.885,0.325 C 1.68015,0.32861 1.49255,0.440486 1.392,0.619 C 0.9535,1.37933 0.515,2.13967 0.0765,2.9 C -0.0252672,3.07709 -0.0252672,3.29491 0.0765,3.472 C 0.514833,4.23867 0.953167,5.00533 1.3915,5.772 C 1.49102,5.95298 1.67812,6.06854 1.8845,6.0765 C 2.76133,6.0765 3.63817,6.0765 4.515,6.0765 C 4.72137,6.06942 4.90881,5.95433 5.0085,5.7735 C 5.44683,5.01117 5.88517,4.24883 6.3235,3.4865 C 6.42597,3.30657 6.42597,3.08593 6.3235,2.906 C 6.3235,2.906 6.3235,2.906 6.3235,2.906z"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 5.0085 5.772 C 5.3205,5.2295 5.6325,4.687 5.9445,4.1445 C 5.52967,3.72967 5.11483,3.31483 4.7,2.9 C 4.51933,3.00267 4.33867,3.10533 4.158,3.208 C 3.65533,2.70533 3.15267,2.20267 2.65,1.7 C 2.33333,1.9 2.01667,2.1 1.7,2.3 C 2.0115,2.6115 2.323,2.923 2.6345,3.2345 C 2.323,3.323 2.0115,3.4115 1.7,3.5 C 2.07317,3.87317 2.44633,4.24633 2.8195,4.6195 C 2.763,4.64633 2.7065,4.67317 2.65,4.7 C 3.10833,5.15833 3.56667,5.61667 4.025,6.075 C 4.18833,6.075 4.35167,6.075 4.515,6.075 C 4.72137,6.06792 4.90881,5.95283 5.0085,5.772 C 5.0085,5.772 5.0085,5.772 5.0085,5.772"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.7" y="2.9" width="3" height="0.6" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="2.65" y="4.1" width="2.05" height="0.6" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.7" y="1.7" width="0.95" height="0.6" rx="0" ry="0"/>
+  </svg:svg>
+</shape>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Extras - Prediction API</name>
+  <icon>Prediction API.png</icon>
+  <connections>
+    <point x="4.277" y="2.7505"/>
+    <point x="3.949" y="2.885"/>
+    <point x="5.6755" y="4.6115"/>
+    <point x="5.8445" y="4.318"/>
+    <point x="4.113" y="2.81775"/>
+    <point x="4.81225" y="3.74825"/>
+    <point x="5.76" y="4.46475"/>
+    <point x="5.06075" y="3.53425"/>
+    <point x="5.4195" y="5.0575"/>
+    <point x="5.588" y="4.764"/>
+    <point x="4.017" y="3.1925"/>
+    <point x="3.689" y="3.327"/>
+    <point x="5.50375" y="4.91075"/>
+    <point x="4.8025" y="3.97825"/>
+    <point x="3.853" y="3.25975"/>
+    <point x="4.55425" y="4.19225"/>
+    <point x="2.1825" y="3.9175"/>
+    <point x="1.9985" y="3.8075"/>
+    <point x="2.8045" y="2.4635"/>
+    <point x="3.5785" y="3.77"/>
+    <point x="3.394" y="3.8795"/>
+    <point x="2.8035" y="2.8825"/>
+    <point x="2.0905" y="3.8625"/>
+    <point x="2.4015" y="3.1355"/>
+    <point x="3.1915" y="3.11675"/>
+    <point x="3.48625" y="3.82475"/>
+    <point x="3.09875" y="3.381"/>
+    <point x="2.493" y="3.4"/>
+    <point x="3.478" y="4.1335"/>
+    <point x="3.478" y="3.4885"/>
+    <point x="3.1555" y="3.811"/>
+    <point x="3.8005" y="3.811"/>
+    <point x="2.0985" y="4.171"/>
+    <point x="2.0985" y="3.526"/>
+    <point x="1.776" y="3.8485"/>
+    <point x="2.421" y="3.8485"/>
+    <point x="4.728" y="2.4265"/>
+    <point x="4.7335" y="1.7635"/>
+    <point x="4.1565" y="2.09"/>
+    <point x="4.73075" y="2.095"/>
+    <point x="4.445" y="1.92675"/>
+    <point x="4.44225" y="2.25825"/>
+  </connections>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:path style="fill: #4285f4; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.3235 2.906 C 5.88517,2.14367 5.44683,1.38133 5.0085,0.619 C 4.90788,0.44056 4.72032,0.328711 4.5155,0.325 C 3.63867,0.325 2.76183,0.325 1.885,0.325 C 1.68015,0.32861 1.49255,0.440486 1.392,0.619 C 0.9535,1.37933 0.515,2.13967 0.0765,2.9 C -0.0252672,3.07709 -0.0252672,3.29491 0.0765,3.472 C 0.514833,4.23867 0.953167,5.00533 1.3915,5.772 C 1.49102,5.95298 1.67812,6.06854 1.8845,6.0765 C 2.76133,6.0765 3.63817,6.0765 4.515,6.0765 C 4.72137,6.06942 4.90881,5.95433 5.0085,5.7735 C 5.44683,5.01117 5.88517,4.24883 6.3235,3.4865 C 6.42597,3.30657 6.42597,3.08593 6.3235,2.906 C 6.3235,2.906 6.3235,2.906 6.3235,2.906z"/>
+    <svg:polygon style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" points="4.277,2.7505 3.949,2.885 5.6755,4.6115 5.8445,4.318 4.277,2.7505 "/>
+    <svg:polygon style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" points="5.4195,5.0575 5.588,4.764 4.017,3.1925 3.689,3.327 5.4195,5.0575 "/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 4.7335 1.7635 C 4.54117,1.87233 4.34883,1.98117 4.1565,2.09 C 4.22867,2.16217 4.30083,2.23433 4.373,2.3065 C 4.31833,2.352 4.26367,2.3975 4.209,2.443 C 4.78333,3.01733 5.35767,3.59167 5.932,4.166 C 6.0625,3.939 6.193,3.712 6.3235,3.485 C 6.33982,3.45611 6.35354,3.42582 6.3645,3.3945 C 5.82083,2.85083 5.27717,2.30717 4.7335,1.7635"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 3.8685 6.075 C 4.084,6.075 4.2995,6.075 4.515,6.075 C 4.72137,6.06792 4.90881,5.95283 5.0085,5.772 C 5.11633,5.58433 5.22417,5.39667 5.332,5.209 C 4.7895,4.66633 4.247,4.12367 3.7045,3.581 C 3.629,3.68517 3.5535,3.78933 3.478,3.8935 C 3.25417,3.4935 3.03033,3.0935 2.8065,2.6935 C 2.49383,3.154 2.18117,3.6145 1.8685,4.075 C 2.53517,4.74167 3.20183,5.40833 3.8685,6.075"/>
+    <svg:polygon style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" points="2.1825,3.9175 1.9985,3.8075 2.8045,2.4635 3.5785,3.77 3.394,3.8795 2.8035,2.8825 2.1825,3.9175 "/>
+    <svg:ellipse style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" cx="3.478" cy="3.811" rx="0.3225" ry="0.3225"/>
+    <svg:ellipse style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" cx="2.0985" cy="3.8485" rx="0.3225" ry="0.3225"/>
+    <svg:path style="fill: #f0f0f0; fill-opacity: 1; stroke: none" fill-rule="evenodd" d="M 3.874 3.436 L 3.689,3.327 L 3.832,3.084 L 4.017,3.193 L 3.874,3.436z"/>
+    <svg:path style="fill: #f0f0f0; fill-opacity: 1; stroke: none" fill-rule="evenodd" d="M 4.134 2.994 L 3.95,2.885 L 4.093,2.642 L 4.277,2.75 L 4.134,2.994z"/>
+    <svg:path style="fill: #f0f0f0; fill-opacity: 1; stroke: none" fill-rule="evenodd" d="M 4.394 2.55 L 4.209,2.441 L 4.35,2.2 L 4.535,2.309 L 4.394,2.55z"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 3.874 3.436 L 3.689,3.327 L 3.832,3.084 L 4.017,3.193 L 3.874,3.436"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 4.134 2.994 L 3.95,2.885 L 4.093,2.642 L 4.277,2.75 L 4.134,2.994"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 4.394 2.55 L 4.209,2.441 L 4.35,2.2 L 4.535,2.309 L 4.394,2.55"/>
+    <svg:polygon style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" points="4.728,2.4265 4.7335,1.7635 4.1565,2.09 4.728,2.4265 "/>
+  </svg:svg>
+</shape>

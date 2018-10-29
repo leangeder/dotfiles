@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Storage Databases - CloudMemorystore</name>
+  <icon>Cloud Memorystore.png</icon>
+  <connections>
+    <point x="1.90001" y="2.30001"/>
+    <point x="2.12501" y="2.30001"/>
+    <point x="2.35001" y="2.30001"/>
+    <point x="2.35001" y="2.42501"/>
+    <point x="2.35001" y="2.55001"/>
+    <point x="2.12501" y="2.55001"/>
+    <point x="1.90001" y="2.55001"/>
+    <point x="1.90001" y="2.42501"/>
+    <point x="2.12501" y="2.42501"/>
+    <point x="1.90001" y="2.80001"/>
+    <point x="2.12501" y="2.80001"/>
+    <point x="2.35001" y="2.80001"/>
+    <point x="2.35001" y="2.92501"/>
+    <point x="2.35001" y="3.05001"/>
+    <point x="2.12501" y="3.05001"/>
+    <point x="1.90001" y="3.05001"/>
+    <point x="1.90001" y="2.92501"/>
+    <point x="2.12501" y="2.92501"/>
+    <point x="1.90001" y="3.30001"/>
+    <point x="2.12501" y="3.30001"/>
+    <point x="2.35001" y="3.30001"/>
+    <point x="2.35001" y="3.42501"/>
+    <point x="2.35001" y="3.55001"/>
+    <point x="2.12501" y="3.55001"/>
+    <point x="1.90001" y="3.55001"/>
+    <point x="1.90001" y="3.42501"/>
+    <point x="2.12501" y="3.42501"/>
+    <point x="1.90001" y="3.80001"/>
+    <point x="2.12501" y="3.80001"/>
+    <point x="2.35001" y="3.80001"/>
+    <point x="2.35001" y="3.92501"/>
+    <point x="2.35001" y="4.05001"/>
+    <point x="2.12501" y="4.05001"/>
+    <point x="1.90001" y="4.05001"/>
+    <point x="1.90001" y="3.92501"/>
+    <point x="2.12501" y="3.92501"/>
+    <point x="4.05001" y="2.30001"/>
+    <point x="4.27501" y="2.30001"/>
+    <point x="4.50001" y="2.30001"/>
+    <point x="4.50001" y="2.42501"/>
+    <point x="4.50001" y="2.55001"/>
+    <point x="4.27501" y="2.55001"/>
+    <point x="4.05001" y="2.55001"/>
+    <point x="4.05001" y="2.42501"/>
+    <point x="4.27501" y="2.42501"/>
+    <point x="4.05001" y="2.80001"/>
+    <point x="4.27501" y="2.80001"/>
+    <point x="4.50001" y="2.80001"/>
+    <point x="4.50001" y="2.92501"/>
+    <point x="4.50001" y="3.05001"/>
+    <point x="4.27501" y="3.05001"/>
+    <point x="4.05001" y="3.05001"/>
+    <point x="4.05001" y="2.92501"/>
+    <point x="4.27501" y="2.92501"/>
+    <point x="4.05001" y="3.30001"/>
+    <point x="4.27501" y="3.30001"/>
+    <point x="4.50001" y="3.30001"/>
+    <point x="4.50001" y="3.42501"/>
+    <point x="4.50001" y="3.55001"/>
+    <point x="4.27501" y="3.55001"/>
+    <point x="4.05001" y="3.55001"/>
+    <point x="4.05001" y="3.42501"/>
+    <point x="4.27501" y="3.42501"/>
+    <point x="4.05001" y="3.80001"/>
+    <point x="4.27501" y="3.80001"/>
+    <point x="4.50001" y="3.80001"/>
+    <point x="4.50001" y="3.92501"/>
+    <point x="4.50001" y="4.05001"/>
+    <point x="4.27501" y="4.05001"/>
+    <point x="4.05001" y="4.05001"/>
+    <point x="4.05001" y="3.92501"/>
+    <point x="4.27501" y="3.92501"/>
+  </connections>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:path style="fill: #4285f4; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.32369 2.906 C 5.88528,2.14364 5.44688,1.38127 5.00847,0.61891 C 4.90783,0.440411 4.72017,0.328576 4.51528,0.325 C 3.63847,0.325 2.76166,0.325 1.88484,0.325 C 1.67995,0.328463 1.49223,0.440268 1.3916,0.618785 C 0.953188,1.37962 0.514782,2.14046 0.076375,2.9013 C -0.0254107,3.07832 -0.0254545,3.29608 0.07626,3.47314 C 0.514673,4.23898 0.953087,5.00482 1.3915,5.77067 C 1.49111,5.95162 1.67828,6.06711 1.88469,6.075 C 2.7615,6.075 3.6383,6.075 4.51511,6.075 C 4.72141,6.06788 4.90878,5.9528 5.00841,5.772 C 5.4468,5.00959 5.88518,4.24718 6.32357,3.48477 C 6.42544,3.3053 6.42549,3.0855 6.32369,2.906 C 6.32369,2.906 6.32369,2.906 6.32369,2.906z"/>
+    <svg:path style="fill: #000000; fill-opacity: 0.07; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.09035 3.89034 C 5.56023,3.36023 5.03012,2.83012 4.5,2.3 C 4.46667,2.3 4.43333,2.3 4.4,2.3 C 4.3,2.2 4.2,2.1 4.1,2 C 3.36667,2.18333 2.63333,2.36667 1.9,2.55 C 1.98333,2.63333 2.06667,2.71667 2.15,2.8 C 2.06667,2.88333 1.98333,2.96667 1.9,3.05 C 1.98333,3.13333 2.06667,3.21667 2.15,3.3 C 2.06667,3.38333 1.98333,3.46667 1.9,3.55 C 2,3.65 2.1,3.75 2.2,3.85 C 2.1,3.91667 2,3.98333 1.9,4.05 C 2.575,4.725 3.25,5.4 3.925,6.075 C 4.1217,6.075 4.3184,6.075 4.51511,6.075 C 4.72141,6.06789 4.90878,5.9528 5.00841,5.772 C 5.36906,5.14478 5.7297,4.51756 6.09035,3.89034z"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.90001" y="2.30001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.90001" y="2.80001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.90001" y="3.30001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="1.90001" y="3.80001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="4.05001" y="2.30001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="4.05001" y="2.80001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="4.05001" y="3.30001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="4.05001" y="3.80001" width="0.45" height="0.25" rx="0" ry="0"/>
+    <svg:path style="fill: #f0f0f0; fill-opacity: 1; stroke: none" fill-rule="evenodd" d="M 2.3 2 L 2.3,4.35 L 4.1,4.35 L 4.1,2 L 2.3,2 L 3.05,4 L 3.05,3.3 L 2.65,3.3 L 3.35,2.35 L 3.35,3.05 L 3.75,3.05 L 3.05,4z"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 2.3 2 L 2.3,4.35 L 4.1,4.35 L 4.1,2 L 2.3,2"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 3.05 4 L 3.05,3.3 L 2.65,3.3 L 3.35,2.35 L 3.35,3.05 L 3.75,3.05 L 3.05,4"/>
+  </svg:svg>
+</shape>

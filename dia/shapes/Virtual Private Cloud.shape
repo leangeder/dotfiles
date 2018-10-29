@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns="http://www.daa.com.au/~james/dia-shape-ns" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <name>Networking - Virtual Private Cloud</name>
+  <icon>Virtual Private Cloud.png</icon>
+  <connections>
+    <point x="2.35" y="2.725"/>
+    <point x="2.475" y="2.725"/>
+    <point x="2.6" y="2.725"/>
+    <point x="2.6" y="3.2125"/>
+    <point x="2.6" y="3.7"/>
+    <point x="2.475" y="3.7"/>
+    <point x="2.35" y="3.7"/>
+    <point x="2.35" y="3.2125"/>
+    <point x="2.475" y="3.2125"/>
+    <point x="3.8" y="2.6065"/>
+    <point x="3.925" y="2.6065"/>
+    <point x="4.05" y="2.6065"/>
+    <point x="4.05" y="3.152"/>
+    <point x="4.05" y="3.6975"/>
+    <point x="3.925" y="3.6975"/>
+    <point x="3.8" y="3.6975"/>
+    <point x="3.8" y="3.152"/>
+    <point x="3.925" y="3.152"/>
+    <point x="2.719" y="2.35"/>
+    <point x="3.20025" y="2.35"/>
+    <point x="3.6815" y="2.35"/>
+    <point x="3.6815" y="2.475"/>
+    <point x="3.6815" y="2.6"/>
+    <point x="3.20025" y="2.6"/>
+    <point x="2.719" y="2.6"/>
+    <point x="2.719" y="2.475"/>
+    <point x="3.20025" y="2.475"/>
+    <point x="2.719" y="3.8"/>
+    <point x="3.20025" y="3.8"/>
+    <point x="3.6815" y="3.8"/>
+    <point x="3.6815" y="3.925"/>
+    <point x="3.6815" y="4.05"/>
+    <point x="3.20025" y="4.05"/>
+    <point x="2.719" y="4.05"/>
+    <point x="2.719" y="3.925"/>
+    <point x="3.20025" y="3.925"/>
+    <point x="2.01464" y="2.01464"/>
+    <point x="2.425" y="2"/>
+    <point x="2.83536" y="2.01464"/>
+    <point x="2.85" y="2.425"/>
+    <point x="2.83536" y="2.83536"/>
+    <point x="2.425" y="2.85"/>
+    <point x="2.01464" y="2.83536"/>
+    <point x="2" y="2.425"/>
+    <point x="2.425" y="2.425"/>
+    <point x="3.56464" y="2.01464"/>
+    <point x="3.975" y="2"/>
+    <point x="4.38536" y="2.01464"/>
+    <point x="4.4" y="2.425"/>
+    <point x="4.38536" y="2.83536"/>
+    <point x="3.975" y="2.85"/>
+    <point x="3.56464" y="2.83536"/>
+    <point x="3.55" y="2.425"/>
+    <point x="3.975" y="2.425"/>
+    <point x="2.01464" y="3.56464"/>
+    <point x="2.425" y="3.55"/>
+    <point x="2.83536" y="3.56464"/>
+    <point x="2.85" y="3.975"/>
+    <point x="2.83536" y="4.38536"/>
+    <point x="2.425" y="4.4"/>
+    <point x="2.01464" y="4.38536"/>
+    <point x="2" y="3.975"/>
+    <point x="2.425" y="3.975"/>
+    <point x="3.56464" y="3.56464"/>
+    <point x="3.975" y="3.55"/>
+    <point x="4.38536" y="3.56464"/>
+    <point x="4.4" y="3.975"/>
+    <point x="4.38536" y="4.38536"/>
+    <point x="3.975" y="4.4"/>
+    <point x="3.56464" y="4.38536"/>
+    <point x="3.55" y="3.975"/>
+    <point x="3.975" y="3.975"/>
+  </connections>
+  <aspectratio type="fixed"/>
+  <svg:svg>
+    <svg:path style="fill: #4285f4; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" fill-rule="evenodd" d="M 6.3235 2.906 C 5.88517,2.14367 5.44683,1.38133 5.0085,0.619 C 4.90788,0.44056 4.72032,0.328711 4.5155,0.325 C 3.63867,0.325 2.76183,0.325 1.885,0.325 C 1.68015,0.32861 1.49255,0.440486 1.392,0.619 C 0.9535,1.37933 0.515,2.13967 0.0765,2.9 C -0.0252672,3.07709 -0.0252672,3.29491 0.0765,3.472 C 0.514833,4.23867 0.953167,5.00533 1.3915,5.772 C 1.49102,5.95298 1.67812,6.06854 1.8845,6.0765 C 2.76133,6.0765 3.63817,6.0765 4.515,6.0765 C 4.72137,6.06942 4.90881,5.95433 5.0085,5.7735 C 5.44683,5.01117 5.88517,4.24883 6.3235,3.4865 C 6.42597,3.30657 6.42597,3.08593 6.3235,2.906 C 6.3235,2.906 6.3235,2.906 6.3235,2.906z"/>
+    <svg:path style="fill: none; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" d="M 4.382 2.015 C 4.0335,2.1825 3.685,2.35 3.3365,2.5175 C 3.16983,2.35083 3.00317,2.18417 2.8365,2.0175 C 2.56417,2.29117 2.29183,2.56483 2.0195,2.8385 C 2.20083,3.01983 2.38217,3.20117 2.5635,3.3825 C 2.38183,3.71583 2.20017,4.04917 2.0185,4.3825 C 2.58317,4.94667 3.14783,5.51083 3.7125,6.075 C 3.98,6.075 4.2475,6.075 4.515,6.075 C 4.72137,6.06792 4.90881,5.95283 5.0085,5.772 C 5.389,5.1095 5.7695,4.447 6.15,3.7845 C 5.56067,3.19467 4.97133,2.60483 4.382,2.015"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="2.35" y="2.725" width="0.25" height="0.975" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="3.8" y="2.6065" width="0.25" height="1.091" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="2.719" y="2.35" width="0.9625" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke: #ffffff" x="2.719" y="3.8" width="0.9625" height="0.25" rx="0" ry="0"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke-linejoin: round; stroke: #ffffff" x="2" y="2" width="0.85" height="0.85" rx="0.05" ry="0.05"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke-linejoin: round; stroke: #ffffff" x="3.55" y="2" width="0.85" height="0.85" rx="0.05" ry="0.05"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke-linejoin: round; stroke: #ffffff" x="2" y="3.55" width="0.85" height="0.85" rx="0.05" ry="0.05"/>
+    <svg:rect style="fill: #f0f0f0; fill-opacity: 1; stroke-opacity: 0; stroke-width: 0.001; stroke-linejoin: round; stroke: #ffffff" x="3.55" y="3.55" width="0.85" height="0.85" rx="0.05" ry="0.05"/>
+  </svg:svg>
+</shape>
