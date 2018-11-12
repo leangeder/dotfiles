@@ -3,4 +3,12 @@ export TERM=xterm-256color
 
 export PATH=$PATH:$HOME/bin
 
-export MPD_HOST="music.leangeder.eu"
+# export MPD_HOST="music.leangeder.eu"
+
+
+export VAULT_ADDR="https://vault.beamery.com"
+export SERVICE_ACCOUNT="vault-auth-global@beamery-global.iam.gserviceaccount.com"
+export GOOGLE_PROJECT="beamery-global"
+export SERVICE_ACCOUNT="vault-auth-global@${GOOGLE_PROJECT}.iam.gserviceaccount.com"
+export GITLAB_TOKEN="xgnQEGhRca-oDWx3gF8Z"
+export GITHUB_TOKEN="348fe61aeba7ed8c2127a12c88ed3a771fce490a"

@@ -78,45 +78,45 @@
 !
 !! Set Colours for xterm
 !! {
-xterm*termName:						xterm-256color
-!xterm*locale:							yes
-!xterm*metaSendsEscape:				true
-!xterm*eightBitInput:					false
-!xterm*backarrowkey:					false
-!xterm*ttyModes:						erase ^?
-xterm*saveLines:						99999
-xterm*borderWidth:					0
-!
-xterm*background:						_background
-xterm*foreground:						_foreground	
-xterm*renderFont:						true
-xterm*faceName:						Liberation Mono:size=11:antialias=true
-xterm*font:								7x13
-!!xterm*cursorColor:					_foreground
-!xterm*cursorColor:					yellow
-!
-xterm*pointerColor:					white
-xterm*pointerColorBackground:		black
-xterm*cursorBlink:					true
-!
-!xterm*color0:							_background
-!xterm*color1:							_foreground
-!xterm*color2:							_color2
-!xterm*color3:							_color3
-!xterm*color4:							_color4
-!xterm*color5:							_color5
-!xterm*color6:							_color6
-!xterm*color7:							_color7
-!! 8-15 are considered brighter colours of 1-7
-!xterm*color8:							_color8
-!xterm*color9:							_color9
-!xterm*color10:							_color10
-!xterm*color11:							_color11
-!xterm*color12:							_color12
-!xterm*color13:							_color13
-!xterm*color14:							_color14
-!xterm*color15:							_color15
-!! }
+! xterm*termName:						xterm-256color
+! !xterm*locale:							yes
+! !xterm*metaSendsEscape:				true
+! !xterm*eightBitInput:					false
+! !xterm*backarrowkey:					false
+! !xterm*ttyModes:						erase ^?
+! xterm*saveLines:						99999
+! xterm*borderWidth:					0
+! !
+! xterm*background:						_background
+! xterm*foreground:						_foreground	
+! xterm*renderFont:						true
+! xterm*faceName:						Liberation Mono:size=11:antialias=true
+! xterm*font:								7x13
+! !!xterm*cursorColor:					_foreground
+! !xterm*cursorColor:					yellow
+! !
+! xterm*pointerColor:					white
+! xterm*pointerColorBackground:		black
+! xterm*cursorBlink:					true
+! !
+! !xterm*color0:							_background
+! !xterm*color1:							_foreground
+! !xterm*color2:							_color2
+! !xterm*color3:							_color3
+! !xterm*color4:							_color4
+! !xterm*color5:							_color5
+! !xterm*color6:							_color6
+! !xterm*color7:							_color7
+! !! 8-15 are considered brighter colours of 1-7
+! !xterm*color8:							_color8
+! !xterm*color9:							_color9
+! !xterm*color10:							_color10
+! !xterm*color11:							_color11
+! !xterm*color12:							_color12
+! !xterm*color13:							_color13
+! !xterm*color14:							_color14
+! !xterm*color15:							_color15
+! !! }
 !
 !! Set Xscreensaver
 !! {
@@ -193,3 +193,5 @@ xterm*cursorBlink:					true
 !!datestamp format--see the strftime(3) manual page for details
 !xscreensaver.dateFormat:    %I:%M%P %a %b %d, %Y
 !! }
+!
+#include "./.Xresources.d/quantum-black"

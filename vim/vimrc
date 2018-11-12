@@ -1,5 +1,5 @@
-" # vi:ft=vim
-
+" vi: ft=vim
+ 
 " Plugins
 " {
     let vundle_exists=expand('~/.vim/plugins/download/Vundle.vim')
@@ -121,7 +121,10 @@
 
     let no_buffers_menu=1
     if !exists('g:not_finish_vimplug')
-      colorscheme molokai
+      " colorscheme molokai
+      colorscheme quantum
+      set background=dark
+      " set termguicolors
     endif
 
     set mousemodel=popup

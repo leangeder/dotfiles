@@ -28,3 +28,80 @@ function music {
   tmux -2 set -t $SESSION -g status off
   tmux -2 attach-session -t $SESSION:0.2
 }
+
+function gitlab_test {
+  sudo rm -rf /tmp/ssh
+  sudo cp -r $HOME/.ssh /tmp/ssh
+
+  # gitlab-runner \
+  # exec docker --docker-privileged \
+  # --docker-pull-policy if-not-present \
+  # --docker-volumes /tmp/ssh:/root/.ssh \
+  # --docker-volumes $PWD:$PWD \
+  # --env GIT_STRATEGY=none \
+  # --env CI_JOB_TOKEN=${GITLAB_TOKEN} \
+  # --env CI_PIPELINE_ID=1 \
+  # --env VAULT_TOKEN_PRODUCTION=${VAULT_TOKEN} \
+  # --env VAULT_TOKEN_PREVIEW=${VAULT_TOKEN} \
+  # --env VAULT_TOKEN_COMMON=${VAULT_TOKEN} \
+  # --env VAULT_TOKEN=${VAULT_TOKEN} \
+  # --env VAULT_ADDR=${VAULT_ADDR} \
+  # $@
+
+  docker run --rm -ti \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume $PWD:$PWD --workdir $PWD \
+  gitlab/gitlab-runner:latest \
+  exec docker --docker-privileged \
+  --docker-pull-policy if-not-present \
+  --docker-volumes $PWD:/builds/project-0/ \
+  --env GIT_STRATEGY=none \
+  --env CI_PIPELINE_ID=1 \
+  --env CI_JOB_TOKEN=${GITLAB_TOKEN} \
+  --env VAULT_TOKEN_PRODUCTION=${VAULT_TOKEN} \
+  --env VAULT_TOKEN_COMMON=${VAULT_TOKEN} \
+  --env VAULT_TOKEN_GLOBAL=${VAULT_TOKEN} \
+  --env VAULT_TOKEN_PREVIEW=${VAULT_TOKEN} \
+  --env VAULT_TOKEN=${VAULT_TOKEN} \
+  --env VAULT_ADDR=${VAULT_ADDR} \
+  $@
+}
+
+
+
+
+function vault_token {
+  if [ $(vault token lookup | grep ^ttl | tr -s " " | cut -d\  -f2) > 0 ]
+  then
+    if [ "X${VAULT_TOKEN}" == "X" ]
+    then
+        export VAULT_TOKEN=$(cat ~/.vault-token)
+    fi
+    return 0
+  fi
+
+  ROLE=$1
+
+  cat - > /tmp/login_request.json <<EOF
+  {
+    "aud": "vault/$ROLE",
+    "sub": "${SERVICE_ACCOUNT}",
+    "exp": $((EXP=$(date +%s)+600))
+  }
+EOF
+
+  JWT=$(gcloud beta iam service-accounts sign-jwt /tmp/login_request.json /tmp/signed_jwt.json --iam-account=${SERVICE_ACCOUNT} --project=${GOOGLE_PROJECT} && cat /tmp/signed_jwt.json)
+  VAULT_TOKEN=$($(which vault) write auth/gcp/login role="$ROLE" jwt="${JWT}" --format=json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["auth"]["client_token"]')
+  $(which vault) login ${VAULT_TOKEN}
+}
+
+function tizonia () {
+  USER_ID=$(id -u)
+  GROUP_ID=$(id -g)
+
+  docker run -it --rm \
+  --volume=/run/user/${USER_ID}/pulse:/run/user/${GROUP_ID}/pulse \
+  --device /dev/snd:/dev/snd \
+  --volume="$HOME/.config/tizonia":/home/tizonia/.config/tizonia --name tizonia \
+  tizonia/docker-tizonia "$@"
+}

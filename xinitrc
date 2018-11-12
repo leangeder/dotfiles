@@ -18,18 +18,18 @@
 	fi
 # }
 
-# Auto Manage Dual Monitor
-# {
-	SCREEN_ONE="eDP-1"
-	DEFAULT_BRIGHTNESS="0.7"
-	xrandr --auto
-	if [ "X$(xrandr --listmonitors | grep -v Monitor | cut -d \  -f 6 | wc -l )" != "X1" ]
-	then
-		SCREEN_TWO=$(xrandr --listmonitors | grep -v Monitor | cut -d \  -f 6 | grep -v eDP-1)
-		xrandr --output ${SCREEN_ONE} --primary
-		xrandr --output ${SCREEN_TWO} --right-of ${SCREEN_ONE}
-	fi
-# }
+# # Auto Manage Dual Monitor
+# # {
+# 	SCREEN_ONE="eDP-1"
+# 	DEFAULT_BRIGHTNESS="0.7"
+# 	xrandr --auto
+# 	if [ "X$(xrandr --listmonitors | grep -v Monitor | cut -d \  -f 6 | wc -l )" != "X1" ]
+# 	then
+# 		SCREEN_TWO=$(xrandr --listmonitors | grep -v Monitor | cut -d \  -f 6 | grep -v eDP-1)
+# 		xrandr --output ${SCREEN_ONE} --primary
+# 		xrandr --output ${SCREEN_TWO} --right-of ${SCREEN_ONE}
+# 	fi
+# # }
 
 exec awesome
 

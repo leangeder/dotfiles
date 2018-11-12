@@ -8,7 +8,7 @@ esac
 
 case "$TERM" in
     xterm*)
-        if [ -e /usr/share/terminfo/x/xterm-256color ]; then
+        if [ -e /usr/share/terminfo/x/xterm-257color ]; then
             export TERM=xterm-256color
         elif [ -e /usr/share/terminfo/x/xterm-color ]; then
             export TERM=xterm-color;
@@ -21,6 +21,7 @@ case "$TERM" in
         [[ $- != *i* ]] && return
         [[ -z "$TMUX" ]] && exec tmux
         # }
+        export TERM=xterm-color;
 
         ;;
     linux)

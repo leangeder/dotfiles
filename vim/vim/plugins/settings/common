@@ -1,7 +1,6 @@
-" # vi:ft=vim
+" vi: ft=vim
 
-" Plugin 'Valloric/YouCompleteMe'
-" Plugin 'scrooloose/nerdtree'
+Plugin 'Valloric/YouCompleteMe'
 " Plugin 'vim-syntastic/syntastic'
 
 
@@ -21,7 +20,6 @@ Plugin 'scrooloose/syntastic'
 Plugin 'Yggdroot/indentLine'
 Plugin 'avelino/vim-bootstrap-updater'
 Plugin 'sheerun/vim-polyglot'
-
 if isdirectory('/usr/local/opt/fzf')
   Plugin '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 else
@@ -50,12 +48,8 @@ endif
 Plugin 'honza/vim-snippets'
 
 " Color
-Plugin 'tomasr/molokai'
+" Plugin 'tomasr/molokai'
+Plugin 'tyrannicaltoucan/vim-quantum'
 
 " Real-time completion
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'roxma/nvim-yarp'
-Plugin 'roxma/vim-hug-neovim-rpc'
-let g:python_host_prog = expand('/usr/bin/python2')
-let g:python3_host_prog = substitute(g:python_host_prog, '2', '3', '')
-let g:deoplete#enable_at_startup = 1
+" Plugin 'Shougo/neocomplete.vim'

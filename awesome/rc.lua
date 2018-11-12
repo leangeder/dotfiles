@@ -588,11 +588,13 @@ awful.rules.rules = {
     { rule = { class = "Nightly" },
       properties = { screen = 1, tag = screen[1].tags[2] } },
     { rule = { class = "Chromium" },
-      properties = { screen = 2, tag = screen[2].tags[2] } },
+      properties = { screen = screen.count(), tag = screen[screen.count()].tags[2] } },
+      --- properties = { screen = 2, tag = screen[2].tags[2] } },
 
     -- Set Slack to always map on the three tag on screen 1/2.
     { rule = { class = "Slack" },
-      properties = { screen = 2, tag = screen[2].tags[1] } },
+      properties = { screen = screen.count(), tag = screen[screen.count()].tags[1] } },
+      --- properties = { screen = 2, tag = screen[2].tags[1] } },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },

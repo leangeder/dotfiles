@@ -1,4 +1,4 @@
-" # vi:ft=vim
+" vi: ft=vim
 
 " Vim racer
 Plugin 'racer-rust/vim-racer'
