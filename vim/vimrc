@@ -25,9 +25,9 @@
       " let Vundle manage Vundle (required)
       Plugin 'VundleVim/Vundle.vim'
 
+      runtime golang
       runtime common
       runtime js
-      runtime golang
       runtime rustlang
       runtime python
 
