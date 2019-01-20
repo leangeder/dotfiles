@@ -1,0 +1,48 @@
+sw_volume: 100
+audio_device_state:1:My HTTP Stream
+audio_device_state:1:PulseAudio server Stream
+audio_device_state:1:fifo
+state: stop
+current: 1
+random: 0
+repeat: 0
+single: 0
+consume: 0
+crossfade: 5
+mixrampdb: 0.000000
+mixrampdelay: -1.000000
+playlist_begin
+song_begin: http://chai5she.cdn.dvmr.fr/bfmbusiness
+Time: 0.000000
+Name: BFM Business
+mtime: 0
+song_end
+song_begin: http://cdn.nrjaudio.fm/adwz1/fr_an/55248/mp3_128.mp3
+Time: 0.000000
+Name: NRJ ANTILLES 64 AAC
+mtime: 0
+song_end
+song_begin: http://radios.la1ere.fr/guadeloupe
+Time: 0.000000
+Name: Radio 1er Guadeloupe
+mtime: 0
+song_end
+song_begin: http://188.165.52.176/rcigp.mp3
+Time: 0.000000
+Name: RCI Guadeloupe
+mtime: 0
+song_end
+4:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_1.mp3
+5:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_10.mp3
+6:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_11.mp3
+7:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_12.mp3
+8:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_13.mp3
+9:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_2.mp3
+10:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_3.mp3
+11:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_4.mp3
+12:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_5.mp3
+13:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_6.mp3
+14:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_7.mp3
+15:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_8.mp3
+16:Audiobook/Sun_Tzu_-_L'art_de_la_guerre/LIV4500A_9.mp3
+playlist_end

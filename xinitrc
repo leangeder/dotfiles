@@ -1,17 +1,19 @@
+
 #!/bin/sh
 
 # Set Xressources
 # {
 	if [ -f ~/.Xresources ]
-	then 
+	then
 		xrdb -load ~/.Xresources
+        # xrdb -load ~/.Xresources
 	fi
-	
+
 	for f in /etc/X11/xinit/xinitrc.d/?*.sh; do
 		[ -x "$f" ] && . "$f"
 	done
 	unset f
-	
+
 	if [ -f ~/.xmodmaprc ]
 	then
 		xmodmap ~/.xmodmaprc
@@ -31,7 +33,7 @@
 # 	fi
 # # }
 
-exec awesome
+# exec awesome
 
 # exec redshift
 

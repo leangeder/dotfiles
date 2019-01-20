@@ -1,6 +1,6 @@
 " vi: ft=vim
 
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 " Plugin 'vim-syntastic/syntastic'
 
 
@@ -45,7 +45,7 @@ if v:version >= 704
   Plugin 'SirVer/ultisnips'
 endif
 
-Plugin 'honza/vim-snippets'
+" Plugin 'honza/vim-snippets'
 
 " Color
 " Plugin 'tomasr/molokai'

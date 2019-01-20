@@ -102,6 +102,12 @@
         let g:session_autosave = "no"
         let g:session_command_aliases = 1
     " }
+    
+    " Undo comand
+    " {
+        set undofile   " Maintain undo history between sessions
+        set undodir=~/.vim/undo
+    " }
 
     set fileformats=unix,dos,mac
 
@@ -118,13 +124,14 @@
     syntax on
     set ruler
     set number
+    set relativenumber
 
     let no_buffers_menu=1
     if !exists('g:not_finish_vimplug')
       " colorscheme molokai
-      colorscheme quantum
       set background=dark
       " set termguicolors
+      " colorscheme quantum
     endif
 
     set mousemodel=popup
@@ -184,6 +191,31 @@
         set titlestring=%F
 
         set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
+
+        " function! GitBranch()
+        "   return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+        " endfunction
+
+        " function! StatuslineGit()
+        "   let l:branchname = GitBranch()
+        "   return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+        " endfunction
+
+        " set statusline=
+        " set statusline+=%#PmenuSel#
+        " set statusline+=%{StatuslineGit()}
+        " set statusline+=%#LineNr#
+        " set statusline+=\ %f
+        " set statusline+=%m\
+        " set statusline+=%=
+        " set statusline+=%#CursorColumn#
+        " set statusline+=\ %y
+        " set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+        " set statusline+=\[%{&fileformat}\]
+        " set statusline+=\ %p%%
+        " set statusline+=\ %l:%c
+        " set statusline+=\
+
     " }
 
     " Search mappings: These will make it so that going to the next one in a
