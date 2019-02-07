@@ -1,55 +1,54 @@
 " vi: ft=vim
 
-" Plugin 'Valloric/YouCompleteMe'
-" Plugin 'vim-syntastic/syntastic'
+" Real-time completion (Neovim and Vim 8):
+Plugin 'Shougo/deoplete.nvim'
+if !has('nvim')
+  Plugin 'roxma/nvim-yarp'
+  Plugin 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
 
-
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'vim-scripts/grep.vim'
-Plugin 'vim-scripts/CSApprox'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'Raimondi/delimitMate'
+" Display source code navigation in a sidebar:
 Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/syntastic'
-Plugin 'Yggdroot/indentLine'
-Plugin 'avelino/vim-bootstrap-updater'
-Plugin 'sheerun/vim-polyglot'
-if isdirectory('/usr/local/opt/fzf')
-  Plugin '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-else
-  Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  Plugin 'junegunn/fzf.vim'
-endif
-let g:make = 'gmake'
-if exists('make')
-        let g:make = 'make'
-endif
-Plugin 'Shougo/vimproc.vim', {'do': g:make}
 
-"" Vim-Session
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-session'
+" Snippets
+Plugin 'Shougo/neosnippet.vim'
+Plugin 'Shougo/neosnippet-snippets'
 
-if v:version >= 703
-  Plugin 'Shougo/vimshell.vim'
-endif
-
-if v:version >= 704
-  "" Snippets
-  Plugin 'SirVer/ultisnips'
-endif
-
-" Plugin 'honza/vim-snippets'
+" Interactive |:GoDecls| and |:GoDeclsDir|
+Plugin 'ctrlpvim/ctrlp.vim'
 
 " Color
 " Plugin 'tomasr/molokai'
 Plugin 'tyrannicaltoucan/vim-quantum'
 
-" Real-time completion
-" Plugin 'Shougo/neocomplete.vim'
+
+" Plugin 'scrooloose/nerdtree'
+" Plugin 'jistr/vim-nerdtree-tabs'
+" Plugin 'tpope/vim-commentary'
+" Plugin 'tpope/vim-fugitive'
+" Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+" Plugin 'airblade/vim-gitgutter'
+" Plugin 'vim-scripts/grep.vim'
+" Plugin 'vim-scripts/CSApprox'
+" Plugin 'bronson/vim-trailing-whitespace'
+" Plugin 'Raimondi/delimitMate'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'scrooloose/syntastic'
+" Plugin 'Yggdroot/indentLine'
+" Plugin 'avelino/vim-bootstrap-updater'
+" Plugin 'sheerun/vim-polyglot'
+" let g:make = 'gmake'
+" if exists('make')
+"         let g:make = 'make'
+" endif
+" Plugin 'Shougo/vimproc.vim', {'do': g:make}
+" 
+" "" Vim-Session
+" Plugin 'xolox/vim-misc'
+" Plugin 'xolox/vim-session'
+" 
+" if v:version >= 703
+"   Plugin 'Shougo/vimshell.vim'
+" endif

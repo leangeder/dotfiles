@@ -272,3 +272,5 @@ function drone_build {
 }
 
 alias kps='kubectl --kubeconfig=/home/leangeder/data/dotfile/kube.conf'
+
+urxvtd -q -o -f &
