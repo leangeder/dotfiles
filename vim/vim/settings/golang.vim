@@ -1,7 +1,31 @@
 " vi: ft=vim
 
+" Plugin List
+" {
+    " Go Lang Bundle
+    Plugin 'fatih/vim-go'
+    Plugin 'zchee/deoplete-go', { 'do': 'make'}
+" }
+
 " Settings
 " {
+"
+"   Settings:deoplete-go
+"   {
+"       " neocomplete like
+"       set completeopt+=noinsert
+"       " deoplete.nvim recommend
+"       set completeopt+=noselect
+" 
+      " Skip the check of neovim module
+      let g:python3_host_skip_check = 1
+      
+      " Run deoplete.nvim automatically
+      let g:deoplete#enable_at_startup = 1
+      " deoplete-go settings
+      let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+      let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+"   }
 
     let g:tagbar_type_go = {
             \ 'ctagstype' : 'go',
