@@ -1,3 +1,4 @@
-vim/vim/plugins
-mpd/*
+vim/vim/.netrwhist/
+vim/vim/plugins/
+mpd/
 !mpd/mpd.conf
