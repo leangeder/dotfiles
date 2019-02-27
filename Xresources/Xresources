@@ -12,7 +12,7 @@
 ! ------------------------------------------------------------------------------
 
 URxvt.geometry: 		72x18
-URxvt*letterSpace: 	    0
+URxvt*letterSpace: 	    -5
 URxvt.lineSpace: 		0
 URxvt*internalBorder:   24
 URxvt*externalBorder:   0
@@ -39,8 +39,8 @@ URxvt.urlButton:        1
 URxvt*buffered:         false          
 URxvt.urgentOnBell: True
 ! URxvt.font: xft:monaco:bold:size=10
-URxvt.font: xft:DejaVu Sans Mono for Powerline:size=10
-!
+URxvt.font: xft:DejaVu Sans Mono for Powerline:size=10:antialias=true
+
 ! ------------------------------------------------------------------------------
 ! Xterm configs
 ! ------------------------------------------------------------------------------
