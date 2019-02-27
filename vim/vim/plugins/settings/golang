@@ -1,4 +1,4 @@
-" vi: ft=vim
-
-" Go Lang Bundle
-Plugin 'fatih/vim-go'
+" " vi: ft=vim
+" 
+" " Go Lang Bundle
+" Plugin 'fatih/vim-go'

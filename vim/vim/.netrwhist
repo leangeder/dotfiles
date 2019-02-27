@@ -1,8 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/home/leangeder/data/dotfile/vim/vim/plugins/settings'
-let g:netrw_dirhist_2='/home/leangeder/go/src/github.com/leangeder/calibre/pkg/server/handler'
-let g:netrw_dirhist_3='/home/leangeder/go/src/github.com/leangeder/calibre/cmd/calibre'
-let g:netrw_dirhist_4='/home/leangeder/go/src/github.com/leangeder/calibre-test'
-let g:netrw_dirhist_5='/home/leangeder/go/src/github.com/leangeder/calibre-test/pkg'
-let g:netrw_dirhist_6='/home/leangeder/go/src/github.com/leangeder/calibre-test/pkg/book'
