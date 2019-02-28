@@ -1,6 +1,90 @@
 # vim: syntax=sh
 alias mpd="mpd ${HOME}/.config/mpd/mpd.conf"
 
+function gitlab_mini {
+
+  GITLAB_HOSTNAME="gitlab.local"
+  
+  if [ "$(minikube status | grep Running | wc -l)" = "0" ]
+  then
+  	minikube config set WantReportErrorPrompt false
+  	minikube start --cpus 3 --memory 8192 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+	# minikube start --memory=6144 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+	minikube addons enable heapster
+  	minikube addons enable ingress
+  	minikube addons enable kube-dns
+  fi
+
+  cat - > /tmp/gitlab-dep.yaml <<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: gitlab
+  name: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  template:
+    metadata:
+      labels:
+        app: gitlab
+    spec:
+      containers:
+      - image: gitlab/gitlab-ce:latest
+        name: gitlab-ce
+        env:
+        - name: GITLAB_OMNIBUS_CONFIG
+          value: "external_url 'http://${GITLAB_HOSTNAME}/'; gitlab_rails['lfs_enabled'] = true;gitlab_rails['initial_root_password'] = beamery;"
+EOF
+
+  cat - > /tmp/gitlab-svc.yaml <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  ports:
+  - name: ssh
+    port: 2280
+    targetPort: 22
+  - name: http
+    port: 80
+  selector:
+    app: gitlab
+  type: NodePort
+EOF
+
+  cat - > /tmp/gitlab-ing.yaml <<EOF
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  rules:
+  - host: ${GITLAB_HOSTNAME}
+    http:
+      paths:
+      - backend:
+          serviceName: gitlab
+          servicePort: http
+EOF
+
+  kubectl replace -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
+
+  
+  if [ ! -n "$(grep ${GITLAB_HOSTNAME} /etc/hosts)" ]
+  then
+  	echo "$(minikube ip) ${GITLAB_HOSTNAME}" | sudo tee -a /etc/hosts
+  fi
+}
+
 function music {
   SESSION=Music
 
