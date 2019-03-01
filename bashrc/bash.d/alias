@@ -8,12 +8,54 @@ function gitlab_mini {
   if [ "$(minikube status | grep Running | wc -l)" = "0" ]
   then
   	minikube config set WantReportErrorPrompt false
-  	minikube start --cpus 3 --memory 8192 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+  	minikube start --cpus 3 --memory 8192
+  	# minikube start --cpus 3 --memory 8192 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
 	# minikube start --memory=6144 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
 	minikube addons enable heapster
   	minikube addons enable ingress
   	minikube addons enable kube-dns
   fi
+
+  cat - > /tmp/gitlab-conf.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-ce
+data:
+  ## This is used by GitLab Omnibus as the primary means of configuration.
+  ## ref: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+  ##
+  gitlab_omnibus_config: |
+    external_url ENV['EXTERNAL_URL'];
+    root_pass = ENV['GITLAB_ROOT_PASSWORD'];
+    gitlab_rails['initial_root_password'] = root_pass unless root_pass.to_s == '';
+    gitlab_rails['lfs_enabled'] = true;
+    manage_accounts['enable'] = false;
+
+    # # disable service
+    # gitlab_rails['gitlab_email_enabled'] = false;
+    # gitlab_rails['registry_enabled'] = false;
+    # gitlab_rails['incoming_email_enabled'] = false;
+    # gitlab_rails['artifacts_enabled'] = false;
+    # gitlab_rails['impersonation_enabled'] = flase;
+    # gitlab_rails['usage_ping_enabled'] = false;
+    # gitlab_rails['auto_migrate'] = false;
+    # gitlab_rails['smtp_enable'] = false;
+    # # gitlab_workhorse['enable'] = false;
+    # # unicorn['enable'] = false;
+    # # sidekiq['metrics_enabled'] = false;
+    # # postgresql['enable'] = false;
+    # # redis['enable'] = false;
+    # registry['enable'] = false;
+    # logrotate['enable'] = false;
+    # prometheus['enable'] = false;
+    # alertmanager['enable'] = false;
+    # node_exporter['enable'] = false;
+    # redis_exporter['enable'] = false;
+    # postgres_exporter['enable'] = false;
+    # gitlab_monitor['enable'] = false;
+    # gitaly['enable'] = false;
+EOF
 
   cat - > /tmp/gitlab-dep.yaml <<EOF
 apiVersion: extensions/v1beta1
@@ -35,9 +77,78 @@ spec:
       containers:
       - image: gitlab/gitlab-ce:latest
         name: gitlab-ce
+        ports:
+        - name: ssh
+          containerPort: 22
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        # livenessProbe:
+        #   httpGet:
+        #     path: /help
+        #     port: http
+        #   initialDelaySeconds: 200
+        #   timeoutSeconds: 1
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   failureThreshold: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /help
+        #     port: http
+        #   initialDelaySeconds: 30
+        #   timeoutSeconds: 1
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   failureThreshold: 3
         env:
         - name: GITLAB_OMNIBUS_CONFIG
-          value: "external_url 'http://${GITLAB_HOSTNAME}/'; gitlab_rails['lfs_enabled'] = true;gitlab_rails['initial_root_password'] = beamery;"
+          valueFrom:
+            configMapKeyRef:
+              name: gitlab-ce
+              key: gitlab_omnibus_config
+        - name: EXTERNAL_URL
+          value: "http://${GITLAB_HOSTNAME}/"
+        - name: GITLAB_ROOT_PASSWORD
+          value: "beamery12345"
+        volumeMounts:
+        - name: gitlab-etc
+          mountPath: /etc/gitlab
+      volumes:
+      - name: gitlab-etc
+EOF
+
+  cat - > /tmp/gitlab_svc.yml <<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: gitlab
+  namespace: gitlab
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: gitlab
+    spec:
+      containers:
+      - env:
+        - name: GITLAB_OMNIBUS_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: gitlab-secret
+              key: GITLAB_OMNIBUS_CONFIG
+        image: gitlab/gitlab-ce:latest
+        name: gitlab
+        ports:
+        - containerPort: 22
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
 EOF
 
   cat - > /tmp/gitlab-svc.yaml <<EOF
@@ -76,13 +187,27 @@ spec:
           servicePort: http
 EOF
 
-  kubectl replace -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
+  kubectl replace -f /tmp/gitlab-conf.yaml -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
 
   
   if [ ! -n "$(grep ${GITLAB_HOSTNAME} /etc/hosts)" ]
   then
   	echo "$(minikube ip) ${GITLAB_HOSTNAME}" | sudo tee -a /etc/hosts
   fi
+
+set -x
+  git config --global credentials.http://${GITLAB_HOSTNAME} root
+  git config --global alias.ci "!f(){
+  	if [ \"\$(git remote | grep ci)\" != \"ci\" ]
+	then
+		REPO_TOKEN=
+		REPO_NAME=\$(basename -s .git \$(git config --get remote.origin.url))
+		curl -H \"Content-Type:application/json\" http://${GITLAB_HOSTNAME}/api/v3/projects?private_token=\${REPO_TOKEN} -d \"{ \\"name\\": \\"\${REPO_NAME}\\" }\"
+		git remote add ci http://root:beamery12345@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
+	fi
+	git push -u ci \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
+  };f"
+set +x
 }
 
 function music {
