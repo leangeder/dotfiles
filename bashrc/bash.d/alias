@@ -4,6 +4,8 @@ alias mpd="mpd ${HOME}/.config/mpd/mpd.conf"
 function gitlab_mini {
 
   GITLAB_HOSTNAME="gitlab.local"
+  GITLAB_REGISTRATION_TOKEN="YrPPR6TUUv3AzRjAKLiB"
+  GITLAB_ROOT_PWD="beamery12345"
   
   if [ "$(minikube status | grep Running | wc -l)" = "0" ]
   then
@@ -30,31 +32,8 @@ data:
     root_pass = ENV['GITLAB_ROOT_PASSWORD'];
     gitlab_rails['initial_root_password'] = root_pass unless root_pass.to_s == '';
     gitlab_rails['lfs_enabled'] = true;
+    gitlab_rails['initial_shared_runners_registration_token'] = "${GITLAB_REGISTRATION_TOKEN}";
     manage_accounts['enable'] = false;
-
-    # # disable service
-    # gitlab_rails['gitlab_email_enabled'] = false;
-    # gitlab_rails['registry_enabled'] = false;
-    # gitlab_rails['incoming_email_enabled'] = false;
-    # gitlab_rails['artifacts_enabled'] = false;
-    # gitlab_rails['impersonation_enabled'] = flase;
-    # gitlab_rails['usage_ping_enabled'] = false;
-    # gitlab_rails['auto_migrate'] = false;
-    # gitlab_rails['smtp_enable'] = false;
-    # # gitlab_workhorse['enable'] = false;
-    # # unicorn['enable'] = false;
-    # # sidekiq['metrics_enabled'] = false;
-    # # postgresql['enable'] = false;
-    # # redis['enable'] = false;
-    # registry['enable'] = false;
-    # logrotate['enable'] = false;
-    # prometheus['enable'] = false;
-    # alertmanager['enable'] = false;
-    # node_exporter['enable'] = false;
-    # redis_exporter['enable'] = false;
-    # postgres_exporter['enable'] = false;
-    # gitlab_monitor['enable'] = false;
-    # gitaly['enable'] = false;
 EOF
 
   cat - > /tmp/gitlab-dep.yaml <<EOF
@@ -66,9 +45,8 @@ metadata:
   name: gitlab
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: gitlab
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -82,26 +60,6 @@ spec:
           containerPort: 22
         - name: http
           containerPort: 80
-        - name: https
-          containerPort: 443
-        # livenessProbe:
-        #   httpGet:
-        #     path: /help
-        #     port: http
-        #   initialDelaySeconds: 200
-        #   timeoutSeconds: 1
-        #   periodSeconds: 10
-        #   successThreshold: 1
-        #   failureThreshold: 10
-        # readinessProbe:
-        #   httpGet:
-        #     path: /help
-        #     port: http
-        #   initialDelaySeconds: 30
-        #   timeoutSeconds: 1
-        #   periodSeconds: 10
-        #   successThreshold: 1
-        #   failureThreshold: 3
         env:
         - name: GITLAB_OMNIBUS_CONFIG
           valueFrom:
@@ -111,21 +69,49 @@ spec:
         - name: EXTERNAL_URL
           value: "http://${GITLAB_HOSTNAME}/"
         - name: GITLAB_ROOT_PASSWORD
-          value: "beamery12345"
-        volumeMounts:
-        - name: gitlab-etc
-          mountPath: /etc/gitlab
-      volumes:
-      - name: gitlab-etc
+          value: "${GITLAB_ROOT_PWD}"
+      #   volumeMounts:
+      #   - name: gitlab-etc
+      #     mountPath: /etc/gitlab
+      # volumes:
+      # - name: gitlab-etc
 EOF
 
-  cat - > /tmp/gitlab_svc.yml <<EOF
+  cat - > /tmp/gitlab-runner-dep.yml <<EOF
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gitlab
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["*"]
+  # resources: ["pods"]
+  # verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gitlab
+subjects:
+- kind: ServiceAccount
+  name: gitlab
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: gitlab
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  name: gitlab
-  namespace: gitlab
+  name: gitlab-runner
 spec:
   replicas: 1
   strategy:
@@ -133,22 +119,91 @@ spec:
   template:
     metadata:
       labels:
-        service: gitlab
+        name: gitlab-runner
     spec:
+      serviceAccountName: gitlab
       containers:
-      - env:
-        - name: GITLAB_OMNIBUS_CONFIG
-          valueFrom:
-            secretKeyRef:
-              name: gitlab-secret
-              key: GITLAB_OMNIBUS_CONFIG
-        image: gitlab/gitlab-ce:latest
-        name: gitlab
-        ports:
-        - containerPort: 22
-        - containerPort: 80
-        resources: {}
+      - name: gitlab-runner-kubernetes
+        image: gitlab/gitlab-runner:latest
+        command: ["/bin/bash"]
+        args: ["-c", "gitlab-runner register kubernetes; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"]
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - "/bin/sh"
+              - "-c"
+              - "gitlab-runner unregister"
+        volumeMounts:
+        - name: docker-socket
+          readOnly: false
+          mountPath: /var/run/docker.sock
+        securityContext:
+          privileged: true
+        env:
+        - name: CI_SERVER_URL
+          value: "http://gitlab/ci"
+        - name: RUNNER_NAME
+          value: "Gitlab Runner kubernetes"
+        - name: REGISTRATION_TOKEN
+          value: "${GITLAB_REGISTRATION_TOKEN}"
+        - name: REGISTER_NON_INTERACTIVE
+          value: "true"
+        - name: RUNNER_EXECUTOR
+          value: "kubernetes"
+        - name: RUNNER_TAG_LIST
+          value: "kubernetes"
+        - name: KUBERNETES_NAMESPACE
+          value: "default"
+      - name: gitlab-runner-docker
+        image: gitlab/gitlab-runner:latest
+        command: ["/bin/bash"]
+        args: ["-c", "gitlab-runner register docker; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"]
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - "/bin/sh"
+              - "-c"
+              - "gitlab-runner unregister"
+        securityContext:
+          privileged: true
+        env:
+        - name: CI_SERVER_URL
+          value: "http://gitlab/ci"
+        - name: RUNNER_NAME
+          value: "Gitlab Runner docker"
+        - name: REGISTRATION_TOKEN
+          value: "${GITLAB_REGISTRATION_TOKEN}"
+        - name: REGISTER_NON_INTERACTIVE
+          value: "true"
+        - name: RUNNER_EXECUTOR
+          value: "docker"
+        - name: RUNNER_TAG_LIST
+          value: "docker"
+        - name: DOCKER_VOLUMES
+          value: "/var/run/docker.sock:/var/run/docker.sock"
+        - name: DOCKER_IMAGE
+          value: "docker:latest"
+        - name: DOCKER_PRIVILEGED
+          value: "true"
+        - name: DOCKER_DISABLE_CACHE
+          value: "false"
+        - name: DOCKER_CACHE_DIR
+          value: "/cache"
+        - name: DOCKER_DNS_SEARCH
+          value: "gitlab.svc.cluster.local"
+        - name: DOCKER_DNS
+          value: "10.0.0.10"
+        volumeMounts:
+        - name: docker-socket
+          readOnly: false
+          mountPath: /var/run/docker.sock
       restartPolicy: Always
+      volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
 EOF
 
   cat - > /tmp/gitlab-svc.yaml <<EOF
@@ -160,9 +215,6 @@ metadata:
     app: gitlab
 spec:
   ports:
-  - name: ssh
-    port: 2280
-    targetPort: 22
   - name: http
     port: 80
   selector:
@@ -177,6 +229,10 @@ metadata:
   name: gitlab
   labels:
     app: gitlab
+  annotations:
+    ingress.kubernetes.io/body-size: 200m
+    ingress.kubernetes.io/affinity: "true"
+    ingress.kubernetes.io/session-cookie-name: "fuckoff"
 spec:
   rules:
   - host: ${GITLAB_HOSTNAME}
@@ -187,7 +243,7 @@ spec:
           servicePort: http
 EOF
 
-  kubectl replace -f /tmp/gitlab-conf.yaml -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
+  kubectl replace -f /tmp/gitlab-runner-dep.yml -f /tmp/gitlab-conf.yaml -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
 
   
   if [ ! -n "$(grep ${GITLAB_HOSTNAME} /etc/hosts)" ]
@@ -200,12 +256,12 @@ set -x
   git config --global alias.ci "!f(){
   	if [ \"\$(git remote | grep ci)\" != \"ci\" ]
 	then
-		REPO_TOKEN=
+		# REPO_TOKEN=
 		REPO_NAME=\$(basename -s .git \$(git config --get remote.origin.url))
 		curl -H \"Content-Type:application/json\" http://${GITLAB_HOSTNAME}/api/v3/projects?private_token=\${REPO_TOKEN} -d \"{ \\"name\\": \\"\${REPO_NAME}\\" }\"
-		git remote add ci http://root:beamery12345@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
+		git remote add ci http://root:${GITLAB_ROOT_PWD}@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
 	fi
-	git push -u ci \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
+	git push -u ci master \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
   };f"
 set +x
 }
