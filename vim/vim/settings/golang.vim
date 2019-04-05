@@ -71,19 +71,20 @@
     nmap <C-g> :GoDeclsDir<cr>
     imap <C-g> <esc>:<C-u>GoDeclsDir<cr>
     
-    
     augroup go
       autocmd!
-    
+
       " Show by default 4 spaces for a tab
       autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-    
+
+      autocmd FileType go nested :TagbarOpen
+
       " :GoBuild and :GoTestCompile
       autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
-    
+
       " :GoTest
       autocmd FileType go nmap <leader>t  <Plug>(go-test)
-    
+
       " :GoRun
       autocmd FileType go nmap <leader>r  <Plug>(go-run)
     
