@@ -43,21 +43,6 @@
 " " General
 " " {
 " 
-"     " Encoding
-"     " {
-"         set encoding=utf-8
-"         set fileencoding=utf-8
-"         set fileencodings=utf-8
-"         set bomb
-"         set binary
-"         set ttyfast
-"     " }
-" 
-"     " Fix backspace indent
-"     " {
-"         set backspace=indent,eol,start
-"     " }
-" 
 "     " Tabs. May be overriten by autocmd rules
 "     " {
 "         set tabstop=4
@@ -71,11 +56,6 @@
 "         let mapleader=','
 "     " }
 " 
-"     "" Enable hidden buffers
-"     " {
-"         set hidden
-"     " }
-" 
 " 
 "     " Searching
 "     " {
@@ -84,43 +64,12 @@
 "         set ignorecase
 "         set smartcase
 "     " }
-" 
-"     " Directories for swp files
-"     " {
-"         set nobackup
-"         set noswapfile
-"     " }
-" 
-"     " session management
-"     " {
-"         let g:session_directory = "~/.vim/.session"
-"         let g:session_autoload = "no"
-"         let g:session_autosave = "no"
-"         let g:session_command_aliases = 1
-"     " }
-" 
-"     " Undo comand
-"     " {
-"         set undofile   " Maintain undo history between sessions
-"         set undodir=~/.vim/.undo
-"     " }
-" 
-"     set fileformats=unix,dos,mac
-" 
-"     if exists('$SHELL')
-"         set shell=$SHELL
-"     else
-"         set shell=/bin/sh
-"     endif
 " " }
 " 
 " 
 " " Visual Settings
 " " {
 "     syntax on
-"     set ruler
-"     set number
-"     set relativenumber
 " 
 "     let no_buffers_menu=1
 "     if !exists('g:not_finish_vimplug')
@@ -691,30 +640,6 @@
 " "
 " " " Settings and scripts for VIM
 " "
-" " " General
-" " " {
-" "     set nocompatible                "turn off backwards compatibility
-" "     set backspace=indent,eol,start  "Allow backspace in insert mode
-" "     set shell=bash
-" "     autocmd! bufwritepost .vimrc source %
-" " " }
-" "
-" " " Resources
-" " " {
-" "     set history=1000                "Store lots of :cmdline history
-" "     set visualbell                  "No sounds
-" "     set autoread                    "Reload files changed outside vim
-" "     set ttyfast                     "Terminal acceleration
-" "     set viminfo='50,<1000,s100,h
-" "     set encoding=utf8
-" "     set path+=**                    "Allow recursive find in current folder
-" "
-" "     " Use all the memory needed, for maximum performance.
-" "     set maxmemtot=2000000
-" "     set maxmem=2000000
-" "     set maxmempattern=2000000
-" " " }
-" "
 " " " " Abbreviations
 " " " " {
 " " "     iab vdate =getDate()
@@ -751,16 +676,6 @@
 " "     set showmode                                        " displays mode in status bar
 " "     set showcmd                                         " displays partially typed command in the status bar
 " "     set mouse=a                                         " have the mouse enabled all the time:
-" "     set ruler                                           " display the current row, col in the status bar
-" "     set rulerformat=%25([%l,%v]\ %p%%%)    " displays a better format
-" "
-" "
-" "
-" "     " set smartindent
-" "     " set smarttab
-" "     " set paste
-" "     " nnoremap <F2> :set invpaste paste?<CR>
-" "     " set pastetoggle=<F2>
 " "
 " "
 " "

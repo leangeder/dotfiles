@@ -32,7 +32,7 @@ mpd_host = 127.0.0.1
 ## Needed for tag editor and file operations to work.
 ##
 # mpd_music_dir = "http://leangeder:password@file.leangeder.eu/Music/"
-mpd_music_dir = "~/Music/"
+mpd_music_dir = "~/Sync/Music/"
 #
 mpd_crossfade_time = 5
 #

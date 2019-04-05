@@ -22,17 +22,31 @@ URxvt*termName:         rxvt-unicode-256color
 URxvt*iso14755:         false
 URxvt*scrollBar:        false
 URxvt*scrollBar_right:  false
-URxvt.perl-ext-common:  default,clipboard,url-select,keyboard-select
+URxvt.perl-ext-common:  default,url-picker,matcher,clipboard,url-select,keyboard-select
 URxvt.copyCommand:      xclip -i -selection clipboard
 URxvt.pasteCommand:     xclip -o -selection clipboard
-! URxvt.keysym.M-c:       perl:clipboard:copy
-! URxvt.keysym.M-v:       perl:clipboard:paste
+URxvt.keysym.C-S-c:       perl:clipboard:copy
+URxvt.keysym.C-S-v:       perl:clipboard:paste
 ! URxvt.keysym.M-C-v:     perl:clipboard:paste_escaped
 ! URxvt.keysym.M-Escape:  perl:keyboard-select:activate
 ! URxvt.keysym.Shift-Up:	command:\033]720;1\007
 ! URxvt.keysym.Shift-Down:command:\033]721;1\007
 ! URxvt.keysym.M-s:       perl:keyboard-select:search
-! URxvt.keysym.M-u:       perl:url-select:select_next
+URxvt.keysym.M-u:       perl:url-select:select_next
+
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+URxvt.keysym.C-Delete: perl:matcher:last
+URxvt.keysym.M-Delete: perl:matcher:list
+URxvt.matcher.rend.0: Uline Bold fg5
+URxvt.colorUL: #4682B4
+
+URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: true
+
+#####################
+#####################
+
 URxvt.urlLauncher:      firefox
 URxvt.underlineURLs:    true
 URxvt.urlButton:        1

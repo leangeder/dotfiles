@@ -11,16 +11,14 @@
     endif
     let g:deoplete#enable_at_startup = 1
     
+
     " Display source code navigation in a sidebar:
     Plugin 'majutsushi/tagbar'
-    
+
+
     " Snippets
     Plugin 'Shougo/neosnippet.vim'
     Plugin 'Shougo/neosnippet-snippets'
-
-
-
-
 
 
 
@@ -43,17 +41,12 @@
     if has('conceal')
       set conceallevel=2 concealcursor=niv
     endif
+   
 
-
-
-
-
-
-
-    
     " Interactive |:GoDecls| and |:GoDeclsDir|
     Plugin 'ctrlpvim/ctrlp.vim'
     
+
     " Color
     " Plugin 'tomasr/molokai'
     Plugin 'tyrannicaltoucan/vim-quantum'
@@ -68,7 +61,11 @@
     set ttymouse=xterm2             " Indicate terminal type for mouse codes
     set ttyscroll=3                 " Speedup scrolling
     set laststatus=2                " Show status line always
+    set bomb                        " Manage UTF-8 BOM encoding
+    set binary                      " Allow to view executable
     set encoding=utf-8              " Set default encoding to UTF-8
+    set fileencoding=utf-8          " Set default encoding to UTF-8
+    set fileencodings=utf-8         " Set default encoding to UTF-8
     set autoread                    " Automatically read changed files
     set autoindent                  " Enabile Autoindent
     set backspace=indent,eol,start  " Makes backspace key more powerful.
@@ -76,7 +73,11 @@
     set hlsearch                    " Highlight found searches
     " set noerrorbells                " No beeps
     set noerrorbells visualbell t_vb=
+    set visualbell                  "No sounds
     set number                      " Show line numbers
+    set relativenumber              " Show line number relative to position
+    set ruler                                           " display the current row, col in the status bar
+    set rulerformat=%25([%l,%v]\ %p%%%)    " displays a better format
     set showcmd                     " Show me what I'm typing
     set noswapfile                  " Don't use swapfile
     set nobackup                    " Don't create annoying backup files
@@ -89,11 +90,52 @@
     set noshowmode                  " We show the mode with airline or lightline
     set ignorecase                  " Search case insensitive...
     set smartcase                   " ... but not it begins with upper case
+
+
+
+
+    set smartindent
+    set smarttab
+    " set paste
+    " nnoremap <F2> :set invpaste paste?<CR>
+    " set pastetoggle=<F2>
+
+
+
+
+
+
     set completeopt=menu,menuone    " Show popup menu, even if there is one entry
     set pumheight=10                " Completion window max size
     set nocursorcolumn              " Do not highlight column (speeds up highlighting)
     set nocursorline                " Do not highlight cursor (speeds up highlighting)
     set lazyredraw                  " Wait to redraw
+    set viminfo='50,<1000,s100,h    " Remembered all last 50 edited files,Limits number of lines saved per register,Registers size higher than 100 KB will be skipped,Disables search highlighting Vim starts
+    set path+=**                    " Allow recursive find in current folder
+    set history=1000                " Store lots of :cmdline history
+
+    " This enables us to undo files even if you exit Vim.
+    set undofile                    " Maintain undo history between sessions
+    set undodir=~/.vim/.undo        " Undo location file
+
+
+    " Directories for swp files
+    set nobackup
+    set noswapfile
+
+    " session management
+    let g:session_directory = "~/.vim/.session"
+    let g:session_autoload = "no"
+    let g:session_autosave = "no"
+    let g:session_command_aliases = 1
+
+
+    " Performance
+    " Use all the memory needed, for maximum performance.
+    set maxmemtot=2000000
+    set maxmem=2000000
+    set maxmempattern=2000000
+
 
     " Enable to copy to clipboard for operations like yank, delete, change and put
     " http://stackoverflow.com/questions/20186975/vim-mac-how-to-copy-to-clipboard-without-pbcopy
@@ -102,20 +144,29 @@
       set clipboard^=unnamedplus
     endif
     
-    " This enables us to undo files even if you exit Vim.
-    if has('persistent_undo')
-      set undofile
-      set undodir=~/.vim/.undo
+    " Set bash as default shell
+    if exists('$SHELL')
+        set shell=$SHELL
+    else
+        set shell=/bin/sh
     endif
-    
+
+
+
     " Colorscheme
     syntax enable
     " set t_Co=256
     " let g:rehash256 = 1
     " let g:molokai_original = 1
     " colorscheme molokai
+    "
 
 " }
+"
+" " General
+" " {
+"     autocmd! bufwritepost .vimrc source %
+" " }
 
 " " Mappings
 " " {

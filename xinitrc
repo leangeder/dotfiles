@@ -1,4 +1,3 @@
-
 #!/bin/sh
 
 # Set Xressources
@@ -6,7 +5,7 @@
 	if [ -f ~/.Xresources ]
 	then
 		xrdb -load ~/.Xresources
-        # xrdb -load ~/.Xresources
+		# xrdb -load ~/.Xresources
 	fi
 
 	for f in /etc/X11/xinit/xinitrc.d/?*.sh; do
@@ -35,14 +34,23 @@
 
 # exec awesome
 
-# exec redshift
-
 # exec xautolock -detectsleep -time 3 -locker "i3lock -d -c 000070" -notify 30 -notifier "notify-send -u critical -t 10000 -- 'LOCKING screen in 30 seconds'"
 #
-firefox &
-chromium-browser &
-redshift &
-slack &
-urxvtd -q -o -f & # urxvt daemon
-urxvtc &
-vault agent -config=$HOME/works/vault_agent.hcl &
+if [ ! -f ~/.config/mpd/pid ]
+then
+	mpd > /dev/null 2>&1 &
+fi
+
+if [ ! -f /tmp/vault_agent.pid ]
+then
+	vault agent -config=$HOME/works/vault_agent.hcl > /dev/null 2>&1 &
+fi
+ 
+urxvtd -q -o -f > /dev/null 2>&1 & # urxvt daemon
+firefox > /dev/null 2>&1 &
+chromium-browser > /dev/null 2>&1 &
+slack > /dev/null 2>&1 &
+syncthing > /dev/null 2>&1 &
+urxvtc > /dev/null 2>&1 &
+redshift > /dev/null 2>&1 &
+xrandr --output HDMI-2 --left-of eDP-1
