@@ -12,3 +12,13 @@ export GOOGLE_PROJECT="beamery-global"
 export SERVICE_ACCOUNT="vault-auth-global@${GOOGLE_PROJECT}.iam.gserviceaccount.com"
 export GITLAB_TOKEN="xgnQEGhRca-oDWx3gF8Z"
 export GITHUB_TOKEN="348fe61aeba7ed8c2127a12c88ed3a771fce490a"
+
+
+
+
+export BEAMERY_HOME=/home/gregory/beamery
+export PATH=$PATH:$BEAMERY_HOME/tool-dev-env/env/bin/linux
+export GOPATH=$HOME/go
+export GOROOT=/usr/local/lib/go/
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+export GOPATH=$HOME/go:$HOME/work

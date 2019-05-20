@@ -319,6 +319,7 @@ function gitlab_test {
   gitlab/gitlab-runner:latest \
   exec docker --docker-privileged \
   --docker-pull-policy if-not-present \
+  --docker-volumes /tmp/ssh:/root/.ssh \
   --docker-volumes $PWD:/builds/project-0/ \
   --env GIT_STRATEGY=none \
   --env CI_PIPELINE_ID=1 \
