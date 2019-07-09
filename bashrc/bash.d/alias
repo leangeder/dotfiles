@@ -1,270 +1,431 @@
-# vim: syntax=sh
+#i vim: syntax=sh
 alias mpd="mpd ${HOME}/.config/mpd/mpd.conf"
 
-function gitlab_mini {
+# function minikube {
+# 	if [ "$0" = "start" ]
+# 	then
+# 		minikube $@ --extra-config=apiserver.Authorization.Mode=RBAC
+# 	fi
+# }
+
+function traefik {
+  DOCKER_NAME=traefik
+  # if [ "$(docker ps -a --filter=name=${DOCKER_NAME} --format \"{{.Names}}\")" != "" ]
+  # then
+  #   docker rm -f ${DOCKER_NAME}
+  # fi
+
+  if [ "$(docker network ls --filter=name=${DOCKER_NAME} --format \"{{.Name}}\")" = "" ]
+  then
+    # docker network rm ${DOCKER_NAME}
+    docker network create ${DOCKER_NAME}
+  fi
+
+
+  if [ "$(docker ps -a --filter=name=${DOCKER_NAME} --format \"{{.Names}}\")" = "" ]
+  then
+    # docker rm -f ${DOCKER_NAME}
+    docker run -d --name=${DOCKER_NAME} -p 80:80 -p 443:443 -p 8080:8080 \
+      --net=${DOCKER_NAME} \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      traefik:latest \
+      -l DEBUG \
+      -c /dev/null \
+      --docker \
+      --docker.domain=traefik \
+      --docker.endpoint="unix://var/run/docker.sock" \
+      --docker.watch \
+      --api
+      # -v /var/lib/boot2docker/:/ssl \
+      # --docker.tls \
+      # --docker.tls.ca=/ssl/ca.pem \
+      # --docker.tls.cert=/ssl/server.pem \
+      # --docker.tls.key=/ssl/server-key.pem \
+      # --docker.tls.insecureSkipVerify \
+      # --docker.watch \
+      # --api
+  fi
+}
+
+function gitlab {
+  traefik
 
   GITLAB_HOSTNAME="gitlab.local"
   GITLAB_REGISTRATION_TOKEN="YrPPR6TUUv3AzRjAKLiB"
-  GITLAB_ROOT_PWD="beamery12345"
-  
-  if [ "$(minikube status | grep Running | wc -l)" = "0" ]
+  GITLAB_ROOT_PASSWORD="password"
+  DOCKER_NAME=gitlab
+
+  if [ "$(docker volume ls --filter=name=${DOCKER_NAME} --format \"{{.Name}}\")" == "" ]
   then
-  	minikube config set WantReportErrorPrompt false
-  	minikube start --cpus 3 --memory 8192
-  	# minikube start --cpus 3 --memory 8192 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
-	# minikube start --memory=6144 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
-	minikube addons enable heapster
-  	minikube addons enable ingress
-  	minikube addons enable kube-dns
+    docker volume create ${DOCKER_NAME}
   fi
 
-  cat - > /tmp/gitlab-conf.yaml <<EOF
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: gitlab-ce
-data:
-  ## This is used by GitLab Omnibus as the primary means of configuration.
-  ## ref: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
-  ##
-  gitlab_omnibus_config: |
-    external_url ENV['EXTERNAL_URL'];
-    root_pass = ENV['GITLAB_ROOT_PASSWORD'];
-    gitlab_rails['initial_root_password'] = root_pass unless root_pass.to_s == '';
-    gitlab_rails['lfs_enabled'] = true;
-    gitlab_rails['initial_shared_runners_registration_token'] = "${GITLAB_REGISTRATION_TOKEN}";
-    manage_accounts['enable'] = false;
-EOF
-
-  cat - > /tmp/gitlab-dep.yaml <<EOF
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    app: gitlab
-  name: gitlab
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: gitlab
-    spec:
-      containers:
-      - image: gitlab/gitlab-ce:latest
-        name: gitlab-ce
-        ports:
-        - name: ssh
-          containerPort: 22
-        - name: http
-          containerPort: 80
-        env:
-        - name: GITLAB_OMNIBUS_CONFIG
-          valueFrom:
-            configMapKeyRef:
-              name: gitlab-ce
-              key: gitlab_omnibus_config
-        - name: EXTERNAL_URL
-          value: "http://${GITLAB_HOSTNAME}/"
-        - name: GITLAB_ROOT_PASSWORD
-          value: "${GITLAB_ROOT_PWD}"
-      #   volumeMounts:
-      #   - name: gitlab-etc
-      #     mountPath: /etc/gitlab
-      # volumes:
-      # - name: gitlab-etc
-EOF
-
-  cat - > /tmp/gitlab-runner-dep.yml <<EOF
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: gitlab
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: gitlab
-rules:
-- apiGroups: [""]
-  resources: ["*"]
-  verbs: ["*"]
-  # resources: ["pods"]
-  # verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: gitlab
-subjects:
-- kind: ServiceAccount
-  name: gitlab
-  apiGroup: ""
-roleRef:
-  kind: Role
-  name: gitlab
-  apiGroup: rbac.authorization.k8s.io
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: gitlab-runner
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        name: gitlab-runner
-    spec:
-      serviceAccountName: gitlab
-      containers:
-      - name: gitlab-runner-kubernetes
-        image: gitlab/gitlab-runner:latest
-        command: ["/bin/bash"]
-        args: ["-c", "gitlab-runner register kubernetes; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"]
-        lifecycle:
-          preStop:
-            exec:
-              command:
-              - "/bin/sh"
-              - "-c"
-              - "gitlab-runner unregister"
-        volumeMounts:
-        - name: docker-socket
-          readOnly: false
-          mountPath: /var/run/docker.sock
-        securityContext:
-          privileged: true
-        env:
-        - name: CI_SERVER_URL
-          value: "http://gitlab/ci"
-        - name: RUNNER_NAME
-          value: "Gitlab Runner kubernetes"
-        - name: REGISTRATION_TOKEN
-          value: "${GITLAB_REGISTRATION_TOKEN}"
-        - name: REGISTER_NON_INTERACTIVE
-          value: "true"
-        - name: RUNNER_EXECUTOR
-          value: "kubernetes"
-        - name: RUNNER_TAG_LIST
-          value: "kubernetes"
-        - name: KUBERNETES_NAMESPACE
-          value: "default"
-      - name: gitlab-runner-docker
-        image: gitlab/gitlab-runner:latest
-        command: ["/bin/bash"]
-        args: ["-c", "gitlab-runner register docker; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"]
-        lifecycle:
-          preStop:
-            exec:
-              command:
-              - "/bin/sh"
-              - "-c"
-              - "gitlab-runner unregister"
-        securityContext:
-          privileged: true
-        env:
-        - name: CI_SERVER_URL
-          value: "http://gitlab/ci"
-        - name: RUNNER_NAME
-          value: "Gitlab Runner docker"
-        - name: REGISTRATION_TOKEN
-          value: "${GITLAB_REGISTRATION_TOKEN}"
-        - name: REGISTER_NON_INTERACTIVE
-          value: "true"
-        - name: RUNNER_EXECUTOR
-          value: "docker"
-        - name: RUNNER_TAG_LIST
-          value: "docker"
-        - name: DOCKER_VOLUMES
-          value: "/var/run/docker.sock:/var/run/docker.sock"
-        - name: DOCKER_IMAGE
-          value: "docker:latest"
-        - name: DOCKER_PRIVILEGED
-          value: "true"
-        - name: DOCKER_DISABLE_CACHE
-          value: "false"
-        - name: DOCKER_CACHE_DIR
-          value: "/cache"
-        - name: DOCKER_DNS_SEARCH
-          value: "gitlab.svc.cluster.local"
-        - name: DOCKER_DNS
-          value: "10.0.0.10"
-        volumeMounts:
-        - name: docker-socket
-          readOnly: false
-          mountPath: /var/run/docker.sock
-      restartPolicy: Always
-      volumes:
-        - name: docker-socket
-          hostPath:
-            path: /var/run/docker.sock
-EOF
-
-  cat - > /tmp/gitlab-svc.yaml <<EOF
-apiVersion: v1
-kind: Service
-metadata:
-  name: gitlab
-  labels:
-    app: gitlab
-spec:
-  ports:
-  - name: http
-    port: 80
-  selector:
-    app: gitlab
-  type: NodePort
-EOF
-
-  cat - > /tmp/gitlab-ing.yaml <<EOF
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: gitlab
-  labels:
-    app: gitlab
-  annotations:
-    ingress.kubernetes.io/body-size: 200m
-    ingress.kubernetes.io/affinity: "true"
-    ingress.kubernetes.io/session-cookie-name: "fuckoff"
-spec:
-  rules:
-  - host: ${GITLAB_HOSTNAME}
-    http:
-      paths:
-      - backend:
-          serviceName: gitlab
-          servicePort: http
-EOF
-
-  kubectl replace -f /tmp/gitlab-runner-dep.yml -f /tmp/gitlab-conf.yaml -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
-
-  
-  if [ ! -n "$(grep ${GITLAB_HOSTNAME} /etc/hosts)" ]
+  if [ "$(docker ps -a --filter=name=${DOCKER_NAME} --format \"{{.Names}}\")" == "" ]
   then
-  	echo "$(minikube ip) ${GITLAB_HOSTNAME}" | sudo tee -a /etc/hosts
+    # docker rm -f ${DOCKER_NAME}
+
+    docker run -d --hostname gitlab.local \
+    --label="traefik.enable=true" \
+    --label="traefik.gitlab.frontend.rule=Host:gitlab.local" \
+    --label="traefik.gitlab.port=80" \
+    --label="traefik.gitlab.protocol=http" \
+    -p 22:22 \
+    --net=traefik \
+    --name ${DOCKER_NAME} --restart always \
+    --env GITLAB_ROOT_PASSWORD=${GITLAB_ROOT_PASSWORD} \
+    --env GITLAB_REGISTRATION_TOKEN=${GITLAB_REGISTRATION_TOKEN} \
+    --env EXTERNAL_URL="http://$GITLAB_HOSTNAME/" \
+    --env GITLAB_OMNIBUS_CONFIG="external_url ENV['EXTERNAL_URL']; manage_accounts['enable'] = false; root_pass = ENV['GITLAB_ROOT_PASSWORD']; gitlab_rails['initial_root_password'] = root_pass unless root_pass.to_s == ''; gitlab_rails['lfs_enabled'] = true;gitlab_rails['initial_shared_runners_registration_token'] = \"${GITLAB_REGISTRATION_TOKEN}\";" \
+    -v ${HOME}/.gitlab/config:/etc/gitlab:Z -v ${HOME}/.gitlab/logs:/var/log/gitlab:Z -v ${HOME}/.gitlab/data:/var/opt/gitlab:Z \
+    gitlab/gitlab-ce:latest
+
+    # --mount source=${DOCKER_NAME},target=/etc/gitlab \
+    # --mount source=${DOCKER_NAME},target=/var/log/gitlab \
+    # --mount source=${DOCKER_NAME},target=/var/opt/gitlab \
+
+
+
+    git config --global credentials.http://${GITLAB_HOSTNAME} root
+    git config --global alias.ci "!f(){
+    	if [ \"\$(git remote | grep ci)\" != \"ci\" ]
+          then
+          	# REPO_TOKEN=
+          	REPO_NAME=\$(basename -s .git \$(git config --get remote.origin.url))
+          	curl -H \"Content-Type:application/json\" http://${GITLAB_HOSTNAME}/api/v3/projects?private_token=\${REPO_TOKEN} -d \"{ \\"name\\": \\"\${REPO_NAME}\\" }\"
+          	git remote add ci http://root:${GITLAB_ROOT_PASSWORD}@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
+          fi
+          git push -u ci master \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
+    };f"
   fi
 
-set -x
-  git config --global credentials.http://${GITLAB_HOSTNAME} root
-  git config --global alias.ci "!f(){
-  	if [ \"\$(git remote | grep ci)\" != \"ci\" ]
-	then
-		# REPO_TOKEN=
-		REPO_NAME=\$(basename -s .git \$(git config --get remote.origin.url))
-		curl -H \"Content-Type:application/json\" http://${GITLAB_HOSTNAME}/api/v3/projects?private_token=\${REPO_TOKEN} -d \"{ \\"name\\": \\"\${REPO_NAME}\\" }\"
-		git remote add ci http://root:${GITLAB_ROOT_PWD}@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
-	fi
-	git push -u ci master \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
-  };f"
+  if [ "$(docker ps -a --filter=name=${DOCKER_NAME}-runner-docker --format \"{{.Names}}\")" == "" ]
+  then
+  set -x
+    docker run -d \
+    --net=traefik \
+    --name ${DOCKER_NAME}-runner-docker --restart always \
+    --env CI_SERVER_URL="http://gitlab/ci" \
+    --env RUNNER_NAME="Gitlab Runner Docker" \
+    --env REGISTRATION_TOKEN="${GITLAB_REGISTRATION_TOKEN}" \
+    --env REGISTER_NON_INTERACTIVE="true" \
+    --env RUNNER_EXECUTOR="docker" \
+    --env RUNNER_TAG_LIST="docker" \
+    --env DOCKER_VOLUMES="/var/run/docker.sock:/var/run/docker.sock" \
+    --env KUBERNETES_NAMESPACE="default" \
+    --env DOCKER_IMAGE="docker:latest" \
+    --env DOCKER_PRIVILEGED="true" \
+    --env DOCKER_DISABLE_CACHE="false" \
+    --env DOCKER_CACHE_DIR="/cache" \
+    --env DOCKER_DNS_SEARCH="gitlab" \
+    -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+    --entrypoint=/bin/bash \
+    gitlab/gitlab-runner:latest \
+    " -c gitlab-runner register docker; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"
+
 set +x
+    # --non-interactive \
+    # --executor "docker" \
+    # --docker-image alpine:latest \
+    # --url "http://gitlab/ci" \
+    # --registration-token "${GITLAB_REGISTRATION_TOKEN}" \
+    # --description "docker-runner" \
+    # --tag-list "docker" \
+    # --run-untagged="true" \
+    # --locked="false" \
+    # --access-level="not_protected"
+
+    # docker run -d \
+    # --net=traefik \
+    # --privileged \
+    # --name ${DOCKER_NAME}-runner-docker --restart always \
+    # --env CI_SERVER_URL="http://gitlab/ci" \
+    # --env RUNNER_NAME="Gitlab Runner Docker" \
+    # --env REGISTRATION_TOKEN="${GITLAB_REGISTRATION_TOKEN}" \
+    # --env REGISTER_NON_INTERACTIVE="true" \
+    # --env RUNNER_EXECUTOR="docker" \
+    # --env RUNNER_TAG_LIST="docker" \
+    # --env DOCKER_VOLUMES="/var/run/docker.sock:/var/run/docker.sock" \
+    # --env KUBERNETES_NAMESPACE="default" \
+    # --env DOCKER_IMAGE="docker:latest" \
+    # --env DOCKER_PRIVILEGED="true" \
+    # --env DOCKER_DISABLE_CACHE="false" \
+    # --env DOCKER_CACHE_DIR="/cache" \
+    # --env DOCKER_DNS_SEARCH="gitlab" \
+    # --volume /var/run/docker.sock:/var/run/docker.sock \
+    # --mount source=${DOCKER_NAME},target=/etc/gitlab-runner \
+    # --entrypoint=/bin/bash \
+    # gitlab/gitlab-runner:latest \
+    # " -c gitlab-runner register docker; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"
+
+  fi
+
 }
+
+# function gitlab_mini {
+# 	set -x
+# 
+#   GITLAB_HOSTNAME="gitlab.local"
+#   GITLAB_REGISTRATION_TOKEN="YrPPR6TUUv3AzRjAKLiB"
+#   GITLAB_ROOT_PWD="beamery12345"
+#   
+#   if [ "$(minikube status | grep Running | wc -l)" = "0" ]
+#   then
+#   	minikube config set WantReportErrorPrompt false
+#   	minikube start --cpus 3 --memory 8192
+#   	# minikube start --cpus 3 --memory 8192 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+# 	# minikube start --memory=6144 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+# 	minikube addons enable heapster
+#   	minikube addons enable ingress
+#   	minikube addons enable kube-dns
+#   fi
+# 
+#   cat - > /tmp/gitlab-conf.yaml <<EOF
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: gitlab-ce
+# data:
+#   ## This is used by GitLab Omnibus as the primary means of configuration.
+#   ## ref: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+#   ##
+#   gitlab_omnibus_config: |
+#     external_url ENV['EXTERNAL_URL'];
+#     root_pass = ENV['GITLAB_ROOT_PASSWORD'];
+#     gitlab_rails['initial_root_password'] = root_pass unless root_pass.to_s == '';
+#     gitlab_rails['lfs_enabled'] = true;
+#     gitlab_rails['initial_shared_runners_registration_token'] = "${GITLAB_REGISTRATION_TOKEN}";
+#     manage_accounts['enable'] = false;
+# EOF
+# 
+#   cat - > /tmp/gitlab-dep.yaml <<EOF
+# apiVersion: extensions/v1beta1
+# kind: Deployment
+# metadata:
+#   labels:
+#     app: gitlab
+#   name: gitlab
+# spec:
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   template:
+#     metadata:
+#       labels:
+#         app: gitlab
+#     spec:
+#       containers:
+#       - image: gitlab/gitlab-ce:latest
+#         name: gitlab-ce
+#         ports:
+#         - name: ssh
+#           containerPort: 22
+#         - name: http
+#           containerPort: 80
+#         env:
+#         - name: GITLAB_OMNIBUS_CONFIG
+#           valueFrom:
+#             configMapKeyRef:
+#               name: gitlab-ce
+#               key: gitlab_omnibus_config
+#         - name: EXTERNAL_URL
+#           value: "http://${GITLAB_HOSTNAME}/"
+#         - name: GITLAB_ROOT_PASSWORD
+#           value: "${GITLAB_ROOT_PWD}"
+#       #   volumeMounts:
+#       #   - name: gitlab-etc
+#       #     mountPath: /etc/gitlab
+#       # volumes:
+#       # - name: gitlab-etc
+# EOF
+# 
+#   cat - > /tmp/gitlab-runner-dep.yml <<EOF
+# ---
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: gitlab
+# ---
+# kind: Role
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   name: gitlab
+# rules:
+# - apiGroups: [""]
+#   resources: ["*"]
+#   verbs: ["*"]
+#   # resources: ["pods"]
+#   # verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+# ---
+# kind: RoleBinding
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   name: gitlab
+# subjects:
+# - kind: ServiceAccount
+#   name: gitlab
+#   apiGroup: ""
+# roleRef:
+#   kind: Role
+#   name: gitlab
+#   apiGroup: rbac.authorization.k8s.io
+# ---
+# apiVersion: extensions/v1beta1
+# kind: Deployment
+# metadata:
+#   name: gitlab-runner
+# spec:
+#   replicas: 1
+#   strategy:
+#     type: Recreate
+#   template:
+#     metadata:
+#       labels:
+#         name: gitlab-runner
+#     spec:
+#       serviceAccountName: gitlab
+#       containers:
+#       - name: gitlab-runner-kubernetes
+#         image: gitlab/gitlab-runner:latest
+#         command: ["/bin/bash"]
+#         args: ["-c", "gitlab-runner register kubernetes; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"]
+#         lifecycle:
+#           preStop:
+#             exec:
+#               command:
+#               - "/bin/sh"
+#               - "-c"
+#               - "gitlab-runner unregister"
+#         volumeMounts:
+#         - name: docker-socket
+#           readOnly: false
+#           mountPath: /var/run/docker.sock
+#         securityContext:
+#           privileged: true
+#         env:
+#         - name: CI_SERVER_URL
+#           value: "http://gitlab/ci"
+#         - name: RUNNER_NAME
+#           value: "Gitlab Runner kubernetes"
+#         - name: REGISTRATION_TOKEN
+#           value: "${GITLAB_REGISTRATION_TOKEN}"
+#         - name: REGISTER_NON_INTERACTIVE
+#           value: "true"
+#         - name: RUNNER_EXECUTOR
+#           value: "kubernetes"
+#         - name: RUNNER_TAG_LIST
+#           value: "kubernetes"
+#         - name: KUBERNETES_NAMESPACE
+#           value: "default"
+#       - name: gitlab-runner-docker
+#         image: gitlab/gitlab-runner:latest
+#         command: ["/bin/bash"]
+#         args: ["-c", "gitlab-runner register docker; /usr/bin/dumb-init /entrypoint run --user=gitlab-runner --working-directory=/home/gitlab-runner"]
+#         lifecycle:
+#           preStop:
+#             exec:
+#               command:
+#               - "/bin/sh"
+#               - "-c"
+#               - "gitlab-runner unregister"
+#         securityContext:
+#           privileged: true
+#         env:
+#         - name: CI_SERVER_URL
+#           value: "http://gitlab/ci"
+#         - name: RUNNER_NAME
+#           value: "Gitlab Runner docker"
+#         - name: REGISTRATION_TOKEN
+#           value: "${GITLAB_REGISTRATION_TOKEN}"
+#         - name: REGISTER_NON_INTERACTIVE
+#           value: "true"
+#         - name: RUNNER_EXECUTOR
+#           value: "docker"
+#         - name: RUNNER_TAG_LIST
+#           value: "docker"
+#         - name: DOCKER_VOLUMES
+#           value: "/var/run/docker.sock:/var/run/docker.sock"
+#         - name: DOCKER_IMAGE
+#           value: "docker:latest"
+#         - name: DOCKER_PRIVILEGED
+#           value: "true"
+#         - name: DOCKER_DISABLE_CACHE
+#           value: "false"
+#         - name: DOCKER_CACHE_DIR
+#           value: "/cache"
+#         - name: DOCKER_DNS_SEARCH
+#           value: "gitlab.svc.cluster.local"
+#         - name: DOCKER_DNS
+#           value: "10.0.0.10"
+#         volumeMounts:
+#         - name: docker-socket
+#           readOnly: false
+#           mountPath: /var/run/docker.sock
+#       restartPolicy: Always
+#       volumes:
+#         - name: docker-socket
+#           hostPath:
+#             path: /var/run/docker.sock
+# EOF
+# 
+#   cat - > /tmp/gitlab-svc.yaml <<EOF
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: gitlab
+#   labels:
+#     app: gitlab
+# spec:
+#   ports:
+#   - name: http
+#     port: 80
+#   selector:
+#     app: gitlab
+#   type: NodePort
+# EOF
+# 
+#   cat - > /tmp/gitlab-ing.yaml <<EOF
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: gitlab
+#   labels:
+#     app: gitlab
+#   annotations:
+#     ingress.kubernetes.io/body-size: 200m
+#     ingress.kubernetes.io/affinity: "true"
+#     ingress.kubernetes.io/session-cookie-name: "fuckoff"
+# spec:
+#   rules:
+#   - host: ${GITLAB_HOSTNAME}
+#     http:
+#       paths:
+#       - backend:
+#           serviceName: gitlab
+#           servicePort: http
+# EOF
+# 
+#   kubectl replace -f /tmp/gitlab-runner-dep.yml -f /tmp/gitlab-conf.yaml -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
+# 
+#   
+#   if [ ! -n "$(grep ${GITLAB_HOSTNAME} /etc/hosts)" ]
+#   then
+#   	echo "$(minikube ip) ${GITLAB_HOSTNAME}" | sudo tee -a /etc/hosts
+#   fi
+# 
+# set -x
+#   git config --global credentials.http://${GITLAB_HOSTNAME} root
+#   git config --global alias.ci "!f(){
+#   	if [ \"\$(git remote | grep ci)\" != \"ci\" ]
+# 	then
+# 		# REPO_TOKEN=
+# 		REPO_NAME=\$(basename -s .git \$(git config --get remote.origin.url))
+# 		curl -H \"Content-Type:application/json\" http://${GITLAB_HOSTNAME}/api/v3/projects?private_token=\${REPO_TOKEN} -d \"{ \\"name\\": \\"\${REPO_NAME}\\" }\"
+# 		git remote add ci http://root:${GITLAB_ROOT_PWD}@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
+# 	fi
+# 	git push -u ci master \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
+#   };f"
+# set +x
+# }
 
 function music {
   SESSION=Music
@@ -297,6 +458,7 @@ function music {
 function gitlab_test {
   sudo rm -rf /tmp/ssh
   sudo cp -r $HOME/.ssh /tmp/ssh
+  sudo cp -r $HOME/.vault-token /tmp/vault_token
 
   # gitlab-runner \
   # exec docker --docker-privileged \
@@ -320,6 +482,7 @@ function gitlab_test {
   exec docker --docker-privileged \
   --docker-pull-policy if-not-present \
   --docker-volumes /tmp/ssh:/root/.ssh \
+  --docker-volumes /tmp/vault_token:/tmp/vault_token:ro \
   --docker-volumes $PWD:/builds/project-0/ \
   --env GIT_STRATEGY=none \
   --env CI_PIPELINE_ID=1 \
