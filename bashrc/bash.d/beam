@@ -1,8 +1,0 @@
-# export RAE_HOME=$(dirname $(readlink $(which beam)))
-# 
-# if [ -n "${ZSH_VERSION}" ]; then
-#     autoload bashcompinit
-#     bashcompinit
-# fi
-# 
-# PROG=rae source $(dirname $(readlink $(which beam)))/bash_autocomplete

@@ -1,4 +1,0 @@
-# vi:ft=vim
-
-" PHP Bundle
-Plug 'arnaud-lb/vim-php-namespace'

@@ -1,6 +1,0 @@
-# vim: syntax=sh
-# if [ "X$(mount | grep -i Music)" == "X" ]
-# then
-# 	mount ~/Music
-# 	mpd
-# fi

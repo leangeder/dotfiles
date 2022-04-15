@@ -1,0 +1,8 @@
+# # if running bash
+# if [ -n "${BASH_VERSION}" ]; then
+#   if [ -f "${HOME}/.bashrc" ]; then
+# 		source "${HOME}/.bashrc"
+# source ~/.bashrc.local
+# 	fi
+# fi
+source ~/.bashrc.local

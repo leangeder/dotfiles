@@ -1,0 +1,14 @@
+[gpg]
+	program = /opt/homebrew/bin/gpg
+[user]
+	signingkey = FCBCBADB
+	email = gregory.bulgare@imgarena.com
+	name = Gregory BULGARE
+[commit]
+	gpgsign = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[pull]
+	rebase = false
+[url "https://x-token-auth:njf3MJsdLo3MCMLsre5O-9Qyh-NW_GBS5IDOu8DvBHyFecM4mSB1ftsDh8aEDI5t4nNARqcj-sV9_UxM9Ow=@bitbucket.org/coinflex"]
+	insteadOf = git@bitbucket.org:coinflex

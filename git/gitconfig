@@ -1,0 +1,15 @@
+[includeIf "gitdir:~/.config/works/"]
+
+
+[gpg]
+	program = /opt/homebrew/bin/gpg
+[user]
+	signingkey = FCBCBADB
+	email = gregory.bulgare@imgarena.com
+	name = Gregory BULGARE
+[commit]
+	gpgsign = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[pull]
+	rebase = false

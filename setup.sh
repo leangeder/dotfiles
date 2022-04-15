@@ -1,65 +1,47 @@
-#!/usr/bin/env sh
-SCRIPT="$(dirname $(readlink -f $0))"
+#!/usr/bin/bash
 
-for file in $(ls ${SCRIPT}/bashrc); do
-   #if [ -e "${HOME}/.${file}" ]
-   if [ -e "${HOME}/.${file}" ]
-   then
-      rm -fr ${HOME}/.${file}
-   fi
-   ln -s ${SCRIPT}/bashrc/${file} ${HOME}/.${file}
-done
+osis()
+{
+	local n=0
+	if [[ "$1" = "-n" ]]; then n=1;shift; fi
 
-for file in $(ls ${SCRIPT}/vim); do
-   #if [ -e "${HOME}/.${file}" ]
-   if [ -e "${HOME}/.${file}" ]
-   then
-      rm -fr ${HOME}/.${file}
-   fi
-   ln -s ${SCRIPT}/vim/${file} ${HOME}/.${file}
-done
+	# echo $OS|grep $1 -i >/dev/null
+	uname -s |grep -i "$1" >/dev/null
 
-for file in $(ls ${SCRIPT}/tmux); do
-   #if [ -e "${HOME}/.${file}" ]
-   if [ -e "${HOME}/.${file}" ]
-   then
-      rm -fr ${HOME}/.${file}
-   fi
-   ln -s ${SCRIPT}/tmux/${file} ${HOME}/.${file}
-done
+  return $(( $n ^ $? ))
+}
 
-for file in $(ls ${SCRIPT}/ssh); do
-   #if [ -e "${HOME}/.${file}" ]
-   if [ -e "${HOME}/.ssh" ]
-   then
-      rm -fr ${HOME}/.ssh
-   fi
-   ln -s ${SCRIPT}/ssh ${HOME}/.ssh
-done
+osis Darwin &&
+{
+	# log_debug Detect mac osx
+  ./setup-darwin.sh
+}
 
-for file in $(ls ${SCRIPT}/awesome); do
-   #if [ -e "${HOME}/.config/${file}" ]
-   if [ -e "${HOME}/.config/awesome" ]
-   then
-      rm -fr ${HOME}/.config/awesome
-   fi
-   ln -sf ${SCRIPT}/awesome ${HOME}/.config/awesome
-done
+osis Linux &&
+{
+	# log_debug Detect linux
+  ./setup-linux.sh
+}
 
-for file in $(ls ${SCRIPT}/mpd); do
-   #if [ -e "${HOME}/.config/${file}" ]
-   if [ -e "${HOME}/.config/mpd" ]
-   then
-      rm -fr ${HOME}/.config/mpd
-   fi
-   ln -sf ${SCRIPT}/mpd ${HOME}/.config/mpd
-done
 
-for file in $(ls ${SCRIPT}/ncmpcpp); do
-   #if [ -e "${HOME}/.config/${file}" ]
-   if [ -e "${HOME}/.config/ncmpcpp" ]
-   then
-      rm -fr ${HOME}/.config/ncmpcpp
-   fi
-   ln -sf ${SCRIPT}/ncmpcpp ${HOME}/.config/ncmpcpp
-done
+# 
+# osis -n Cygwin &&
+# {
+# 	log_debug Not Cygwin
+# }
+
+
+# golang
+mkdir -p /tmp/go
+curl -OL https://golang.org/dl/go1.17.7.linux-amd64.tar.gz
+tar -C /tmp/go -xvf go1.17.7.linux-amd64.tar.gz
+mv /tmp/go/go ${HOME}/.go
+
+# rustlang
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
+
+if [[ "$(grep ${HOME}/.bashrc.local $HOME/.bashrc)" == "" ]]
+then
+	# echo ". ${HOME}/.bashrc.local" >> ${HOME}/.bashrc
+	# # source ${HOME}/.bashrc
+fi
