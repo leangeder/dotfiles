@@ -8,6 +8,11 @@ osis()
 	# echo $OS|grep $1 -i >/dev/null
 	uname -s |grep -i "$1" >/dev/null
 
+  # alacritty
+  if ! grep -qF "${n,,}.yml" ./alacritty/alacritty.yml; then
+			echo -e "include:\n- ${n,,}.yml" >> ./alacritty/alacritty.yml
+  fi
+
   return $(( $n ^ $? ))
 }
 
@@ -23,13 +28,14 @@ osis Linux &&
   ./setup-linux.sh
 }
 
-
 # 
 # osis -n Cygwin &&
 # {
 # 	log_debug Not Cygwin
 # }
 
+# gpgp
+git config --global gpg.program $(command -v gpg)
 
 # golang
 mkdir -p /tmp/go
