@@ -1,5 +1,7 @@
 vim/vim/.netrwhist
 vim/vim/plugins
+vim/vim/plugged
+node_modules/
 mpd/
 !mpd/mpd.conf
 ncmpcpp/error.log

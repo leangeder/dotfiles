@@ -170,10 +170,11 @@ cursor:
 live_config_reload: true
 # Tell Alacritty that we’re using fish here
 shell:
-  # program: /usr/local/bin/fish
   program: /bin/bash
   args:
-    - --login
+    - -l
+    - -c
+    - "tmux"
 # Enable clickable URLs
 # mouse:
 #   url:

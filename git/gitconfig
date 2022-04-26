@@ -1,12 +1,11 @@
-[includeIf "gitdir:~/.config/works/"]
-
-
-[gpg]
-	program = /opt/homebrew/bin/gpg
 [user]
-	signingkey = FCBCBADB
-	email = gregory.bulgare@imgarena.com
+	# email = gregory.bulgare@imgarena.com
+	# signingkey = FCBCBADB
 	name = Gregory BULGARE
+[includeIf "gitdir:~/Works/"]
+  path = ~/Works/.gitconfig
+[includeIf "gitdir:~/Perso/"]
+  path = ~/.gitconfig.perso
 [commit]
 	gpgsign = true
 [url "git@github.com:"]
