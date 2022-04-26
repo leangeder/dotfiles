@@ -11,5 +11,13 @@
 	gpgsign = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
 [pull]
 	rebase = false
+[status]
+	submoduleSummary = true
+[diff]
+	submodule = log
