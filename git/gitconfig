@@ -1,6 +1,7 @@
 [user]
 	# email = gregory.bulgare@imgarena.com
 	# signingkey = FCBCBADB
+	signingkey = 8FC327FAC86F3DC70FC6B1EB460832CEFCBCBADB
 	name = Gregory BULGARE
 [includeIf "gitdir:~/Works/"]
   path = ~/Works/.gitconfig
