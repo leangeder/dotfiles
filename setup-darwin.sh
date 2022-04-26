@@ -12,9 +12,16 @@ brew upgrade && brew cleanup
 brew tap homebrew/cask-fonts
 brew install --quiet --force --cask alacritty --no-quarantine
 brew install --quiet --force --cask rancher font-hack-nerd-font
-brew install --quiet --force skaffold kustomize vim curl  git tmux \
-  yarn npm python3 node nvm go rustup terraform packer \
+brew install --quiet --force skaffold kustomize vim curl git tmux bash \
+  yarn npm python3 node nvm go rustup terraform packer rancher \
   gnupg bash-completion docker-completion
+
+echo $(brew --prefix)/bin/bash | sudo tee -a /private/etc/shells
+chpass -s $(brew --prefix)/bin/bash
+
+if ! grep -qF 'source shared/projectx/project.bashrc' $bashrc_file; then
+    echo "source shared/projectx/project.bashrc" >> $bashrc_file
+fi
 
 sudo mkdir -p /usr/local/bin
 sudo chown $USER /usr/local/bin
