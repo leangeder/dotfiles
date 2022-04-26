@@ -1,7 +1,7 @@
 vim/vim/.netrwhist
 vim/vim/plugins
 vim/vim/plugged
-coc/extensions/
+coc/
 node_modules/
 mpd/
 !mpd/mpd.conf
