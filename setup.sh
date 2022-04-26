@@ -34,6 +34,12 @@ osis Linux &&
 # 	log_debug Not Cygwin
 # }
 
+for _link in $(echo "bashrc/bashrc.d bashrc/bashrc.local git/gitconfig git/gitconfig.perso pass/password-store bashrc/profile tmux/tmux.conf tmux/tmux.d vim/vim vim/vimrc")
+do
+	echo ${_link}
+	ln -Fs ${PWD}/${_link} ${HOME}/.$(basename ${_link})
+done
+
 # gpgp
 git config --global gpg.program $(command -v gpg)
 
@@ -46,8 +52,9 @@ mv /tmp/go/go ${HOME}/.go
 # rustlang
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y
 
-if [[ "$(grep ${HOME}/.bashrc.local $HOME/.bashrc)" == "" ]]
-then
-	# echo ". ${HOME}/.bashrc.local" >> ${HOME}/.bashrc
-	# # source ${HOME}/.bashrc
-fi
+# # Ficher sourcer dans profile
+# if ! grep -qF "${HOME}/.bashrc.local" $HOME/.bashrc
+# then
+# 	echo ". ${HOME}/.bashrc.local" >> ${HOME}/.bashrc
+# 	# source ${HOME}/.bashrc
+# fi
