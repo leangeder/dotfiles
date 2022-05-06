@@ -1,0 +1,6 @@
+# vim: syntax=sh
+if [ -d $HOME/.rd/ ]
+then
+  export PATH=$PATH:${HOME}/.rd/bin
+  # export DOCKER_HOST=${HOME}/.rd/docker.sock
+fi

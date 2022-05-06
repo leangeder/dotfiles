@@ -4,9 +4,9 @@
 	signingkey = 8FC327FAC86F3DC70FC6B1EB460832CEFCBCBADB
 	name = Gregory BULGARE
 [includeIf "gitdir:~/Works/"]
-  path = ~/Works/.gitconfig
+  path = /Users/gregorybulgare/Works/.gitconfig
 [includeIf "gitdir:~/Perso/"]
-  path = ~/.gitconfig.perso
+  path = /Users/gregorybulgare/.gitconfig.perso
 [commit]
 	gpgsign = true
 [url "git@github.com:"]

@@ -1,6 +1,0 @@
-shell:
-  program: /opt/homebrew/bin/bash
-  args:
-  - -l
-  - -c
-  - "tmux"

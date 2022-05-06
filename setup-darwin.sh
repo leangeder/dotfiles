@@ -12,7 +12,7 @@ brew upgrade && brew cleanup
 brew tap homebrew/cask-fonts
 brew install --quiet --force --cask alacritty --no-quarantine
 brew install --quiet --force --cask rancher font-hack-nerd-font
-brew install --quiet --force skaffold kustomize vim curl git tmux bash \
+brew install --quiet --force skaffold kustomize kind vim curl git tmux bash \
   yarn npm python3 node nvm go rustup terraform packer rancher \
   gnupg bash-completion docker-completion
 
@@ -33,7 +33,28 @@ npm cache clean --force
 npm install -g n --force
 npm install -g yarn --force
 
-#
+# kustomize
+kustomize completion bash > ./bashrc/bashrc.d/kustomize
+
+# skaffold
+skaffold completion bash > ./bashrc/bashrc.d/skaffold
+
+# kind
+kind completion bash > ./bashrc/bashrc.d/kind
+
+# flux
+flux completion bash > ./bashrc/bashrc.d/flux
+
+# Command line are from rancher-desktop
+# {
+  # rancher-desktop
+  rdctl completion bash > ./bashrc/bashrc.d/rancher-desktop
+  # helm
+  helm completion bash > ./bashrc/bashrc.d/helm
+  # nerdctl
+  nerdctl completion bash > ./bashrc/bashrc.d/nerdctl
+# }
+ 
 #
 #curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
 #
