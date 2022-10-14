@@ -1,5 +1,7 @@
 # vim: syntax=sh
 alias mpd="mpd ${HOME}/.config/mpd/mpd.conf"
+alias works="cd ${HOME}/Works"
+alias perso="cd ${HOME}/Perso"
 
 function gitlab_mini {
 
@@ -315,23 +317,23 @@ function tizonia () {
   tizonia/docker-tizonia "$@"
 }
 
-# function kubectl() {
-# 	podman run -ti --rm -u $UID:$GID -v $HOME/.kube:/root/.kube -v $(pwd):/kube:z \
-# 	-w /kube gcr.io/google.com/cloudsdktool/cloud-sdk:latest kubectl $@
+# # function kubectl() {
+# # 	podman run -ti --rm -u $UID:$GID -v $HOME/.kube:/root/.kube -v $(pwd):/kube:z \
+# # 	-w /kube gcr.io/google.com/cloudsdktool/cloud-sdk:latest kubectl $@
+# # }
+# # 
+# # function terraform() {
+# #   set -x
+# # 	podman run -ti --rm -u $UID:$GROUPS -v $HOME/.terraform.d:/root/.terraform.d:z -v $(pwd):/terraform:z \
+# # 	-w /terraform hashicorp/terraform:latest $@
+# #   set +x
+# # }
+# 
+# function aws() {
+# 	podman run -ti --rm -u $UID:$GID -v $HOME/.aws:/root/.aws -v $(pwd):/aws -w /aws amazon/aws-cli $@
 # }
 # 
-# function terraform() {
-#   set -x
-# 	podman run -ti --rm -u $UID:$GROUPS -v $HOME/.terraform.d:/root/.terraform.d:z -v $(pwd):/terraform:z \
-# 	-w /terraform hashicorp/terraform:latest $@
-#   set +x
+# function gcloud() {
+# 	podman run -ti --rm -u $UID:$GID -v $HOME/.config/gcloud:/root/.config/gcloud -v $(pwd):/gcloud \
+# 	-w /gcloud gcr.io/google.com/cloudsdktool/cloud-sdk:latest gcloud $@
 # }
-
-function aws() {
-	podman run -ti --rm -u $UID:$GID -v $HOME/.aws:/root/.aws -v $(pwd):/aws -w /aws amazon/aws-cli $@
-}
-
-function gcloud() {
-	podman run -ti --rm -u $UID:$GID -v $HOME/.config/gcloud:/root/.config/gcloud -v $(pwd):/gcloud \
-	-w /gcloud gcr.io/google.com/cloudsdktool/cloud-sdk:latest gcloud $@
-}

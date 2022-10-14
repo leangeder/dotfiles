@@ -9,12 +9,41 @@ HISTCONTROL=ignoreboth
 # Disable Bell (and discard any output)
 xset -b b off > /dev/null 2>&1
 
+export AWS_PROFILE=ume-users
+export GITLAB_TOKEN=glpat-9Q-841JZC9xY_HhcRaaQ
+export HARBOR_HOST=harbor.platform.pe.core.underwriteme.co.uk
+export HARBOR_USER=Gregory_Bulgare
+export HARBOR_TOKEN=74dVn4qQC
+# export AWS_CA_BUNDLE=~/Library/Certificate/Zscaler.pem
+# export NODE_EXTRA_CA_CERTS=$HOME/Library/Certificate/Zscaler.pem
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+
 export EDITOR=vim
 # export TERM=xterm
 export TERM=xterm-256color
 export GPG_TTY=$(tty)
 export LANG=fr_FR.UTF-8
 export LC_ALL=fr_fr.UTF-8
+
+if [ -f /opt/homebrew/bin/brew ]
+then
+  eval $(/opt/homebrew/bin/brew shellenv)
+  export SHELL=$(brew --prefix)/bin/bash
+  export BASH_SILENCE_DEPRECATION_WARNING=1
+  if [ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]
+  then
+    . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+  fi
+fi
+
+if [ -f /usr/libexec/java_home ]
+then
+  # export JAVA_HOME=$(/usr/libexec/java_home)
+  # export JDK_HOME=$(/usr/libexec/java_home)
+  export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+  export JDK_HOME=$(/usr/libexec/java_home -v 1.8)
+fi
 
 if [ -d ~/.bashrc.d ]
 then

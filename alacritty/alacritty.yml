@@ -174,23 +174,36 @@ live_config_reload: true
 #     launcher:
 #       program: open
 #     modifiers: Command
-# Map the keys (British keyboard layout)
 key_bindings:
-  - { key: Key0, mods: Alt, chars: 'º' }
-  - { key: Key1, mods: Alt, chars: '¡' }
-  - { key: Key2, mods: Alt, chars: '€' }
-  - { key: Key3, mods: Alt, chars: '#' }
-  - { key: Key4, mods: Alt, chars: '¢' }
-  - { key: Key5, mods: Alt, chars: '∞' }
-  - { key: Key6, mods: Alt, chars: '§' }
-  - { key: Key7, mods: Alt, chars: '¶' }
-  - { key: Key8, mods: Alt, chars: '•' }
-  - { key: Key9, mods: Alt, chars: 'ª' }
-  - { key: Comma, mods: Command, command: {program: "sh", args: ["-c","open ~/.config/alacritty/alacritty.yml"]}}
-  - { key: N,         mods: Command,      action: SpawnNewInstance       }
-  - { key: Space,     mods: Alt,          chars: " "                     }
-  - { key: Back, mods: Super, chars: "\x15" } # delete word/line
-  - { key: Left,     mods: Alt,     chars: "\x1bb"                       } # one word left
-  - { key: Right,    mods: Alt,     chars: "\x1bf"                       } # one word right
-  - { key: Left,     mods: Command, chars: "\x1bOH",   mode: AppCursor   } # Home
-  - { key: Right,    mods: Command, chars: "\x1bOF",   mode: AppCursor   } # End
+# Map the keys (British keyboard layout)
+  # - { key: Key0, mods: Alt, chars: 'º' }
+  # - { key: Key1, mods: Alt, chars: '¡' }
+  # - { key: Key2, mods: Alt, chars: '€' }
+  # - { key: Key3, mods: Alt, chars: '#' }
+  # - { key: Key4, mods: Alt, chars: '¢' }
+  # - { key: Key5, mods: Alt, chars: '∞' }
+  # - { key: Key6, mods: Alt, chars: '§' }
+  # - { key: Key7, mods: Alt, chars: '¶' }
+  # - { key: Key8, mods: Alt, chars: '•' }
+  # - { key: Key9, mods: Alt, chars: 'ª' }
+# Map the keys (French PC keyboard layout)
+- { key: 19,             mods: Alt,                       chars: "~"                     }
+- { key: 20,             mods: Alt,                       chars: "#"                     }
+- { key: 21,             mods: Alt,                       chars: "{"                     }
+- { key: 22,             mods: Alt,                       chars: "|"                     }
+- { key: 23,             mods: Alt,                       chars: "["                     }
+- { key: 24,             mods: Alt,                       chars: "}"                     }
+- { key: 25,             mods: Alt,                       chars: "^"                     }
+- { key: 26,             mods: Alt,                       chars: "`"                     }
+- { key: 27,             mods: Alt,                       chars: "]"                     }
+- { key: 28,             mods: Alt,                       chars: "\\"                    }
+- { key: 29,             mods: Alt,                       chars: "@"                     }
+# Map Keyboard
+- { key: Comma, mods: Command, command: {program: "sh", args: ["-c","open ~/.config/alacritty/alacritty.yml"]}}
+- { key: N,         mods: Command,      action: SpawnNewInstance       }
+- { key: Space,     mods: Alt,          chars: " "                     }
+- { key: Back, mods: Super, chars: "\x15" } # delete word/line
+- { key: Left,     mods: Alt,     chars: "\x1bb"                       } # one word left
+- { key: Right,    mods: Alt,     chars: "\x1bf"                       } # one word right
+- { key: Left,     mods: Command, chars: "\x1bOH",   mode: AppCursor   } # Home
+- { key: Right,    mods: Command, chars: "\x1bOF",   mode: AppCursor   } # End
