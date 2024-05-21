@@ -1,0 +1,21 @@
+# vim: syntax=sh
+
+# if [[ "$(which kustomize)" != "" ]]
+# then
+#   eval $(kustomize completion bash)
+# fi
+# 
+# if [[ "$(which skaffold)" != "" ]]
+# then
+#   eval $(skaffold completion bash)
+# fi
+
+if [[ "$(which kubectl)" != "" ]]
+then
+  source <(kubectl completion bash)
+fi
+
+if [[ "$(which helm)" != "" ]]
+then
+  source <(helm completion bash)
+fi

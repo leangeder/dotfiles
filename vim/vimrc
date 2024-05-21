@@ -1,0 +1,123 @@
+"""""""""""""""""""""""""""""""""""
+" "
+"
+" Following package are requied
+"   vim curl ripgrep python3 python3-pip nodejs npm
+"
+" Install python tools
+"   python3 -m pip install --upgrade pip
+"   pip3 install virtualenv
+"
+" Need to install/update node package
+"   npm cache clean -f && npm install -g n && npm install -g yarn
+"
+" Need to install golang package
+"
+"
+" Configure Coc for Python, JavaScript/TScript, Golang
+" :CocInstall coc-pyright coc-tsserver coc-go
+"
+"""""""""""""""""""""""""""""""""""
+"
+" Plugins
+" {
+    let vimplug_exists=expand('~/.vim/autoload/plug.vim')
+    if has('win32')&&!has('win64')
+      let curl_exists=expand('C:\Windows\Sysnative\curl.exe')
+    else
+      let curl_exists=expand('curl')
+    endif
+    
+    if !filereadable(vimplug_exists)
+      if !executable(curl_exists)
+        echoerr "You have to install curl or first install vim-plug yourself!"
+        execute "q!"
+      endif
+      echo "Installing Vim-Plug..."
+      echo ""
+      silent exec "!"curl_exists" -fLo " . shellescape(vimplug_exists) . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+      let g:not_finish_vimplug = "yes"
+    
+      autocmd VimEnter * PlugInstall
+    endif
+    
+    call plug#begin(expand('~/.vim/plugged'))
+      source ~/.vim/settings/plug.vim
+    call plug#end()
+" }
+
+" Settings : general
+" {
+    if filereadable(expand("~/.vim/settings/general.vim"))
+      source ~/.vim/settings/general.vim
+    endif
+" }
+
+" Settings : theme
+" {
+    if filereadable(expand("~/.vim/settings/theme.vim"))
+      source ~/.vim/settings/theme.vim
+    endif
+" }
+
+
+" " Default Settings
+" " {
+"     set encoding=utf-8
+"     syntax on
+"     set modeline
+"     set expandtab
+"     set tabstop=4
+"     set shiftwidth=4
+"     set exrc " .vimrc in local project dir
+"     set secure
+"     autocmd BufRead,BufNewFile * set signcolumn=yes
+"     autocmd FileType tagbar,nerdtree set signcolumn=no
+"     set foldmethod=indent
+"     set nofoldenable
+"     set number relativenumber
+"     set diffopt+=vertical
+"     :augroup numbertoggle
+"     :  autocmd!
+"     :  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu | set rnu   | endif
+"     :  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
+"     :augroup END
+" " }
+" 
+" " Theme settings
+" " {
+"     colorscheme material
+"     let g:airline_theme = 'material'
+"     if (has('termguicolors'))
+"       set termguicolors
+"     endif
+"     set cursorline
+"     set background=dark
+"     let g:material_theme_style = 'simple'
+"     " let g:material_theme_style = 'darker'
+"     hi Normal       ctermbg=NONE guibg=NONE
+"     hi SignColumn   ctermbg=235 guibg=#262626
+"     hi LineNr       ctermfg=grey guifg=grey ctermbg=NONE guibg=NONE
+"     hi CursorLineNr ctermbg=NONE guibg=NONE ctermfg=178 guifg=#d7af00
+" 
+"     let g:gitgutter_set_sign_backgrounds = 0
+" " } 
+" "
+" let g:gitgutter_set_sign_backgrounds = 0
+" 
+" " -- Whitespace highlight --
+" match ExtraWhitespace /\s\+$/
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+" autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+" autocmd BufWinLeave * call clearmatches()
+" 
+" 
+" 
+" 
+" let g:airline_statusline_ontop=1
+" " let g:airline#extensions#tabline#enabled = 1
+" " let g:airline#extensions#tabline#left_sep = ' '
+" " let g:airline#extensions#tabline#left_alt_sep = '|'
+" " 
+" " " let g:airline_theme='simple'

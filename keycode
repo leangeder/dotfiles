@@ -1,0 +1,9 @@
+# loadkeys file_path in bashrc
+keycode 164 = XF86AudioPlay
+keycode 164 = XF86AudioMute
+keycode 164 = XF86AudioLowerVolume
+keycode 164 = XF86AudioRaiseVolume
+keycode 164 = XF86MonBrightnessUp
+keycode 164 = XF86MonBrightnessDown
+keycode 164 = XF86PowerOff
+keycode 164 = XF86Next_VMode

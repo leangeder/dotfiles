@@ -1,0 +1,9 @@
+vim/vim/.netrwhist
+vim/vim/plugins
+vim/vim/plugged
+*.swp
+coc/
+node_modules/
+mpd/
+!mpd/mpd.conf
+ncmpcpp/error.log

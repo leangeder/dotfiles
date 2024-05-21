@@ -1,0 +1,508 @@
+# vim: syntax=bash
+alias mpd="mpd ${HOME}/.config/mpd/mpd.conf"
+alias works="cd ${HOME}/Works"
+alias perso="cd ${HOME}/Perso"
+alias kind-remote="CONTAINER_HOST=ssh://ansible@192.168.0.6:22/run/user/1000/podman/podman.sock kind"
+
+function ws {
+  _ws_name=${1}
+  _ws_k8s_replicas=${2:-1}
+  _ws_k8s_ports="32080 32443"
+  _ws_k8s_envs="ops dev"
+  _ws_path=${HOME}/workspaces/${_ws_name}
+
+  mkdir -p $(dirname ${_ws_path})/.traefik/configs
+
+  docker rm -f traefik 2>&1 >/dev/null
+  docker run -d --name traefik --network kind -v $(dirname ${_ws_path})/.traefik/configs:/tmp/configs -v /var/run/docker.sock:/var/run/docker.sock \
+    -p 8080:8080 -p 80:80 -p 443:443 traefik --api --api.dashboard --api.insecure=true --providers.docker=false --providers.docker.watch --accesslog \
+    --providers.file.directory=/tmp/configs --providers.file.watch=true --global.checknewversion --global.sendanonymoususage --entrypoints.web.address=:80 \
+    --entrypoints.web.http.redirections.entrypoint.to=websecure --entrypoints.web.http.redirections.entrypoint.scheme=https \
+    --entrypoints.web.http.redirections.entrypoint.permanent=true --entrypoints.websecure.address=:443 2>&1 >/dev/null
+
+  if [ ! -d "${_ws_path}" ]
+  then
+
+    mkdir -p ${_ws_path}/{infrastructures,applications}
+    chown -R 1000:1000 ${_ws_path}/{infrastructures,applications}
+
+    cat - > ${_ws_path}/k8s-bootstrap.sh <<EOF
+#!/bin/sh
+
+    cat - > \${HOME}/.traefik/\${WorkSpace}_route.yml <<TRAEFIK_EOF
+http:
+  # Add the router
+  routers:
+TRAEFIK_EOF
+
+    cat - > \${HOME}/.traefik/\${WorkSpace}_service.yml <<TRAEFIK_EOF
+http:
+  # Add the service
+  services:
+TRAEFIK_EOF
+
+for _env in \$(echo "${_ws_k8s_envs}")
+do
+  if [ "\$(kind get clusters | grep \${_env} | wc -l)" = "0" ]
+  then
+    mkdir -p \${HOME}/infrastructures/\${_env}
+    mkdir -p \${HOME}/applications/\${_env}
+    cat - > \${HOME}/infrastructures/\${_env}/kind.yml <<KIND_EOF
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: \${WorkSpace}-\${_env}
+kubeadmConfigPatches:
+- |-
+  kind: InitConfiguration
+  nodeRegistration:
+    kubeletExtraArgs:
+      node-labels: "cluster=\${WorkSpace},environment=\${_env},region=local"
+- |-
+  kind: JoinConfiguration
+  nodeRegistration:
+    kubeletExtraArgs:
+      node-labels: "cluster=\${WorkSpace},environment=\${_env},region=local,ingress=true"
+- |-
+  kind: ClusterConfiguration
+  # configure controller-manager bind address
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0 #Disable localhost binding
+      secure-port: "0"      #Disable the https 
+      port: "10257"         #Enable http on port 10257
+  # configure etcd metrics listen address
+  etcd:
+    local:
+      extraArgs:
+        listen-metrics-urls: http://0.0.0.0:2381
+  # configure scheduler bind address
+  scheduler:
+    extraArgs:
+      bind-address: 0.0.0.0  #Disable localhost binding
+      secure-port: "0"       #Disable the https
+      port: "10259"          #Enable http on port 10259
+- |-
+  kind: KubeProxyConfiguration
+  # configure proxy metrics bind address
+  metricsBindAddress: 0.0.0.0
+nodes:
+- role: control-plane
+KIND_EOF
+
+    _ws_k8s_replicas_tmp=${_ws_k8s_replicas}
+    while [ \${_ws_k8s_replicas_tmp} -gt 0 ]
+    do
+      echo "- role: worker" >> \${HOME}/infrastructures/\${_env}/kind.yml
+      _ws_k8s_replicas_tmp=\$(( \${_ws_k8s_replicas_tmp} - 1 ))
+    done
+    kind create cluster --config \${HOME}/infrastructures/\${_env}/kind.yml --wait 5m
+
+    cat - >> \${HOME}/.traefik/\${WorkSpace}_route.yml <<TRAEFIK_EOF
+    \${WorkSpace}-\${_env}:
+      entryPoints:
+      - web
+      - websecure
+      service: \${WorkSpace}-\${_env}
+      rule: Host(\\\`*.\${_env}.\${WorkSpace}.dev\\\`)
+TRAEFIK_EOF
+
+    cat - >> \${HOME}/.traefik/\${WorkSpace}_service.yml <<TRAEFIK_EOF
+    \${WorkSpace}-\${_env}:
+      loadBalancer:
+        passHostHeader: true
+        sticky:
+          cookie:
+            name: \${WorkSpace}-\${_env}
+            secure: true
+            httpOnly: false
+        healthCheck:
+          path: /ping
+          port: 32082
+          scheme: http
+          interval: "10s"
+          timeout: "3s"
+        servers:
+TRAEFIK_EOF
+
+    for _worker in \$(docker ps -a --no-trunc --filter name=\^/\${WorkSpace}-\${_env}-worker.*\$ --format "{{.Names}}")
+    do
+      for _port in \$(echo ${_ws_k8s_ports})
+      do
+        printf "        - url: http://%s:%s\n" "\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \${_worker})" "\${_port}" >> \${HOME}/.traefik/\${WorkSpace}_service.yml
+      done
+    done
+
+    if [ ! -f \${HOME}/applications/\${_env}/kustomization.yaml ]
+    then
+      cd \${HOME}/applications/\${_env}
+      kustomize create --resources ../common/overlay/ --annotations=environment:\${_env},region:local,project:\${WorkSpace}
+      cd -
+    fi
+  fi
+  kustomize build --enable-helm \${HOME}/applications/\${_env} | kubectl apply -f - --wait
+done
+EOF
+
+    cat - > ${_ws_path}/k8s-clean.sh <<EOF
+#!/bin/sh
+
+set -x
+for _kindFile in $(echo ${_envs})
+do
+  kind delete cluster --name \${WorkSpace}-\${_kindFile}
+done
+EOF
+
+  fi
+     
+  docker run -ti --net host --name wp_${_ws_name} --hostname wp_${_ws_name} --rm \
+    --memory 512mb -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix\$DISPLAY -e PATH=${PATH}:/home/${USER}/.go/bin,/home/${USER}/.cargo/bin \
+    -e PS1='🐳 \[\033[1;36m\]\h \[\033[1;34m\]\W\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]' -e WorkSpace=${_ws_name} \
+    --user=${UID}:${GROUPS} --group-add audio --group-add video --group-add plugdev --group-add users --group-add 994 \
+    --device /dev/video0 --device /dev/snd:/dev/snd --device /dev/dri:/dev/dri \
+    -v /dev/shm:/dev/shm -v ${_ws_path}:/home/${USER} -v $(dirname ${_ws_path})/.traefik/configs:/home/${USER}/.traefik \
+    -v ${HOME}/.bashrc.local:/home/${USER}/.bashrc.local:ro -v ${HOME}/.profile:/home/${USER}/.profile:ro -v ${HOME}/.bashrc.d:/home/${USER}/.bashrc.d:ro \
+    -v ${HOME}/.vim:/home/${USER}/.vim:ro -v ${HOME}/.vimrc:/home/${USER}/.vimrc:ro -v ${HOME}/.viminfo:/home/${USER}/.viminfo:ro \
+    -v /usr/bin/docker:/usr/bin/docker:ro -v /usr/bin/git:/usr/bin/git:ro -v /usr/local/bin/kind:/usr/local/bin/kind:ro -v /usr/bin/k9s:/usr/bin/k9s:ro \
+    -v ${HOME}/.local/bin/kubectl:/usr/local/bin/kubectl:ro -v ${HOME}/.local/bin/kustomize:/usr/local/bin/kustomize:ro -v /usr/bin/helm:/usr/bin/helm:ro \
+    -v ${HOME}/.go:/home/${USER}/.go:ro -v ${HOME}/.cargo:/home/${USER}/.cargo:ro -v ${HOME}/.rustup:/home/${USER}/.rustup:ro -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro -v /etc/localtime:/etc/localtime:ro -v $(dirname ${_ws_path})/common:/home/${USER}/applications/common \
+    --mount type=bind,source=/etc/ssl/certs,target=/etc/ssl/certs --mount type=bind,source=/var/run/dbus,target=/var/run/dbus \
+    --mount type=bind,source=/etc/machine-id,target=/etc/machine-id --mount type=bind,source=/var/run/user/${UID},target=/var/run/user/${UID} \
+    -w /home/${USER} debian
+}
+
+function gitlab_mini {
+
+  GITLAB_HOSTNAME="gitlab.local"
+  
+  if [ "$(minikube status | grep Running | wc -l)" = "0" ]
+  then
+  	minikube config set WantReportErrorPrompt false
+  	minikube start --cpus 3 --memory 8192
+  	# minikube start --cpus 3 --memory 8192 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+	# minikube start --memory=6144 --extra-config=apiserver.authorization-mode=RBAC --extra-config=controller-manager.cluster-signing-cert-file="/var/lib/localkube/certs/ca.crt" --extra-config=controller-manager.cluster-signing-key-file="/var/lib/localkube/certs/ca.key" --extra-config=apiserver.admission-control="NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+	minikube addons enable heapster
+  	minikube addons enable ingress
+  	minikube addons enable kube-dns
+  fi
+
+  cat - > /tmp/gitlab-conf.yaml <<EOF
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-ce
+data:
+  ## This is used by GitLab Omnibus as the primary means of configuration.
+  ## ref: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template
+  ##
+  gitlab_omnibus_config: |
+    external_url ENV['EXTERNAL_URL'];
+    root_pass = ENV['GITLAB_ROOT_PASSWORD'];
+    gitlab_rails['initial_root_password'] = root_pass unless root_pass.to_s == '';
+    gitlab_rails['lfs_enabled'] = true;
+    manage_accounts['enable'] = false;
+
+    # # disable service
+    # gitlab_rails['gitlab_email_enabled'] = false;
+    # gitlab_rails['registry_enabled'] = false;
+    # gitlab_rails['incoming_email_enabled'] = false;
+    # gitlab_rails['artifacts_enabled'] = false;
+    # gitlab_rails['impersonation_enabled'] = flase;
+    # gitlab_rails['usage_ping_enabled'] = false;
+    # gitlab_rails['auto_migrate'] = false;
+    # gitlab_rails['smtp_enable'] = false;
+    # # gitlab_workhorse['enable'] = false;
+    # # unicorn['enable'] = false;
+    # # sidekiq['metrics_enabled'] = false;
+    # # postgresql['enable'] = false;
+    # # redis['enable'] = false;
+    # registry['enable'] = false;
+    # logrotate['enable'] = false;
+    # prometheus['enable'] = false;
+    # alertmanager['enable'] = false;
+    # node_exporter['enable'] = false;
+    # redis_exporter['enable'] = false;
+    # postgres_exporter['enable'] = false;
+    # gitlab_monitor['enable'] = false;
+    # gitaly['enable'] = false;
+EOF
+
+  cat - > /tmp/gitlab-dep.yaml <<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: gitlab
+  name: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  template:
+    metadata:
+      labels:
+        app: gitlab
+    spec:
+      containers:
+      - image: gitlab/gitlab-ce:latest
+        name: gitlab-ce
+        ports:
+        - name: ssh
+          containerPort: 22
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        # livenessProbe:
+        #   httpGet:
+        #     path: /help
+        #     port: http
+        #   initialDelaySeconds: 200
+        #   timeoutSeconds: 1
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   failureThreshold: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /help
+        #     port: http
+        #   initialDelaySeconds: 30
+        #   timeoutSeconds: 1
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   failureThreshold: 3
+        env:
+        - name: GITLAB_OMNIBUS_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: gitlab-ce
+              key: gitlab_omnibus_config
+        - name: EXTERNAL_URL
+          value: "http://${GITLAB_HOSTNAME}/"
+        - name: GITLAB_ROOT_PASSWORD
+          value: "beamery12345"
+        volumeMounts:
+        - name: gitlab-etc
+          mountPath: /etc/gitlab
+      volumes:
+      - name: gitlab-etc
+EOF
+
+  cat - > /tmp/gitlab_svc.yml <<EOF
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: gitlab
+  namespace: gitlab
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: gitlab
+    spec:
+      containers:
+      - env:
+        - name: GITLAB_OMNIBUS_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: gitlab-secret
+              key: GITLAB_OMNIBUS_CONFIG
+        image: gitlab/gitlab-ce:latest
+        name: gitlab
+        ports:
+        - containerPort: 22
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+EOF
+
+  cat - > /tmp/gitlab-svc.yaml <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  ports:
+  - name: ssh
+    port: 2280
+    targetPort: 22
+  - name: http
+    port: 80
+  selector:
+    app: gitlab
+  type: NodePort
+EOF
+
+  cat - > /tmp/gitlab-ing.yaml <<EOF
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab
+  labels:
+    app: gitlab
+spec:
+  rules:
+  - host: ${GITLAB_HOSTNAME}
+    http:
+      paths:
+      - backend:
+          serviceName: gitlab
+          servicePort: http
+EOF
+
+  kubectl replace -f /tmp/gitlab-conf.yaml -f /tmp/gitlab-dep.yaml -f /tmp/gitlab-svc.yaml -f /tmp/gitlab-ing.yaml --force
+
+  
+  if [ ! -n "$(grep ${GITLAB_HOSTNAME} /etc/hosts)" ]
+  then
+  	echo "$(minikube ip) ${GITLAB_HOSTNAME}" | sudo tee -a /etc/hosts
+  fi
+
+set -x
+  git config --global credentials.http://${GITLAB_HOSTNAME} root
+  git config --global alias.ci "!f(){
+  	if [ \"\$(git remote | grep ci)\" != \"ci\" ]
+	then
+		REPO_TOKEN=
+		REPO_NAME=\$(basename -s .git \$(git config --get remote.origin.url))
+		curl -H \"Content-Type:application/json\" http://${GITLAB_HOSTNAME}/api/v3/projects?private_token=\${REPO_TOKEN} -d \"{ \\"name\\": \\"\${REPO_NAME}\\" }\"
+		git remote add ci http://root:beamery12345@${GITLAB_HOSTNAME}/root/\${REPO_NAME}.git
+	fi
+	git push -u ci \$(git rev-parse --symbolic-full-name --abbrev-ref HEAD) 
+  };f"
+set +x
+}
+
+function music {
+  SESSION=Music
+
+  tmux -2 new-session -d -s $SESSION 'ncmpcpp -s help'	
+  tmux -2 split-window -d -t $SESSION:0 -p 40 'ncmpcpp -s playlist'
+  tmux -2 split-window -d -t $SESSION:0 -p 50 'ncmpcpp -s visualizer'
+
+  for i in "\\"; do
+    tmux -2 send-keys -t $SESSION:0.1 "$i"
+    tmux -2 send-keys -t $SESSION:0.2 "$i"
+  done
+
+  for i in "C-l" "BSpace" "BSpace" "60" "Enter" "7" "Left"; do
+    tmux -2 send-keys -t $SESSION:0.0 "$i"
+  done
+
+  sleep 1
+
+  for i in "C-l" "BSpace" "BSpace" "60" "Enter" "4" "Left"; do
+    tmux -2 send-keys -t $SESSION:0.2 "$i"
+  done
+
+  sleep 1
+
+  tmux -2 set -t $SESSION -g status off
+  tmux -2 attach-session -t $SESSION:0.2
+}
+
+function gitlab_test {
+  sudo rm -rf /tmp/ssh
+  sudo cp -r $HOME/.ssh /tmp/ssh
+
+  # gitlab-runner \
+  # exec docker --docker-privileged \
+  # --docker-pull-policy if-not-present \
+  # --docker-volumes /tmp/ssh:/root/.ssh \
+  # --docker-volumes $PWD:$PWD \
+  # --env GIT_STRATEGY=none \
+  # --env CI_JOB_TOKEN=${GITLAB_TOKEN} \
+  # --env CI_PIPELINE_ID=1 \
+  # --env VAULT_TOKEN_PRODUCTION=${VAULT_TOKEN} \
+  # --env VAULT_TOKEN_PREVIEW=${VAULT_TOKEN} \
+  # --env VAULT_TOKEN_COMMON=${VAULT_TOKEN} \
+  # --env VAULT_TOKEN=${VAULT_TOKEN} \
+  # --env VAULT_ADDR=${VAULT_ADDR} \
+  # $@
+
+  docker run --rm -ti \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume $PWD:$PWD --workdir $PWD \
+  gitlab/gitlab-runner:latest \
+  exec docker --docker-privileged \
+  --docker-pull-policy if-not-present \
+  --docker-volumes $PWD:/builds/project-0/ \
+  --env GIT_STRATEGY=none \
+  --env CI_PIPELINE_ID=1 \
+  --env CI_JOB_TOKEN=${GITLAB_TOKEN} \
+  --env VAULT_TOKEN_PRODUCTION=${VAULT_TOKEN} \
+  --env VAULT_TOKEN_COMMON=${VAULT_TOKEN} \
+  --env VAULT_TOKEN_GLOBAL=${VAULT_TOKEN} \
+  --env VAULT_TOKEN_PREVIEW=${VAULT_TOKEN} \
+  --env VAULT_TOKEN=${VAULT_TOKEN} \
+  --env VAULT_ADDR=${VAULT_ADDR} \
+  $@
+}
+
+
+
+
+function vault_token {
+  if [ $(vault token lookup | grep ^ttl | tr -s " " | cut -d\  -f2) > 0 ]
+  then
+    if [ "X${VAULT_TOKEN}" == "X" ]
+    then
+        export VAULT_TOKEN=$(cat ~/.vault-token)
+    fi
+    return 0
+  fi
+
+  ROLE=$1
+
+  cat - > /tmp/login_request.json <<EOF
+  {
+    "aud": "vault/$ROLE",
+    "sub": "${SERVICE_ACCOUNT}",
+    "exp": $((EXP=$(date +%s)+600))
+  }
+EOF
+
+  JWT=$(gcloud beta iam service-accounts sign-jwt /tmp/login_request.json /tmp/signed_jwt.json --iam-account=${SERVICE_ACCOUNT} --project=${GOOGLE_PROJECT} && cat /tmp/signed_jwt.json)
+  VAULT_TOKEN=$($(which vault) write auth/gcp/login role="$ROLE" jwt="${JWT}" --format=json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["auth"]["client_token"]')
+  $(which vault) login ${VAULT_TOKEN}
+}
+
+function tizonia () {
+  USER_ID=$(id -u)
+  GROUP_ID=$(id -g)
+
+  docker run -it --rm \
+  --volume=/run/user/${USER_ID}/pulse:/run/user/${GROUP_ID}/pulse \
+  --device /dev/snd:/dev/snd \
+  --volume="$HOME/.config/tizonia":/home/tizonia/.config/tizonia --name tizonia \
+  tizonia/docker-tizonia "$@"
+}
+
+# function kubectl() {
+# 	podman run -ti --rm -u $UID:$GID -v $HOME/.kube:/root/.kube -v $(pwd):/kube:z \
+# 	-w /kube gcr.io/google.com/cloudsdktool/cloud-sdk:latest kubectl $@
+# }
+# 
+# function terraform() {
+#   set -x
+# 	podman run -ti --rm -u $UID:$GROUPS -v $HOME/.terraform.d:/root/.terraform.d:z -v $(pwd):/terraform:z \
+# 	-w /terraform hashicorp/terraform:latest $@
+#   set +x
+# }
+# 
+# # function aws() {
+# # 	podman run -ti --rm -u $UID:$GID -v $HOME/.aws:/root/.aws -v $(pwd):/aws -w /aws amazon/aws-cli $@
+# # }
+# # 
+# # function gcloud() {
+# # 	podman run -ti --rm -u $UID:$GID -v $HOME/.config/gcloud:/root/.config/gcloud -v $(pwd):/gcloud \
+# # 	-w /gcloud gcr.io/google.com/cloudsdktool/cloud-sdk:latest gcloud $@
+# # }

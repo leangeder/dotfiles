@@ -1,0 +1,33 @@
+# # if running bash
+# if [ -n "${BASH_VERSION}" ]; then
+#   if [ -f "${HOME}/.bashrc" ]; then
+# 		source "${HOME}/.bashrc"
+# source ~/.bashrc.local
+# 	fi
+# fi
+
+if [ -f /opt/homebrew/bin/brew ]
+then
+  eval $(/opt/homebrew/bin/brew shellenv)
+  export SHELL=$(brew --prefix)/bin/bash
+  export BASH_SILENCE_DEPRECATION_WARNING=1
+  # if [ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]
+  # then
+  #   . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+  # fi
+fi
+
+if [[ -z "$TMUX" ]]; then
+    if tmux has-session 2>/dev/null; then
+        exec tmux attach
+    else
+        exec tmux
+    fi
+fi
+
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$PATH" ]]
+then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+source ~/.bashrc.local

@@ -1,0 +1,28 @@
+[user]
+# 	# email = gregory.bulgare@imgarena.com
+# 	# # signingkey = FCBCBADB
+# 	# signingkey = 8FC327FAC86F3DC70FC6B1EB460832CEFCBCBADB
+# 	signingkey = 460832CEFCBCBADB
+	name = Grégory BULGARE
+ 	email = leangeder@hotmail.com
+[includeIf "gitdir:~/Works/"]
+  path = /Users/gregorybulgare/Works/.gitconfig
+[includeIf "gitdir:~/Perso/"]
+  path = /Users/gregorybulgare/.gitconfig.perso
+# [commit]
+# 	gpgsign = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/
+[url "git@gitlab.com:"]
+	insteadOf = https://gitlab.com/
+[pull]
+	rebase = false
+[status]
+	submoduleSummary = true
+[diff]
+	submodule = log
+[user]
+	name = Grégory BULGARE
+	email = leangeder@hotmail.com

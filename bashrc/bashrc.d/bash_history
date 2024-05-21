@@ -1,0 +1,5 @@
+# vim: syntax=sh
+
+export HISTTIMEFORMAT='%F %T '
+export HISTIGNORE='ls -l:pwd:history'
+export HISTCONTROL=ignoredups

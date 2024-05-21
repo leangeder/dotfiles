@@ -1,0 +1,41 @@
+# vim: syntax=sh
+
+function __setprompt {
+   local BLUE="\[\033[0;34m\]"
+   local NO_COLOUR="\[\033[0m\]"
+   local SSH_IP=`echo $SSH_CLIENT | awk '{ print $1 }'`
+   local SSH2_IP=`echo $SSH2_CLIENT | awk '{ print $1 }'`
+   if [ $SSH2_IP ] || [ $SSH_IP ] ; then
+      local SSH_FLAG="@\h"
+   fi
+   PS1="$BLUE[\$(date +%H:%M:%s)][\u$SSH_FLAG:\w]\\$ $NO_COLOUR"
+   PS2="$BLUE>$NO_COLOUR "
+   PS4='$BLUE+$NO_COLOUR '
+}
+__setprompt
+
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[$(tput bold)\]\[$(tput setaf 4)\]\t::\[$(tput setaf 2)\]\[$(tput setaf 2)\][\h]@[\u]\[$(tput setaf 6)\][\W]\$(git_branch_parser)\\$ \[$(tput sgr0)\]\[$(tput sgr0)\]"
+    ;;
+*)
+   if [ "$color_prompt" =  es ]; then
+      PS1="\[$(tput bold)\]\[$(tput setaf 4)\]\t::\[$(tput setaf 2)\]\[$(tput setaf 2)\][\h]@[\u]\[$(tput setaf 6)\][\W]\$(git_branch_parser)\\$ \[$(tput sgr0)\]\[$(tput sgr0)\]"
+   else
+      PS1="\[$(tput bold)\]\[$(tput setaf 4)\]\t::\[$(tput setaf 2)\]\[$(tput setaf 2)\][\h]@[\u]\[$(tput setaf 6)\][\W]\$(git_branch_parser)\\$ \[$(tput sgr0)\]\[$(tput sgr0)\]"
+   fi
+    ;;
+esac
+
+
+
+unset color_prompt force_color_prompt
