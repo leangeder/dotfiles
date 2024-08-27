@@ -162,7 +162,7 @@ EOF
     ssh-keygen -t ${_sshKeyMethod} -f ${_homeDirectory}/.ssh/id_${_sshKeyMethod} -P "SSH Key for ${_compagny}"
   fi
 
-  if [[ $(sudo virsh list --name | grep -c ${_compagny}) == 0 ]]
+  if [[ $(sudo virsh list --name --all | grep -c ${_compagny}) == 0 ]]
   then
 
     while IFS= read -r key; do     echo "  - $key" >> "${_commonDirectory}/user-data"; done < <(grep -v '^ *#' < $HOME/.ssh/id_${_sshKeyMethod}.pub)
@@ -176,6 +176,11 @@ EOF
 		--cloud-init=disable=on,user-data=${_qemuDirectory}/user-data --filesystem=${_homeDirectory},works-${_compagny},driver.type=virtiofs \
 		--memorybacking=source.type=memfd,access.mode=shared --network network=${_vmNetwork},model=virtio --hvm --arch x86_64 --accelerate --check-cpu \
 		--osinfo debian11 --graphics none --noautoconsole --watchdog=default
+  fi
+
+  if [[ $(sudo virsh list --name --state-running | grep -c ${_compagny}) == 0 ]]
+  then
+    sudo sudo virsh start --domain ${_compagny}
   fi
 
   printf "%s\n" "Wait the VM is not ready yet"
