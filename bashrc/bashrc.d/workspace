@@ -1,0 +1,206 @@
+__ws() {
+	if [ "${#COMP_WORDS[@]}" == "2" ]; then
+		VALID_WORDS=$(ls /data/workspace | grep -v "common" | grep -v ".bck")
+		COMPREPLY=($(compgen -W "${VALID_WORDS}" -- "${COMP_WORDS[1]}"))
+	fi
+}
+
+complete -F __ws ws
+
+function ws {
+  _compagny=$1
+  _username="gregory.bulgare"
+  _sshKeyMethod="ed25519"
+  _directory="/data/workspace"
+  _commonDirectory="${_directory}/common"
+  _compagnyDirectory="${_directory}/${_compagny}"
+  _homeDirectory="${_compagnyDirectory}/home"
+  _qemuDirectory="${_compagnyDirectory}/qemu"
+  _vmNetwork="lab"
+
+  if [[ $2 != "" ]]
+  then
+    _username="$2"
+  fi
+
+  mkdir -p ${_commonDirectory} ${_homeDirectory}/{.ssh,.local/bin,.local/go/bin,bin,.config} ${_qemuDirectory}
+
+  if [[ ! -f "${_commonDirectory}/debian-12.qcow2" ]]
+  then
+    curl -L -o ${_commonDirectory}/debian-12.qcow2 https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2
+  fi
+
+  if [ $(sudo virsh net-list --name --all | grep -c "${_vmNetwork}") == 0 ]
+  then
+    cat > "${_commonDirectory}/network.xml" << EOF
+<network connections='1'>
+  <name>${_vmNetwork}</name>
+  <forward mode='nat' />
+  <domain name='${_vmNetwork}'/>
+  <ip address='192.168.100.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.100.10' end='192.168.100.20'/>
+    </dhcp>
+  </ip>
+</network>
+EOF
+    sudo virsh net-create --file ${_commonDirectory}/network.xml
+  fi
+
+  cat > "${_commonDirectory}/user-data" << EOF
+#cloud-config
+
+# Configure hostname and manage /etc/hosts
+preserve_hostname: false
+create_hostname_file: true
+prefer_fqdn_over_hostname: false
+
+# Set the timezone and locale to your preferred settings
+timezone: "Etc/UTC"
+
+bootcmd:
+- echo 'PATH=\${PATH}:\${HOME}/.local/bin:\${HOME}/bin:\${HOME}/.local/go/bin' >> /etc/profile
+- echo 'eval "\$(\${HOME}/.local/bin/starship init bash)"' >> /etc/profile
+
+runcmd:
+- apt update && apt -y install gpg curl wget apt-transport-https unattended-upgrades ca-certificates
+- wget -O- "https://apt.releases.hashicorp.com/gpg" | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+- wget -O- "https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367" | gpg --dearmour -o /usr/share/keyrings/ansible-archive-keyring.gpg
+- curl -fsSL "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key" | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg && chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
+- curl "https://baltocdn.com/helm/signing.asc" | gpg --dearmor -o /usr/share/keyrings/helm.gpg
+- echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free-firmware' | tee /etc/apt/sources.list.d/non-free-firmware.list
+- echo 'deb-src http://deb.debian.org/debian/ bookworm main contrib non-free-firmware' | tee /etc/apt/sources.list.d/non-free-firmware.list
+- echo "deb [arch=\$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com \$(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
+- echo "deb [arch=\$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ansible-archive-keyring.gpg] http://ppa.launchpad.net/ansible/ansible/ubuntu jammy main" | tee /etc/apt/sources.list.d/ansible.list
+- echo "deb [arch=\$(dpkg --print-architecture) signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list
+- echo "deb [arch=\$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
+- apt update && apt -y install terraform ansible helm kubectl awscli
+- rm -rf /home/${_username}/.firstboot
+
+# Install essential packages
+packages:
+- jq
+- pass
+- default-jdk
+- openssh-client
+- git
+- vim
+- bash
+- bash-completion
+- tar
+- bat
+- tree
+- multitail
+- unzip
+- fontconfig
+- systemd
+- docker.io
+- htop
+
+# Disable root SSH login and password authentication for SSH
+ssh_pwauth: false
+disable_root: true
+
+# Configure unattended upgrades for security updates
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+# Set up swap space (adjust size as needed)
+swap:
+  filename: /swapfile
+  size: "1G"
+  maxsize: "2G"
+
+mounts:
+- [ works-${_compagny},  /home/${_username}, virtiofs, "rw,relatime,user=${_username}" ]
+
+# Setup Users with ssh keys so that I can log in into new machine
+users:
+- name: ${_username}
+  uid: 1000
+  sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+  primary_group: ${_username}
+  groups: [${_username}, sudo, docker]
+  shell: /bin/bash
+  ssh_authorized_keys:
+EOF
+
+  if [ ! -f ${_homeDirectory}/.ssh/id_${_sshKeyMethod} ]
+  then
+		git clone https://github.com/leangeder/dotfiles.git ${_homeDirectory}/.dotfiles
+
+    if [ ! -f ${_homeDirectory}/.local/bin/kustomize ]
+		then
+		  curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+			mv kustomize ${_homeDirectory}/.local/bin/kustomize
+		fi
+    if [ ! -f ${_homeDirectory}/.local/bin/starship ]
+		then
+		  curl -sS https://starship.rs/install.sh | sh -s -- --bin-dir ${_homeDirectory}/.local/bin/ --force --yes
+			${_homeDirectory}/.local/bin/starship preset bracketed-segments -o ${_homeDirectory}/.config/starship.toml
+		fi
+    if [ ! -f ${_homeDirectory}/.local/bin/skaffold ]
+		then
+		  curl -L -o ${_homeDirectory}/.local/bin/skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+		fi
+    if [ ! -f ${_homeDirectory}/.local/bin/kind ]
+		then
+		  curl -L -o ${_homeDirectory}/.local/bin/kind https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64
+		fi
+    if [ ! -f ${_homeDirectory}/.local/go/bin/go ]
+		then
+		  rm -rf ${_homeDirectory}/.local/go
+			mkdir -p ${_homeDirectory}/.local/go
+			curl -L -O https://go.dev/dl/go1.23.0.linux-amd64.tar.gz
+			tar -C ${_homeDirectory}/.local/go -xzf go1.23.0.linux-amd64.tar.gz
+		fi
+
+    chmod 700 ${_homeDirectory}/.ssh
+    > ${_homeDirectory}/.firstboot
+	  cp ${HOME}/.ssh/id_${_sshKeyMethod}.pub ${_homeDirectory}/.ssh/authorized_keys
+    ssh-keygen -t ${_sshKeyMethod} -f ${_homeDirectory}/.ssh/id_${_sshKeyMethod} -P "SSH Key for ${_compagny}"
+  fi
+
+  if [[ $(sudo virsh list --name | grep -c ${_compagny}) == 0 ]]
+  then
+
+    while IFS= read -r key; do     echo "  - $key" >> "${_commonDirectory}/user-data"; done < <(grep -v '^ *#' < $HOME/.ssh/id_${_sshKeyMethod}.pub)
+
+    cat "${_commonDirectory}/user-data" > "${_qemuDirectory}/user-data"
+		echo "hostname: ${_compagny}" >> "${_qemuDirectory}/user-data"
+
+		rm -rf qcow2 ${_qemuDirectory}/vm-disk.qcow2
+    qemu-img create -b ${_commonDirectory}/debian-12.qcow2 -F qcow2 -f qcow2 ${_qemuDirectory}/vm-disk.qcow2 20G
+    sudo virt-install --name ${_compagny} --memory 2048 --vcpus 2 --disk=size=20,backing_store=${_qemuDirectory}/vm-disk.qcow2 \
+		--cloud-init=disable=on,user-data=${_qemuDirectory}/user-data --filesystem=${_homeDirectory},works-${_compagny},driver.type=virtiofs \
+		--memorybacking=source.type=memfd,access.mode=shared --network network=${_vmNetwork},model=virtio --hvm --arch x86_64 --accelerate --check-cpu \
+		--osinfo debian11 --graphics none --noautoconsole --watchdog=default
+  fi
+
+  printf "%s\n" "Wait the VM is not ready yet"
+  while [ -f ${_homeDirectory}/.firstboot ]
+	do
+    printf "-"
+    sleep 1
+	done
+
+
+  # for ((i=1; i<=120; i=i+1))
+  # do
+  #   if [ ! -f ${_homeDirectory}/.firstboot ]
+  #   then
+  #     VM_IP=$(sudo virsh net-dhcp-leases --network ${_vmNetwork} | grep -i ${_compagny} | tr -s "[:blank:]" | cut -d\  -f 6 | cut -d/ -f 1)
+  #     if $(ssh -o StrictHostKeyChecking=no -q ${_username}@${VM_IP} true)
+  #     then
+	# 		  break
+  #     fi
+  #   fi
+
+  #   printf "-"
+  #   sleep 1
+  # done
+
+  VM_IP=$(sudo virsh net-dhcp-leases --network ${_vmNetwork} | grep -i ${_compagny} | tr -s "[:blank:]" | cut -d\  -f 6 | cut -d/ -f 1)
+  ssh -o StrictHostKeyChecking=no ${_username}@${VM_IP}
+}
