@@ -61,6 +61,14 @@
 " }
 
 
+" Local Settings
+" {
+    if filereadable(expand("~/.vimrc.local"))
+      source ~/.vimrc.local
+    endif
+" }
+
+
 " " Default Settings
 " " {
 "     set encoding=utf-8
