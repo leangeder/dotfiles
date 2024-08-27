@@ -1,13 +1,14 @@
 __ws() {
-
 	if [ "${#COMP_WORDS[@]}" == "2" ]; then
-		VALID_WORDS="start stop"
+		VALID_WORDS="start stop delete destroy"
 		COMPREPLY=($(compgen -W "${VALID_WORDS}" -- "${COMP_WORDS[1]}"))
 	elif [ "${#COMP_WORDS[@]}" -gt "2" ]; then
-	  if [ "${COMP_WORDS[1]}" == "start" ]; then
+	  if [ "${COMP_WORDS[1]}" == "start" ] || [ "${COMP_WORDS[1]}" == "destroy" ]; then
 		  VALID_WORDS=$(ls /data/workspace | grep -v "common" | grep -v ".bck" | xargs echo)
     elif [ "${COMP_WORDS[1]}" == "stop" ]; then
-		  VALID_WORDS=$(sudo virsh list --name --state-running | xargs echo)
+		  VALID_WORDS=$(sudo virsh list --name --all --state-running | xargs echo)
+    elif [ "${COMP_WORDS[1]}" == "delete" ]; then
+		  VALID_WORDS=$(sudo virsh list --name --all | xargs echo)
     fi
 		COMPREPLY=($(compgen -W "${VALID_WORDS}" -- "${COMP_WORDS[2]}"))
 	fi
@@ -16,22 +17,11 @@ __ws() {
 complete -F __ws ws
 
 function ws {
+
   _command="${1}"
   shift
 
-  case "${_command}" in
-  	start)
-  		__ws_start "$@"
-  		;;
-  	stop)
-  		__ws_stop "$@"
-  		;;
-  esac
-}
-
-function __ws_start {
-
-  _compagny=$1
+  _compagny="${1}"
   _username="gregory.bulgare"
   _sshKeyMethod="ed25519"
   _directory="/data/workspace"
@@ -41,10 +31,38 @@ function __ws_start {
   _qemuDirectory="${_compagnyDirectory}/qemu"
   _vmNetwork="lab"
 
-  if [[ $2 != "" ]]
+  if [[ ${2} != "" ]]
   then
-    _username="$2"
+    _username="${2}"
   fi
+
+  case "${_command}" in
+  	start)
+  		__ws_start "${_compagny}" "${_username}" "${_sshKeyMethod}" "${_directory}" "${_commonDirectory}" "${_compagnyDirectory}" "${_homeDirectory}" "${_qemuDirectory}" "${_vmNetwork}"
+  		;;
+  	stop)
+  		__ws_stop "${_compagny}"
+  		;;
+  	delete)
+  		__ws_delete "${_compagny}"
+  		;;
+  	destroy)
+  		__ws_destroy "${_compagny}" "${_compagnyDirectory}"
+  		;;
+  esac
+}
+
+function __ws_start {
+
+  _compagny="${1}"
+  _username="${2}"
+  _sshKeyMethod="${3}"
+  _directory="${4}"
+  _commonDirectory="${5}"
+  _compagnyDirectory="${6}"
+  _homeDirectory="${7}"
+  _qemuDirectory="${8}"
+  _vmNetwork="${9}"
 
   mkdir -p ${_commonDirectory} ${_homeDirectory}/{.ssh,.local/bin,.local/go/bin,bin,.config} ${_qemuDirectory}
 
@@ -119,6 +137,7 @@ packages:
 - systemd
 - docker.io
 - htop
+- qemu-guest-agent
 
 # Disable root SSH login and password authentication for SSH
 ssh_pwauth: false
@@ -194,14 +213,15 @@ EOF
 		echo "hostname: ${_compagny}" >> "${_qemuDirectory}/user-data"
 
 		rm -rf qcow2 ${_qemuDirectory}/vm-disk.qcow2
+
     qemu-img create -b ${_commonDirectory}/debian-12.qcow2 -F qcow2 -f qcow2 ${_qemuDirectory}/vm-disk.qcow2 20G
-    sudo virt-install --name ${_compagny} --memory 2048 --vcpus 2 --disk=size=20,backing_store=${_qemuDirectory}/vm-disk.qcow2 \
+    sudo virt-install --name ${_compagny} --memory 2048 --vcpus 2 --disk=size=20,path=${_qemuDirectory}/vm-disk.qcow2 \
 		--cloud-init=disable=on,user-data=${_qemuDirectory}/user-data --filesystem=${_homeDirectory},works-${_compagny},driver.type=virtiofs \
 		--memorybacking=source.type=memfd,access.mode=shared --network network=${_vmNetwork},model=virtio --hvm --arch x86_64 --accelerate --check-cpu \
 		--osinfo debian11 --graphics none --noautoconsole --watchdog=default
   fi
 
-  if [[ $(sudo virsh list --name --state-running | grep -c ${_compagny}) == 0 ]]
+  if [[ $(sudo virsh list --name --all --state-running | grep -c ${_compagny}) == 0 ]]
   then
     sudo sudo virsh start --domain ${_compagny}
   fi
@@ -222,15 +242,36 @@ function __ws_stop {
 
   _compagny=$1
 
-  if [[ $(sudo virsh list --name --state-running | grep -c ${_compagny}) == 1 ]]
+  if [[ $(sudo virsh list --name --all --state-running | grep -c ${_compagny}) == 1 ]]
   then
     sudo sudo virsh shutdown --domain ${_compagny} --mode acpi
   fi
 
   printf "%s\n" "Wait the VM is not stop yet"
-  while [[ $(sudo virsh list --name --state-running | grep -c ${_compagny}) == 1 ]]
+  while [[ $(sudo virsh list --name --all --state-running | grep -c ${_compagny}) == 1 ]]
   do
     printf "-"
     sleep 1
   done
+}
+
+function __ws_delete {
+
+  _compagny=$1
+
+  if [[ $(sudo virsh list --name --all | grep -c ${_compagny}) == 1 ]]
+  then
+    __ws_stop ${_compagny}
+    sudo virsh undefine --domain ${_compagny} --delete-storage-volume-snapshots --remove-all-storage --wipe-storage
+  fi
+}
+
+function __ws_destroy {
+  _compagny=$1
+
+  if [[ $(ls /data/workspace | grep -v "common" | grep -v ".bck" | grep -c ${_compagny}) == 1 ]]
+  then
+    __ws_delete ${_compagny}
+    rm -rf ${_compagnyDirectory}
+  fi
 }
