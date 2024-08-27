@@ -4,7 +4,11 @@ __ws() {
 		VALID_WORDS="start stop"
 		COMPREPLY=($(compgen -W "${VALID_WORDS}" -- "${COMP_WORDS[1]}"))
 	elif [ "${#COMP_WORDS[@]}" -gt "2" ]; then
-		VALID_WORDS=$(ls /data/workspace | grep -v "common" | grep -v ".bck" | xargs echo)
+	  if [ "${COMP_WORDS[1]}" == "start" ]; then
+		  VALID_WORDS=$(ls /data/workspace | grep -v "common" | grep -v ".bck" | xargs echo)
+    elif [ "${COMP_WORDS[1]}" == "stop" ]; then
+		  VALID_WORDS=$(sudo virsh list --name --state-running | xargs echo)
+    fi
 		COMPREPLY=($(compgen -W "${VALID_WORDS}" -- "${COMP_WORDS[2]}"))
 	fi
 }
