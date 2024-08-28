@@ -195,7 +195,7 @@ EOF
 		  rm -rf ${_homeDirectory}/.local/go
 			mkdir -p ${_homeDirectory}/.local/go
 			curl -L -O https://go.dev/dl/go1.23.0.linux-amd64.tar.gz
-			tar -C ${_homeDirectory}/.local/go -xzf go1.23.0.linux-amd64.tar.gz
+			tar -C ${_homeDirectory}/.local -xzf go1.23.0.linux-amd64.tar.gz
 		fi
 
     chmod 700 ${_homeDirectory}/.ssh
