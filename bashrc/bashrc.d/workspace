@@ -213,9 +213,31 @@ EOF
 		echo "hostname: ${_compagny}" >> "${_qemuDirectory}/user-data"
 
 		rm -rf qcow2 ${_qemuDirectory}/vm-disk.qcow2
-
     qemu-img create -b ${_commonDirectory}/debian-12.qcow2 -F qcow2 -f qcow2 ${_qemuDirectory}/vm-disk.qcow2 20G
-    sudo virt-install --name ${_compagny} --memory 2048 --vcpus 2 --disk=size=20,path=${_qemuDirectory}/vm-disk.qcow2 \
+
+    if [ $(sudo virsh pool-list --name --all | grep -c "${_compagny}") == 0 ]
+    then
+      cat > "${_qemuDirectory}/pool.xml" << EOF
+<pool type='dir'>
+  <name>${_compagny}</name>
+  <source>
+  </source>
+  <target>
+    <path>${_qemuDirectory}</path>
+    <permissions>
+      <mode>0711</mode>
+      <owner>$(id -u)</owner>
+      <group>$(id -g)</group>
+    </permissions>
+  </target>
+</pool>
+EOF
+      sudo virsh pool-define --file ${_qemuDirectory}/pool.xml --validate
+      sudo virsh pool-start ${_compagny}
+      sudo virsh pool-autostart ${_compagny}
+    fi
+
+    sudo virt-install --name ${_compagny} --memory 2048 --vcpus 2 --disk=size=20,vol=${_compagny}/vm-disk.qcow2 \
 		--cloud-init=disable=on,user-data=${_qemuDirectory}/user-data --filesystem=${_homeDirectory},works-${_compagny},driver.type=virtiofs \
 		--memorybacking=source.type=memfd,access.mode=shared --network network=${_vmNetwork},model=virtio --hvm --arch x86_64 --accelerate --check-cpu \
 		--osinfo debian11 --graphics none --noautoconsole --watchdog=default
@@ -234,6 +256,13 @@ EOF
 	done
 
   VM_IP=$(sudo virsh net-dhcp-leases --network ${_vmNetwork} | grep -i ${_compagny} | tr -s "[:blank:]" | cut -d\  -f 6 | cut -d/ -f 1)
+  # while [ ! $(ssh -F /dev/null -l ${_username} -o StrictHostKeyChecking=no -o BatchMode=yes -o ConnectTimeout=5 ${VM_IP} true &>/dev/null) ]
+  while [ "$(ssh -o StrictHostKeyChecking=no -q ${_username}@${VM_IP} [ -d '/tmp' ] && echo 1; exit)" != 1 ]
+  do
+    printf "-"
+    sleep 1
+  done
+
   ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${VM_IP}"
   ssh -o StrictHostKeyChecking=no ${_username}@${VM_IP}
 }
@@ -262,16 +291,22 @@ function __ws_delete {
   if [[ $(sudo virsh list --name --all | grep -c ${_compagny}) == 1 ]]
   then
     __ws_stop ${_compagny}
-    sudo virsh undefine --domain ${_compagny} --delete-storage-volume-snapshots --remove-all-storage --wipe-storage
+    sudo virsh undefine --domain ${_compagny}
   fi
 }
 
 function __ws_destroy {
   _compagny=$1
+  _vmPool=$2
 
   if [[ $(ls /data/workspace | grep -v "common" | grep -v ".bck" | grep -c ${_compagny}) == 1 ]]
   then
     __ws_delete ${_compagny}
+    if [[ $(sudo virsh pool-list --all --name | grep -c ${_compagny}) == 1 ]]
+    then
+      sudo virsh pool-destroy --pool ${_compagny}
+      sudo virsh pool-undefine --pool ${_compagny}
+    fi
     rm -rf ${_compagnyDirectory}
   fi
 }
