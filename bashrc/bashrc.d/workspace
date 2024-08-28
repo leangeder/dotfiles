@@ -76,7 +76,12 @@ function __ws_start {
     cat > "${_commonDirectory}/network.xml" << EOF
 <network connections='1'>
   <name>${_vmNetwork}</name>
-  <forward mode='nat' />
+  <forward dev="br0" mode="nat">
+    <nat>
+      <port start="1024" end="65535"/>
+    </nat>
+    <interface dev="br0"/>
+  </forward>
   <domain name='${_vmNetwork}'/>
   <ip address='192.168.100.1' netmask='255.255.255.0'>
     <dhcp>
@@ -261,6 +266,7 @@ EOF
   do
     printf "-"
     sleep 1
+    VM_IP=$(sudo virsh net-dhcp-leases --network ${_vmNetwork} | grep -i ${_compagny} | tr -s "[:blank:]" | cut -d\  -f 6 | cut -d/ -f 1)
   done
 
   ssh-keygen -f "${HOME}/.ssh/known_hosts" -R "${VM_IP}"
